@@ -2,18 +2,20 @@
 #include <QList>
 #include <plugininterface.h>
 #include <qglobal.h>
+#include <QScopedPointer>
 
 namespace dspace {
 class PluginLoaderPrivate;
 class PluginLoader {
 public:
-    PluginLoader(const QString &pluginsDir);
+    PluginLoader(const QString &pluginDir);
+    PluginLoader(const QString &pluginDir, PluginLoaderPrivate &d);
     ~PluginLoader();
-    QList<PluginInterface>  *loadPlugins();
+    bool                    loadPlugins();
     void                    showAllPlugins();
 
 private:
     Q_DECLARE_PRIVATE(PluginLoader)
-    PluginLoaderPrivate *d_ptr;
+    QScopedPointer<PluginLoaderPrivate> d_ptr;
 };
 }

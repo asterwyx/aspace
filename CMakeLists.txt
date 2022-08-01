@@ -14,9 +14,16 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
+include(GNUInstallDirs)
+
+file(GLOB INTERFACES "interface/*.h")
+
 find_package(Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 set(TS_FILES translations/dde-space_zh_CN.ts)
 qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
-add_subdirectory(server)
-add_subdirectory(plugins)
+include_directories("interfaces")
+
+add_subdirectory("server")
+# add_subdirectory("plugins")
+add_subdirectory("tests")
