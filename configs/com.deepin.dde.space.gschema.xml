@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schemalist>
+    <schema path="/com/deepin/dde/space/" id="com.deepin.dde.space">
+        <key name="first-run" type="b">
+            <default>true</default>
+            <summary>Whether initialized</summary>
+            <description>If not initialized, initialize it.</description>
+        </key>
+    </schema>
+</schemalist>
