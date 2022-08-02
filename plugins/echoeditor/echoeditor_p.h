@@ -7,7 +7,7 @@ namespace dspace {
 class EchoEditorPrivate {
 
 public:
-  EchoEditorPrivate(EchoEditor *q);
+  explicit EchoEditorPrivate(EchoEditor *q);
   ~EchoEditorPrivate();
 
 private:

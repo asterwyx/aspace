@@ -1,25 +1,24 @@
 #pragma once
 #include "plugininterface.h"
-#include <QScopedPointer>
-#include <QString>
 #include <QWidget>
-#include <QtGlobal>
+#include <QScopedPointer>
+
 namespace dspace {
-class EchoEditorPrivate;
-class EchoEditor : public QWidget, public PluginInterface {
+class WeatherPluginPrivate;
+class WeatherPlugin : public QWidget, public PluginInterface {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_ID)
     Q_INTERFACES(PluginInterface)
-
 public:
-    explicit EchoEditor(QWidget *parent = nullptr);
-    ~EchoEditor() override;
+    explicit WeatherPlugin(QWidget *parent = nullptr);
+    ~WeatherPlugin() override;
     [[nodiscard]] const QString pluginName() const override;
     [[nodiscard]] const QString pluginDisplayName() const override;
     QWidget *pluginWidget(const QString &key) override;
-
 private:
-    Q_DECLARE_PRIVATE(EchoEditor)
-    QScopedPointer<EchoEditorPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(WeatherPlugin)
+    QScopedPointer<WeatherPluginPrivate> d_ptr;
 };
-} // namespace dspace
+
+} // dspace
+

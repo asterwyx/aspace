@@ -5,13 +5,14 @@
 #include <QPushButton>
 #include <QWidget>
 #include <QtGlobal>
+#include <QString>
 
 namespace dspace {
 
 EchoEditor::EchoEditor(QWidget *parent)
     : QWidget(parent), d_ptr(new EchoEditorPrivate(this)) {}
 
-EchoEditor::~EchoEditor() {}
+EchoEditor::~EchoEditor() = default;
 
 const QString EchoEditor::pluginName() const { return QString("echo-editor"); }
 const QString EchoEditor::pluginDisplayName() const {
@@ -20,17 +21,17 @@ const QString EchoEditor::pluginDisplayName() const {
 
 QWidget *EchoEditor::pluginWidget(const QString &key) {
   Q_UNUSED(key)
-  QGroupBox *box = new QGroupBox();
-  box->setGeometry(0, 0, 100, 50);
+  auto *box = new QGroupBox();
+  box->setGeometry(0, 0, 150, 50);
   Q_D(EchoEditor);
   d->m_lineEdit->setParent(box);
   d->m_lineEdit->setText(d->m_buffer);
   d->m_label->setParent(box);
   d->m_label->setText(d->m_buffer);
   d->m_button->setParent(box);
-  d->m_lineEdit->setGeometry(0, 0, 75, 25);
-  d->m_lineEdit->setGeometry(75, 0, 25, 25);
-  d->m_label->setGeometry(0, 25, 100, 25);
+  d->m_lineEdit->setGeometry(0, 0, 100, 25);
+  d->m_button->setGeometry(100, 0, 50, 25);
+  d->m_label->setGeometry(0, 25, 150, 25);
   connect(d->m_button, &QPushButton::clicked, [=](bool checked) {
     Q_UNUSED(checked)
     d->m_buffer = d->m_lineEdit->text();
