@@ -1,5 +1,3 @@
-project(dde-space-server)
-
 aux_source_directory("src" SERVER_SRCS)
 aux_source_directory("." SERVER_SRCS)
 

@@ -3,13 +3,12 @@
 #include <QMainWindow>
 using namespace dspace;
 
-int main(int argc, char* argv[])
-{
-    QApplication a(argc, argv);
-    QMainWindow w;
-    w.show();
-    dspace::PluginLoader loader("plugins");
-    loader.loadPlugins();
-    loader.showAllPlugins();
-    return a.exec();
+int main(int argc, char *argv[]) {
+  QApplication a(argc, argv);
+  QMainWindow w;
+  PluginLoader loader("plugins/echoeditor");
+  loader.loadPlugins();
+  loader.showAllPlugins(&w);
+  w.show();
+  return a.exec();
 }

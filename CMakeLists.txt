@@ -18,12 +18,12 @@ include(GNUInstallDirs)
 
 file(GLOB INTERFACES "interface/*.h")
 
-find_package(Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt5 REQUIRED COMPONENTS Widgets Gui LinguistTools)
 set(TS_FILES translations/dde-space_zh_CN.ts)
 qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
 include_directories("interfaces")
 
 add_subdirectory("server")
-# add_subdirectory("plugins")
+add_subdirectory("plugins")
 add_subdirectory("tests")
