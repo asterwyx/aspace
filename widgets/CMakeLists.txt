@@ -4,6 +4,5 @@ project(widgets
 )
 
 file(GLOB SRCS "*.h" "*.cpp")
-
 add_library(widgets SHARED ${SRCS})
 target_link_libraries(widgets PRIVATE Qt::Widgets Qt::UiPlugin)

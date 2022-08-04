@@ -2,9 +2,7 @@
 #include <QWidget>
 #include <QDesignerExportWidget>
 #include <QColor>
-#include <qobjectdefs.h>
 #include <QSize>
-#include <qwindowdefs.h>
 
 namespace dspace {
 class QDESIGNER_WIDGET_EXPORT Battery : public QWidget {
@@ -31,7 +29,7 @@ class QDESIGNER_WIDGET_EXPORT Battery : public QWidget {
 
 public:
     explicit Battery(QWidget *parent = nullptr);
-    ~Battery();
+    ~Battery() override;
 
 public:
 
@@ -100,15 +98,15 @@ private slots:
     void    updateValue();
 
 private:
-    double  minValue;
-    double  maxValue;
-    double  value;
-    double  alarmValue;
+    double  minValue{};
+    double  maxValue{};
+    double  value{};
+    double  alarmValue{};
 
-    double  step;
-    int     borderRadius;
-    int     bgRadius;
-    int     headRadius;
+    double  step{};
+    int     borderRadius{};
+    int     bgRadius{};
+    int     headRadius{};
 
     QColor  borderColorStart;
     QColor  borderColorEnd;
@@ -119,8 +117,8 @@ private:
     QColor  normalColorStart;
     QColor  normalColorEnd;
 
-    bool    m_isForward;
-    double  m_currentValue;
+    bool    m_isForward{};
+    double  m_currentValue{};
     QRectF  m_batteryRect;
     QTimer  *m_timer;
 

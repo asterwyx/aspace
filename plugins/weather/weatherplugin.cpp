@@ -8,19 +8,11 @@
 
 namespace dspace {
 
-WeatherPlugin::WeatherPlugin(QWidget *parent)
-    : PluginInterface(parent),
-    d_ptr(new WeatherPluginPrivate(this))
-{}
-WeatherPlugin::~WeatherPlugin() {}
+WeatherPlugin::WeatherPlugin() : d_ptr(new WeatherPluginPrivate(this)) {}
+WeatherPlugin::~WeatherPlugin() = default;
 
-const QString WeatherPlugin::pluginName() const
-{
-    return QString("dde-weather");
-}
-const QString WeatherPlugin::pluginDisplayName() const {
-    return QString("Weather");
-}
+QString WeatherPlugin::pluginName() const { return {"dde-weather"}; }
+QString WeatherPlugin::pluginDisplayName() const { return {"Weather"}; }
 
 QWidget *WeatherPlugin::pluginWidget(const QString &key) {
     Q_UNUSED(key)

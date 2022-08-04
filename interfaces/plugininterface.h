@@ -1,29 +1,27 @@
 #pragma once
 #include <QWidget>
-
-class PluginInterface : public QWidget {
+class PluginInterface {
 public:
 
-  PluginInterface(QWidget *parent = nullptr) : QWidget(parent) {}
   /**
    * @brief Destroy the Plugin Interface object
    *
    */
-  virtual ~PluginInterface() = 0;
+  virtual ~PluginInterface() {}
 
   /**
    * @brief Return the only name of a plugin, this is a must-need name
    *
    * @return const QString
    */
-  virtual const QString pluginName() const = 0;
+  virtual QString pluginName() const = 0;
 
   /**
    * @brief Overwrite this function if you want a different display name
    *
    * @return const QString
    */
-  virtual const QString pluginDisplayName() const { return QString(); }
+  virtual QString pluginDisplayName() const { return QString(""); }
 
   /**
    * @brief Get the widget of the plugin
@@ -35,7 +33,6 @@ public:
 };
 
 #define PLUGIN_INTERFACE_ID "org.deepin.dde.space.plugin"
-
 QT_BEGIN_NAMESPACE
 Q_DECLARE_INTERFACE(PluginInterface, PLUGIN_INTERFACE_ID)
 QT_END_NAMESPACE

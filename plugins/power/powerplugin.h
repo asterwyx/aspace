@@ -5,16 +5,16 @@
 
 namespace dspace {
 class PowerPluginPrivate;
-class PowerPlugin : public PluginInterface {
+class PowerPlugin : public QObject, public PluginInterface {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_ID)
     Q_INTERFACES(PluginInterface)
 
 public:
-    explicit PowerPlugin(QWidget *parent = nullptr);
+    PowerPlugin();
     ~PowerPlugin() override;
-    const QString pluginName() const override;
-    const QString pluginDisplayName() const override;
+    QString pluginName() const override;
+    QString pluginDisplayName() const override;
     QWidget *pluginWidget(const QString &key) override;
 
 private:

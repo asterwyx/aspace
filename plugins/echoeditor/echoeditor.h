@@ -6,16 +6,16 @@
 #include <QtGlobal>
 namespace dspace {
 class EchoEditorPrivate;
-class EchoEditor : public PluginInterface {
+class EchoEditor : public QObject, public PluginInterface {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_ID)
     Q_INTERFACES(PluginInterface)
 
 public:
-    explicit EchoEditor(QWidget *parent = nullptr);
+    EchoEditor();
     ~EchoEditor() override;
-    const QString pluginName() const override;
-    const QString pluginDisplayName() const override;
+    QString pluginName() const override;
+    QString pluginDisplayName() const override;
     QWidget *pluginWidget(const QString &key) override;
 
 private:

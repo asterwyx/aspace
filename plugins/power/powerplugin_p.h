@@ -10,6 +10,5 @@ public:
 private:
     Q_DECLARE_PUBLIC(PowerPlugin)
     PowerPlugin *q_ptr;
-    Battery  *m_battery;
 };
 }

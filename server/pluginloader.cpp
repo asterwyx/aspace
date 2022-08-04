@@ -52,10 +52,14 @@ const QList<PluginInterface *> *PluginLoader::getPlugins()
 }
 
 PluginLoaderPrivate::PluginLoaderPrivate(PluginLoader *q) : q_ptr(q) {}
-PluginLoaderPrivate::~PluginLoaderPrivate() = default;
+PluginLoaderPrivate::~PluginLoaderPrivate()
+{
+    for (auto plugin : m_plugins) {
+        delete plugin;
+    }
+}
 
 bool PluginLoaderPrivate::loadPlugins() {
-    qDebug() << "Enter load plugins.";
     QString appRunPrefix = qApp->applicationDirPath();
     foreach (QString pluginDir, m_pluginDirs)
     {
@@ -63,7 +67,6 @@ bool PluginLoaderPrivate::loadPlugins() {
         pluginsDir.cdUp();
         pluginsDir.cd(pluginDir);
         foreach (QString fileName, pluginsDir.entryList(QDir::Files | QDir::Executable)) {
-            qDebug() << fileName;
             QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
             QObject *plugin = pluginLoader.instance();
             PluginInterface *loadedInterface = qobject_cast<PluginInterface *>(plugin);
