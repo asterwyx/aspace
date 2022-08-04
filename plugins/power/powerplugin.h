@@ -1,24 +1,24 @@
 #pragma once
 #include "plugininterface.h"
-#include <QWidget>
 #include <QScopedPointer>
+#include <QWidget>
 
 namespace dspace {
-class WeatherPluginPrivate;
-class WeatherPlugin : public PluginInterface {
+class PowerPluginPrivate;
+class PowerPlugin : public PluginInterface {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_ID)
     Q_INTERFACES(PluginInterface)
+
 public:
-    explicit WeatherPlugin(QWidget *parent = nullptr);
-    ~WeatherPlugin() override;
+    explicit PowerPlugin(QWidget *parent = nullptr);
+    ~PowerPlugin() override;
     const QString pluginName() const override;
     const QString pluginDisplayName() const override;
     QWidget *pluginWidget(const QString &key) override;
+
 private:
-    Q_DECLARE_PRIVATE(WeatherPlugin)
-    QScopedPointer<WeatherPluginPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(PowerPlugin)
+    QScopedPointer<PowerPluginPrivate> d_ptr;
 };
-
-} // dspace
-
+}

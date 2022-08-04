@@ -9,10 +9,9 @@
 namespace dspace {
 
 WeatherPlugin::WeatherPlugin(QWidget *parent)
-    : QWidget(parent), d_ptr(new WeatherPluginPrivate(this))
-{
-
-}
+    : PluginInterface(parent),
+    d_ptr(new WeatherPluginPrivate(this))
+{}
 WeatherPlugin::~WeatherPlugin() {}
 
 const QString WeatherPlugin::pluginName() const
@@ -24,6 +23,7 @@ const QString WeatherPlugin::pluginDisplayName() const {
 }
 
 QWidget *WeatherPlugin::pluginWidget(const QString &key) {
+    Q_UNUSED(key)
     auto widget = new QLabel("<h1>Hello Weather</h1>");
     widget->setGeometry(0, 50, 300, 50);
     return widget;

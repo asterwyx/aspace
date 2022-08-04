@@ -10,7 +10,7 @@
 namespace dspace {
 
 EchoEditor::EchoEditor(QWidget *parent)
-    : QWidget(parent), d_ptr(new EchoEditorPrivate(this)) {}
+    : PluginInterface(parent), d_ptr(new EchoEditorPrivate(this)) {}
 
 EchoEditor::~EchoEditor() = default;
 

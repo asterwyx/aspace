@@ -1,15 +1,15 @@
 #pragma once
-#include <QtCore>
+#include <QWidget>
 
-class PluginInterface {
+class PluginInterface : public QWidget {
 public:
+
+  PluginInterface(QWidget *parent = nullptr) : QWidget(parent) {}
   /**
    * @brief Destroy the Plugin Interface object
    *
    */
-
-
-  virtual ~PluginInterface() = default;
+  virtual ~PluginInterface() = 0;
 
   /**
    * @brief Return the only name of a plugin, this is a must-need name
@@ -28,13 +28,13 @@ public:
   /**
    * @brief Get the widget of the plugin
    *
-   * @param itemKey the only identifier for the plugin
+   * @param key the only identifier for the plugin
    * @return QWidget* the widget
    */
-  virtual QWidget *pluginWidget(const QString &itemKey) = 0;
+  virtual QWidget *pluginWidget(const QString &key) = 0;
 };
 
-#define PLUGIN_INTERFACE_ID "com.deepin.dde.space.plugin"
+#define PLUGIN_INTERFACE_ID "org.deepin.dde.space.plugin"
 
 QT_BEGIN_NAMESPACE
 Q_DECLARE_INTERFACE(PluginInterface, PLUGIN_INTERFACE_ID)

@@ -6,7 +6,7 @@
 #include <QtGlobal>
 namespace dspace {
 class EchoEditorPrivate;
-class EchoEditor : public QWidget, public PluginInterface {
+class EchoEditor : public PluginInterface {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_ID)
     Q_INTERFACES(PluginInterface)
@@ -14,8 +14,8 @@ class EchoEditor : public QWidget, public PluginInterface {
 public:
     explicit EchoEditor(QWidget *parent = nullptr);
     ~EchoEditor() override;
-    [[nodiscard]] const QString pluginName() const override;
-    [[nodiscard]] const QString pluginDisplayName() const override;
+    const QString pluginName() const override;
+    const QString pluginDisplayName() const override;
     QWidget *pluginWidget(const QString &key) override;
 
 private:
