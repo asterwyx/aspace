@@ -2,7 +2,7 @@
 #include "pluginloader.h"
 #include <QString>
 #include <qlist.h>
-namespace dspace {
+BEGIN_USER_NAMESPACE
 class PluginLoaderPrivate {
 public:
     explicit PluginLoaderPrivate(PluginLoader *q);
@@ -18,5 +18,4 @@ private:
     QList<PluginInterface *>        m_plugins;
 };
 
-
-}
+END_USER_NAMESPACE

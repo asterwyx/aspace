@@ -3,8 +3,9 @@
 #include <QDesignerExportWidget>
 #include <QColor>
 #include <QSize>
+#include "namespace.h"
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 class QDESIGNER_WIDGET_EXPORT Battery : public QWidget {
     Q_OBJECT
     Q_PROPERTY(double minValue READ getMinValue WRITE setMinValue)
@@ -123,4 +124,4 @@ private:
     QTimer  *m_timer;
 
 };
-}
+END_USER_NAMESPACE

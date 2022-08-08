@@ -6,7 +6,7 @@
 #include "weatherplugin_p.h"
 #include <QLabel>
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 
 WeatherPlugin::WeatherPlugin() : d_ptr(new WeatherPluginPrivate(this)) {}
 WeatherPlugin::~WeatherPlugin() = default;
@@ -23,4 +23,4 @@ QWidget *WeatherPlugin::pluginWidget(const QString &key) {
 WeatherPluginPrivate::WeatherPluginPrivate(WeatherPlugin *q) : q_ptr(q) {}
 
 WeatherPluginPrivate::~WeatherPluginPrivate() = default;
-} // dspace
+END_USER_NAMESPACE

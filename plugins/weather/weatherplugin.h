@@ -2,8 +2,9 @@
 #include "plugininterface.h"
 #include <QWidget>
 #include <QScopedPointer>
+#include "namespace.h"
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 class WeatherPluginPrivate;
 class WeatherPlugin : public QObject, public PluginInterface {
     Q_OBJECT
@@ -20,5 +21,5 @@ private:
     QScopedPointer<WeatherPluginPrivate> d_ptr;
 };
 
-} // dspace
+END_USER_NAMESPACE
 

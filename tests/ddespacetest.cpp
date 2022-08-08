@@ -2,8 +2,10 @@
 #include "battery.h"
 #include <QMainWindow>
 #include <QApplication>
+#include "namespace.h"
 
-namespace dspace {
+USE_USER_NAMESPACE
+
 TEST(test_widget_battery, DefaultConstrutor)
 {
     int argc = 0;
@@ -13,5 +15,4 @@ TEST(test_widget_battery, DefaultConstrutor)
     battery->setParent(&w);
     w.show();
     a.exec();
-}
 }

@@ -4,7 +4,8 @@
 #include <QString>
 #include <QWidget>
 #include <QtGlobal>
-namespace dspace {
+#include "namespace.h"
+BEGIN_USER_NAMESPACE
 class EchoEditorPrivate;
 class EchoEditor : public QObject, public PluginInterface {
     Q_OBJECT
@@ -22,4 +23,4 @@ private:
     Q_DECLARE_PRIVATE(EchoEditor)
     QScopedPointer<EchoEditorPrivate> d_ptr;
 };
-} // namespace dspace
+END_USER_NAMESPACE

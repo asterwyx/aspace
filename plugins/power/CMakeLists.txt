@@ -1,7 +1,7 @@
 set(PLUGIN_NAME "power")
 
 project(${PLUGIN_NAME})
-include_directories("widgets")
+#include_directories("widgets")
 file(GLOB_RECURSE POWER_SRCS "*.cpp")
 find_package(Qt5 REQUIRED COMPONENTS UiPlugin)
 

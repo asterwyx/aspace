@@ -3,7 +3,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QtGlobal>
-namespace dspace {
+BEGIN_USER_NAMESPACE
 class EchoEditorPrivate {
 
 public:
@@ -18,4 +18,4 @@ private:
   Q_DECLARE_PUBLIC(EchoEditor)
   EchoEditor *q_ptr;
 };
-} // namespace dspace
+END_USER_NAMESPACE

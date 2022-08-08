@@ -2,7 +2,7 @@
 #include "powerplugin.h"
 #include "battery.h"
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 class PowerPluginPrivate {
 public:
     PowerPluginPrivate(PowerPlugin *q);
@@ -11,4 +11,4 @@ private:
     Q_DECLARE_PUBLIC(PowerPlugin)
     PowerPlugin *q_ptr;
 };
-}
+END_USER_NAMESPACE

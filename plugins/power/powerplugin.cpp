@@ -2,7 +2,7 @@
 #include "battery.h"
 #include "powerplugin_p.h"
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 PowerPlugin::PowerPlugin() : d_ptr(new PowerPluginPrivate(this)) {}
 
 PowerPlugin::~PowerPlugin() = default;
@@ -35,4 +35,4 @@ QWidget *PowerPlugin::pluginWidget(const QString &key) {
 PowerPluginPrivate::PowerPluginPrivate(PowerPlugin *q) : q_ptr(q) {}
 
 PowerPluginPrivate::~PowerPluginPrivate() = default;
-}
+END_USER_NAMESPACE

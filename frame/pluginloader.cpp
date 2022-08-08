@@ -10,7 +10,7 @@
 #include <QDebug>
 #include <QPluginLoader>
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 PluginLoader::PluginLoader(const QString &pluginDir)
     : d_ptr(new PluginLoaderPrivate(this)) {
     Q_D(PluginLoader);
@@ -78,4 +78,4 @@ bool PluginLoaderPrivate::loadPlugins() {
     }
     return true;
 }
-} // namespace dspace
+END_USER_NAMESPACE

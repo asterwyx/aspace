@@ -7,7 +7,8 @@
 #include <QPainter>
 #include <QDebug>
 
-namespace dspace {
+
+BEGIN_USER_NAMESPACE
 DynamicSun::DynamicSun(QWidget *parent)
     : QWidget(parent),
       m_timer(new QTimer(this)),
@@ -18,18 +19,24 @@ DynamicSun::DynamicSun(QWidget *parent)
       m_currentTimerCount(0),
       m_sunRadius(50),
       m_sunLightSize(20, 5),
-      m_sunColor(QColor(255, 215, 0)),
+      m_sunColor(QColor(255, 200, 0)),
       m_sunLightColor(m_sunColor) {
     m_timer->setInterval(m_timerInterval);
     connect(m_timer, &QTimer::timeout, this, &DynamicSun::updateView);
     m_timer->start();
-    this->resize(100, 200);
+    initSize();
+}
+
+void DynamicSun::initSize() {
+    resize(width(), height());
+}
+void DynamicSun::resize(int width, int height) {
+    auto margin = qMin(width, height);
+    QWidget::resize(margin, margin);
 }
 
 void DynamicSun::paintEvent(QPaintEvent *event) {
     Q_UNUSED(event)
-    auto margin = qMin(width(), height());
-    resize(margin, margin);
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
     drawSun(&painter);
@@ -55,10 +62,13 @@ void DynamicSun::drawSunLight(QPainter *painter) {
 void DynamicSun::drawSun(QPainter *painter) const {
     painter->save();
     auto bound = width();
-    auto radius = bound / 4;
+    auto radius = bound / 4.0;
     QRectF boundRect(0, 0, 2 * radius, 2 * radius);
     painter->translate(radius, radius);
-    painter->setBrush(QBrush(m_sunColor));
+    QRadialGradient gradient(radius, radius, radius, radius, radius);
+    gradient.setColorAt(0.0, QColor(255, 170, 0));
+    gradient.setColorAt(1.0, m_sunColor);
+    painter->setBrush(QBrush(gradient));
     painter->setPen(QPen(m_sunColor));
     painter->drawEllipse(boundRect);
     painter->restore();
@@ -77,4 +87,4 @@ void DynamicSun::updateView() {
 
 DynamicSun::~DynamicSun() = default;
 
-}
+END_USER_NAMESPACE

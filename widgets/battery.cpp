@@ -8,7 +8,7 @@
 #include <QPaintEvent>
 #include <QDebug>
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 Battery::Battery(QWidget *parent)
     : QWidget(parent),
     m_timer(new QTimer(this))
@@ -112,4 +112,4 @@ void Battery::updateValue()
     }
 }
 
-}
+END_USER_NAMESPACE

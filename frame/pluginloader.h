@@ -3,8 +3,9 @@
 #include <QList>
 #include <QScopedPointer>
 #include <QtGlobal>
+#include "namespace.h"
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 class PluginLoaderPrivate;
 class PluginLoader {
 public:
@@ -21,4 +22,4 @@ private:
     Q_DECLARE_PRIVATE(PluginLoader)
     QScopedPointer<PluginLoaderPrivate> d_ptr;
 };
-} // namespace dspace
+END_USER_NAMESPACE

@@ -7,7 +7,7 @@
 #include <QtGlobal>
 #include <QString>
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 
 EchoEditor::EchoEditor() : d_ptr(new EchoEditorPrivate(this)) {}
 
@@ -41,4 +41,4 @@ EchoEditorPrivate::EchoEditorPrivate(EchoEditor *q) : q_ptr(q) {}
 
 EchoEditorPrivate::~EchoEditorPrivate() = default;
 
-} // namespace dspace
+END_USER_NAMESPACE

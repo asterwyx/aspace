@@ -1,12 +1,9 @@
-//
-// Created by astrea on 8/4/22.
-//
 #pragma once
 #include <QWidget>
 #include <QDesignerExportWidget>
+#include "namespace.h"
 
-namespace dspace {
-
+BEGIN_USER_NAMESPACE
 class QDESIGNER_WIDGET_EXPORT DynamicSun : public QWidget {
     Q_OBJECT
 
@@ -33,9 +30,11 @@ public:
 public:
     explicit DynamicSun(QWidget *parent = nullptr);
     ~DynamicSun() override;
+    void resize(int width, int height);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void initSize();
     void drawSun(QPainter *painter) const;
     void drawSunLight(QPainter *painter);
 
@@ -57,4 +56,4 @@ private:
 
 };
 
-} // dspace
+END_USER_NAMESPACE

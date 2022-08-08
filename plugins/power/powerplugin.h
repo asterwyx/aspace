@@ -2,8 +2,9 @@
 #include "plugininterface.h"
 #include <QScopedPointer>
 #include <QWidget>
+#include "namespace.h"
 
-namespace dspace {
+BEGIN_USER_NAMESPACE
 class PowerPluginPrivate;
 class PowerPlugin : public QObject, public PluginInterface {
     Q_OBJECT
@@ -21,4 +22,4 @@ private:
     Q_DECLARE_PRIVATE(PowerPlugin)
     QScopedPointer<PowerPluginPrivate> d_ptr;
 };
-}
+END_USER_NAMESPACE
