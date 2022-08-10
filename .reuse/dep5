@@ -1,0 +1,32 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: aspace
+Upstream-Contact: Astrea Wang <wangyixue@uniontech.com>
+Source: https://github.com/asterwyx/aspace
+Copyright: Astrea Wang
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...
+
+# debian
+Files: debian/*
+Copyright: None
+License: CC0-1.0
+
+# qrc
+Files: *.qrc
+Copyright: None
+License: CC0-1.0
+
+# assets
+Files: plugins/weather/icons/*
+Copyright: None
+License: CC0-1.0
+
+# Arch
+Files: archlinux/*
+Copyright: None
+License: CC0-1.0
+

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2022 Astrea Wang
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "echoeditor.h"
 #include "echoeditor_p.h"
 #include <QGroupBox>

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2022 Astrea Wang
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 set(PLUGIN_NAME "echo-editor")
 
 project(${PLUGIN_NAME})

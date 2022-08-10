@@ -1,8 +1,14 @@
+// SPDX-FileCopyrightText: 2022 Astrea Wang
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #pragma once
 #include "plugininterface.h"
 #include <QWidget>
 #include <QScopedPointer>
 #include "namespace.h"
+
+#include "weatherdata.h"
 
 BEGIN_USER_NAMESPACE
 class WeatherPluginPrivate;
@@ -16,6 +22,8 @@ public:
     QString pluginName() const override;
     QString pluginDisplayName() const override;
     QWidget *pluginWidget(const QString &key) override;
+private slots:
+    void weatherUpdated(const WeatherData &weather);
 private:
     Q_DECLARE_PRIVATE(WeatherPlugin)
     QScopedPointer<WeatherPluginPrivate> d_ptr;

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2022 Astrea Wang
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 project(aspace-unit-test
     LANGUAGES CXX
     HOMEPAGE_URL https://github.com/asterwyx/aspace

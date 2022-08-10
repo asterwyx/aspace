@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2022 Uniontech Software Technology Co., Ltd
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "pluginloader.h"
 #include "plugininterface.h"
 #include "pluginloader_p.h"
@@ -32,7 +36,7 @@ bool PluginLoader::loadPlugins() {
 
 void PluginLoader::showAllPlugins(QWidget *parent) {
     Q_D(PluginLoader);
-    for (auto plugin : d->m_plugins) {
+    foreach (PluginInterface *plugin, d->m_plugins) {
         QWidget *widget = plugin->pluginWidget("");
         widget->setParent(parent);
     }
@@ -54,7 +58,7 @@ const QList<PluginInterface *> *PluginLoader::getPlugins()
 PluginLoaderPrivate::PluginLoaderPrivate(PluginLoader *q) : q_ptr(q) {}
 PluginLoaderPrivate::~PluginLoaderPrivate()
 {
-    for (auto plugin : m_plugins) {
+    foreach (PluginInterface* plugin, m_plugins) {
         delete plugin;
     }
 }
@@ -64,7 +68,7 @@ bool PluginLoaderPrivate::loadPlugins() {
     foreach (QString pluginDir, m_pluginDirs)
     {
         QDir pluginsDir(appRunPrefix);
-        pluginsDir.cdUp();
+//        pluginsDir.cdUp();
         pluginsDir.cd(pluginDir);
         foreach (QString fileName, pluginsDir.entryList(QDir::Files | QDir::Executable)) {
             QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));

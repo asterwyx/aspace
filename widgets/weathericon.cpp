@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2022 Astrea Wang
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "weathericon.h"
 #include "weathericon_p.h"
 #include <QSvgRenderer>
@@ -10,7 +14,7 @@
 #include "utils.h"
 
 BEGIN_USER_NAMESPACE
-WeatherIcon::WeatherIcon(const QString& iconPath, double scaleFactor, IconType type, QWidget *parent)
+WeatherIcon::WeatherIcon(const QString& iconPath, QWidget *parent, double scaleFactor, IconType type)
     : QWidget{parent}, d_ptr{new WeatherIconPrivate(this)}
 {
     Q_D(WeatherIcon);
@@ -54,6 +58,7 @@ void WeatherIcon::paintEvent(QPaintEvent *event)
         renderer.load(d->m_svgData);
         auto size = renderer.defaultSize();
         QPixmap pixmap(size * d->m_scaleFactor);
+        resize(pixmap.size());
         pixmap.fill(Qt::transparent);
         QPainter painter(&pixmap);
         painter.setRenderHints(QPainter::Antialiasing);
@@ -64,6 +69,7 @@ void WeatherIcon::paintEvent(QPaintEvent *event)
     } else {
         QPixmap pixmap(d->m_iconPath);
         pixmap.scaled(pixmap.size() * d->m_scaleFactor);
+        resize(pixmap.size());
         QPainter painter(this);
         painter.drawPixmap(0, 0, pixmap);
     }

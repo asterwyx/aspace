@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2022 Astrea Wang
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #pragma once
 #include <QObject>
 #include <QWidget>
@@ -16,7 +20,7 @@ public:
     };
 
 public:
-    explicit WeatherIcon(const QString& iconPath, double scaleFactor = 1.0, IconType type = SVG, QWidget *parent = nullptr);
+    explicit WeatherIcon(const QString& iconPath, QWidget *parent = nullptr, double scaleFactor = 1.0, IconType type = SVG);
     ~WeatherIcon() override;
     void setSvgColor(QColor color = Qt::yellow);
 
