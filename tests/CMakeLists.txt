@@ -8,7 +8,7 @@ project(aspace-unit-test
     DESCRIPTION "A space for weather and rest."
     VERSION ${VERSION})
 
-find_package(GTest REQUIRED COMPONENTS GTest Main)
+find_package(GTest REQUIRED)
 
 aux_source_directory("." TEST_SRCS)
 

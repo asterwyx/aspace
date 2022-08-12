@@ -12,6 +12,8 @@
 #include <QFont>
 #include <QDebug>
 #include <QDBusArgument>
+#include <QPushButton>
+#include <QtConcurrent>
 
 #include "weatherdata.h"
 #include "weathericon.h"
@@ -28,133 +30,153 @@ QString WeatherPlugin::pluginDisplayName() const { return {"Weather"}; }
 
 QWidget *WeatherPlugin::pluginWidget(const QString &key) {
     Q_UNUSED(key)
-    QDBusConnection bus = QDBusConnection::sessionBus();
-    QDBusInterface *iface = new QDBusInterface("org.deepin.aspace",
-                                                  "/weather",
-                                             "org.deepin.aspace.Weather",
-                                            bus,
-                                                this);
-    QDBusMessage overviewMsg = iface->call("getCurrentWeatherOverview");
-    WeatherData data;
-    if (overviewMsg.type() == QDBusMessage::ErrorMessage)
-    {
-        qWarning() << "call getCurrentWeatherOverview unsuccessfully.";
-    }
-    else if (overviewMsg.type() == QDBusMessage::ReplyMessage)
-    {
-        qDebug() << "call getCurrentWeatherOverviewSuccessfully.";
-        // For complex types, we might encounter signature mismatch problem,
-        // although we've overwrite the >> operator of enum WeatherOverview and 
-        // enum TemperatureUnit. So we should unmarshal it manually.
-        WeatherOverview overview = qdbus_cast<WeatherOverview>(overviewMsg.arguments().takeFirst());
-        data.setWeatherOverview(overview);
-    }
-    else
-    {
-        qWarning() << "Unknown message type.";
-    }
-    // For simple and well-defind types by Qt like QString, we could use QDBusReply wrapper
-    QDBusReply<double> temperReply = iface->call("getCurrentTemperature");
-    if (temperReply.isValid())
-    {
-        qDebug() << "call getCurrentTemperature successfully.";
-        data.setCurrentTemperature(temperReply.value());
-    }
-    QDBusReply<QString> locationReply = iface->call("getLocation");
-    if (locationReply.isValid())
-    {
-        qDebug() << "call getLocation successfully.";
-        data.setLocation(locationReply.value());
-    }
-    QDBusMessage unitMsg = iface->call("getCurrentTemperatureUnit");
-    if (unitMsg.type() == QDBusMessage::ErrorMessage)
-    {
-        qWarning() << "call getCurrentTemperatureUnit unsuccessfully.";
-    }
-    else if (unitMsg.type() == QDBusMessage::ReplyMessage)
-    {
-        qDebug() << "call getCurrentTemperatureUnit successfully.";
-        TemperatureUnit unit = qdbus_cast<TemperatureUnit>(unitMsg.arguments().takeFirst());
-        data.setTemperatureUnit(unit);
-    }
-    QDBusMessage futureWeatherMsg = iface->call("getFutureWeather");
-    auto arguments = futureWeatherMsg.arguments();
-    qDebug() << arguments.size();
-    QList<WeatherData> futureWeather = qdbus_cast<QList<WeatherData>>(arguments.takeFirst());
-    qDebug() << futureWeather;
-    auto box = new QGroupBox();
-    auto temperLabel = new QLabel(box);
-    QString temperString = QString::number(data.getCurrentTemperature(), 10, 0);
-    temperString += "\u00B0"; // add degree character °
-    if (data.getTemperatureUnit() == TemperatureUnit::CELSIUS)
-    {
-        temperString += "C";
-    }
-    else
-    {
-        temperString += "F";
-    }
-    temperLabel->setText(temperString);
-    auto locationLabel = new QLabel(data.getLocation(), box);
-    QFont locationFont("Noto Sans CJK SC");
-    locationFont.setWeight(100);
-    locationFont.setPointSize(16);
-    temperLabel->setFont(locationFont);
-    temperLabel->resize(2 * temperLabel->size());
-    locationLabel->setFont(locationFont);
-    WeatherIcon *icon;
-    switch (data.getWeatherOverview())
-    {
-    case WeatherOverview::SUNNY:
-        icon = new WeatherIcon(":/icons/sunny.svg", box, 9);
-        break;
-    case WeatherOverview::RAINY:
-        icon = new WeatherIcon(":/icons/slightly_rainy.svg", box, 9);
-        break;
-    default:
-        icon = nullptr;
-        break;
-    }
+    Q_D(WeatherPlugin);
+    // just create widget, data is updated with callback.
+    QFont labelFont("Noto Sans CJK SC");
+    labelFont.setWeight(100);
+    labelFont.setPointSize(16);
+    QGroupBox *box = new QGroupBox();
+    d->m_exportedWidget = box;
+    box->resize(d->m_size);
+    box->setObjectName("WeatherPluginWidget");
+    QLabel* temperLabel = new QLabel(box);
+    temperLabel->setObjectName(d->m_temperatureLabelName);
+    temperLabel->setFont(labelFont);
+    temperLabel->resize(d->m_size.width() / 2, d->m_size.height() / 3);
+    temperLabel->move(0, d->m_size.height() / 3);
+    QLabel* locationLabel = new QLabel(box);
+    locationLabel->setObjectName(d->m_locationLabelName);
+    locationLabel->setFont(labelFont);
+    locationLabel->resize(d->m_size.width() / 2, d->m_size.height() / 3);
+    QPushButton *updateButton = new QPushButton(box);
+    updateButton->setText(tr("更新天气"));
+    connect(updateButton, &QPushButton::clicked, this, [=](bool checked)
+    {   
+        Q_UNUSED(checked)
+        QtConcurrent::run([=] {
+            // This is a temporary call, make sure daemon can exit after call
+            QDBusConnection bus = QDBusConnection::sessionBus();
+            QDBusInterface iface("org.deepin.aspace", "/weather", "org.deepin.aspace.Weather", bus);
+            QDBusMessage replyMsg = iface.call("getCurrentWeather");
+            if (replyMsg.type() == QDBusMessage::ReplyMessage)
+            {
+                QList<QVariant> arguments = replyMsg.arguments();
+                WeatherData weather = qdbus_cast<WeatherData>(arguments.takeFirst());
+                onWeatherChanged(weather);
+            }
+            else if (replyMsg.type() == QDBusMessage::ErrorMessage)
+            {
+                qWarning() << "calling getCurrentWeather get a error message: " << replyMsg.errorMessage();
+            }
+            else
+            {
+                qWarning() << "calling getCurrentWeather get a unknown message type: " << replyMsg.type();
+            }
+        });
+
+    });
+    updateButton->move(0, d->m_size.height() / 3 * 2);
+    WeatherIcon *icon = new WeatherIcon("", box);
+    icon->setObjectName(d->m_weatherIconName);
     icon->setSvgColor(Qt::yellow);
-    icon->move(50, 50);
-    box->setGeometry(0,0,800,800);
+    icon->move(d->m_size.width() / 2, 0);
+    icon->resize(d->m_size / 2);
     return box;
 }
 WeatherPluginPrivate::WeatherPluginPrivate(WeatherPlugin *q)
-    : q_ptr(q)
-{}
-
-WeatherPluginPrivate::~WeatherPluginPrivate() = default;
-
-
-void WeatherPlugin::weatherUpdated(const WeatherData &weather)
+    : q_ptr(q),
+    m_exportedWidget(nullptr),
+    m_weatherIconName("WeatherPluginWidget::WeatherIcon"),
+    m_locationLabelName("WeatherPluginWidget::LocationLabel"),
+    m_temperatureLabelName("WeatherPluginWidget::TemperatureLabel"),
+    m_size(400, 200),
+    m_connection(QDBusConnection::sessionBus()),
+    m_interface(nullptr)
 {
+
+}
+
+WeatherPluginPrivate::~WeatherPluginPrivate()
+{
+    // We should manage interface in plugin private, connection should be managed by itself.
+    delete m_interface;
+}
+
+
+void WeatherPlugin::onWeatherChanged(const WeatherData &weather)
+{
+    qDebug() << "weather changed, slot triggered.";
     Q_D(WeatherPlugin);
     QGroupBox *box = qobject_cast<QGroupBox *>(d->m_exportedWidget);
-    auto children = box->children();
+    QObjectList children = box->children();
     foreach(QObject *obj, children)
     {
-        qDebug() << obj->metaObject()->className();
         if (obj->objectName() == d->m_weatherIconName)
         {
+            // weather icon
             WeatherIcon *icon = qobject_cast<WeatherIcon *>(obj);
-            switch (weather.getWeatherOverview()) {
+            switch (weather.overview) {
             case SUNNY:
+                icon->setIcon(":/icons/sunny.svg");
+                break;
             case RAINY:
+                icon->setIcon(":/icons/slightly_rainy.svg");
+                break;
             case CLOUDY:
             case WINDY:
             case SUNNY2RAINY:
             case SUNNY2CLOUDY:
             case CLOUDY2SUNNY:
             case RAINY2SUNNY:
-                break;
             default:
                 break;
             }
         }
-
+        else if (obj->objectName() == d->m_locationLabelName)
+        {
+            // location label
+            QLabel *locationLabel = qobject_cast<QLabel *>(obj);
+            locationLabel->setText(weather.location);
+        }
+        else if (obj->objectName() == d->m_temperatureLabelName)
+        {
+            // temperature label
+            QLabel *temperatureLabel = qobject_cast<QLabel *>(obj);
+            QString temperatureStr = QString::number(weather.currentTemperature, 10, 0);
+            temperatureStr += "\u00B0";
+            if (weather.unit == TemperatureUnit::CELSIUS)
+            {
+                temperatureStr += "C";
+            }
+            else
+            {
+                temperatureStr += "F";
+            }
+            temperatureLabel->setText(temperatureStr);
+        }
     }
 }
 
-
+void WeatherPlugin::weatherUpdated(QDBusMessage weatherMsg)
+{
+    qDebug() << "weather updated.";
+    WeatherData weather;
+    if (weatherMsg.type() == QDBusMessage::ErrorMessage)
+    {
+        qWarning() << "can't get weather, get a error a message.";
+        return;
+    }
+    else if (weatherMsg.type() == QDBusMessage::ReplyMessage)
+    {
+        QList<QVariant> arguments = weatherMsg.arguments();
+        weather = qdbus_cast<WeatherData>(arguments.takeFirst());
+        onWeatherChanged(weather);
+    }
+    else
+    {
+        qWarning() << "unknown message type.";
+        return;
+    }
+    
+}
 END_USER_NAMESPACE

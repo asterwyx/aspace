@@ -7,7 +7,7 @@
 #include <QList>
 #include <QScopedPointer>
 #include <QtGlobal>
-#include "namespace.h"
+#include "global.h"
 
 BEGIN_USER_NAMESPACE
 class PluginLoaderPrivate;

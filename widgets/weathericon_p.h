@@ -19,8 +19,9 @@ private:
     double                  m_scaleFactor;
     WeatherIcon             *q_ptr;
     QString                 m_iconPath;
+    QColor                  m_iconColor; // This is only valid for svg icon
     WeatherIcon::IconType   m_iconType;
     QByteArray              m_svgData;
-
+    QPixmap                 m_iconPixmap;
 };
 END_USER_NAMESPACE

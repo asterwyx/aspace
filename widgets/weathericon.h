@@ -5,7 +5,8 @@
 #pragma once
 #include <QObject>
 #include <QWidget>
-#include "namespace.h"
+
+#include "global.h"
 
 BEGIN_USER_NAMESPACE
 class WeatherIconPrivate;
@@ -23,9 +24,13 @@ public:
     explicit WeatherIcon(const QString& iconPath, QWidget *parent = nullptr, double scaleFactor = 1.0, IconType type = SVG);
     ~WeatherIcon() override;
     void setSvgColor(QColor color = Qt::yellow);
+    void setIcon(const QString& iconPath, IconType type = SVG);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void loadSvgData();
+    
+    
 
 private:
     Q_DECLARE_PRIVATE(WeatherIcon)

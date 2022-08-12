@@ -15,4 +15,9 @@ target_link_libraries(aspace-daemon PRIVATE
     Qt5::Widgets
     Qt5::DBus
     common
-    )
+)
+
+install(TARGETS aspace-daemon RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+set(DAEMON_BIN "${CMAKE_INSTALL_BINDIR}/aspace-daemon")
+configure_file(org.deepin.aspace.service.in "${DBUS_SERVICE_NAME}.service")
+install(FILES "${DBUS_SERVICE_NAME}.service" DESTINATION ${CMAKE_INSTALL_DBUSDIR})

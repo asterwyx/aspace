@@ -6,8 +6,9 @@
 #include "plugininterface.h"
 #include <QWidget>
 #include <QScopedPointer>
-#include "namespace.h"
+#include <QDBusMessage>
 
+#include "global.h"
 #include "weatherdata.h"
 
 BEGIN_USER_NAMESPACE
@@ -23,7 +24,8 @@ public:
     QString pluginDisplayName() const override;
     QWidget *pluginWidget(const QString &key) override;
 private slots:
-    void weatherUpdated(const WeatherData &weather);
+    void weatherUpdated(QDBusMessage weatherMsg);
+    void onWeatherChanged(const WeatherData &weather);
 private:
     Q_DECLARE_PRIVATE(WeatherPlugin)
     QScopedPointer<WeatherPluginPrivate> d_ptr;

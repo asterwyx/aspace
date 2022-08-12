@@ -20,3 +20,5 @@ target_link_libraries(widgets PRIVATE
     Qt::Svg
     Qt::Xml
 )
+
+install(TARGETS widgets LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR})

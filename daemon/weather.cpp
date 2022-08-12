@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "weather.h"
-#include "weather_p.h"
 #include <QDBusConnection>
 #include <QDBusMetaType>
 #include <QDebug>
@@ -11,50 +10,51 @@
 #include "enumdbus.h"
 BEGIN_USER_NAMESPACE
 Weather::Weather(QObject *parent)
-    : QObject{parent}, d_ptr{new WeatherPrivate(this)}
+    : QObject(parent)
 {
     QDBusConnection conn = QDBusConnection::sessionBus();
-    conn.registerObject("/weather", this, QDBusConnection::ExportNonScriptableContents | QDBusConnection::ExportAllContents);
+    conn.registerObject(DBUS_WEATHER_PATH, this, QDBusConnection::ExportNonScriptableContents | QDBusConnection::ExportAllContents);
     qDebug() << "weather object registered.";
-    conn.registerService("org.deepin.aspace");
+    conn.registerService(DBUS_SERVICE_NAME);
     qDebug() << "org.deepin.aspace service registered.";
 }
 
-Weather::~Weather()
-{
-    delete this->d_ptr;
-}
+Weather::~Weather() = default;
 
 void Weather::setLocation(QString location)
 {
-    Q_D(Weather);
-    d->m_currentWeather.setLocation(location);
+    m_currentWeather.location = location;
 }
 
 double Weather::getCurrentTemperature()
 {
-    // TODO implement data acquiring.
-    Q_D(Weather);
-    return d->m_currentWeather.getCurrentTemperature();
+    return m_currentWeather.currentTemperature;
+}
+
+double Weather::getLowestTemperature()
+{
+    return m_currentWeather.lowestTemperature;
+}
+
+double Weather::getHighestTemperature()
+{
+    return m_currentWeather.highestTemperature;
 }
 
 TemperatureUnit Weather::getCurrentTemperatureUnit()
 {
-    Q_D(Weather);
-    return d->m_currentWeather.getTemperatureUnit();
+    return m_currentWeather.unit;
 }
 
 WeatherOverview Weather::getCurrentWeatherOverview()
 {
-    // TODO implement the data acquiring.
-    Q_D(Weather);
-    return d->m_currentWeather.getWeatherOverview();
+    return m_currentWeather.overview;
 }
 
 WeatherData Weather::getCurrentWeather()
 {
-    Q_D(Weather);
-    return d->m_currentWeather;
+    // TODO implement the data acquiring.
+    return m_currentWeather;
 }
 
 QList<WeatherData> Weather::getFutureWeather()
@@ -68,19 +68,13 @@ QList<WeatherData> Weather::getFutureWeather()
 
 void Weather::setTemperatureUnit(TemperatureUnit unit)
 {
-    Q_D(Weather);
-    d->m_currentWeather.setTemperatureUnit(unit);
+    m_currentWeather.changeTemperatureUnit(unit);
 }
 
 QString Weather::getLocation()
 {
-    Q_D(Weather);
-    return d->m_currentWeather.getLocation();
+    return m_currentWeather.location;
 }
-
-WeatherPrivate::WeatherPrivate(Weather *q)
-    : q_ptr{q}
-{}
 
 void Weather::registerWeatherMetaTypes()
 {

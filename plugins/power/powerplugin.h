@@ -6,7 +6,7 @@
 #include "plugininterface.h"
 #include <QScopedPointer>
 #include <QWidget>
-#include "namespace.h"
+#include "global.h"
 
 BEGIN_USER_NAMESPACE
 class PowerPluginPrivate;

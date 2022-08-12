@@ -8,7 +8,7 @@
 #include <QString>
 #include <QWidget>
 #include <QtGlobal>
-#include "namespace.h"
+#include "global.h"
 BEGIN_USER_NAMESPACE
 class EchoEditorPrivate;
 class EchoEditor : public QObject, public PluginInterface {

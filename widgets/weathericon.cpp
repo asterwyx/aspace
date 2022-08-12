@@ -21,18 +21,25 @@ WeatherIcon::WeatherIcon(const QString& iconPath, QWidget *parent, double scaleF
     d->m_scaleFactor = scaleFactor;
     d->m_iconPath = iconPath;
     d->m_iconType = type;
-    if (type == SVG)
+    if (!d->m_iconPath.isEmpty())
     {
-        QFile iconFile(d->m_iconPath);
-        iconFile.open(QIODevice::ReadOnly);
-        d->m_svgData = iconFile.readAll();
-        iconFile.close();
+        if (type == SVG)
+        {
+            QFile iconFile(d->m_iconPath);
+            iconFile.open(QIODevice::ReadOnly);
+            d->m_svgData = iconFile.readAll();
+            iconFile.close();
+        }
     }
+
 }
 
 void WeatherIcon::setSvgColor(QColor color)
 {
     Q_D(WeatherIcon);
+    d->m_iconColor = color;
+    if (d->m_iconPath.isEmpty())
+        return;    
     if (d->m_iconType == PNG)
     {
         qWarning() << "Icon type is PNG, cannot set color.";
@@ -47,6 +54,16 @@ void WeatherIcon::setSvgColor(QColor color)
     elem = Utils::setXmlAttrValueRecurse(doc.documentElement(), "fill", colorString);
     doc.replaceChild(doc.documentElement(), elem);
     d->m_svgData = doc.toByteArray();
+}
+
+void WeatherIcon::loadSvgData()
+{
+    Q_D(WeatherIcon);
+    QFile iconFile(d->m_iconPath);
+    iconFile.open(QIODevice::ReadOnly);
+    d->m_svgData = iconFile.readAll();
+    iconFile.close();
+    setSvgColor(d->m_iconColor); // Sync color setting
 }
 
 void WeatherIcon::paintEvent(QPaintEvent *event)
@@ -73,6 +90,21 @@ void WeatherIcon::paintEvent(QPaintEvent *event)
         QPainter painter(this);
         painter.drawPixmap(0, 0, pixmap);
     }
+}
+
+void WeatherIcon::setIcon(const QString& iconPath, IconType type)
+{
+    Q_D(WeatherIcon);
+    d->m_iconPath = iconPath;
+    d->m_iconType = type;
+    if (type == IconType::SVG)
+    {
+        QFile iconFile(d->m_iconPath);
+        iconFile.open(QIODevice::ReadOnly);
+        d->m_svgData = iconFile.readAll();
+        iconFile.close();
+    }
+    this->update();
 }
 
 WeatherIcon::~WeatherIcon() = default;

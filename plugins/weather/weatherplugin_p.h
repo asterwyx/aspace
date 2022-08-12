@@ -4,6 +4,8 @@
 
 #pragma once
 #include "weatherplugin.h"
+#include <QDBusConnection>
+#include <QDBusInterface>
 BEGIN_USER_NAMESPACE
 class WeatherPluginPrivate {
 public:
@@ -16,5 +18,8 @@ private:
     QString         m_weatherIconName;
     QString         m_locationLabelName;
     QString         m_temperatureLabelName;
+    QSize           m_size;
+    QDBusConnection m_connection;
+    QDBusInterface  *m_interface;
 };
 END_USER_NAMESPACE

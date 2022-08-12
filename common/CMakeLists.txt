@@ -15,3 +15,5 @@ target_link_libraries(common PRIVATE
     Qt::Widgets
     Qt::DBus
 )
+
+install(TARGETS common LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

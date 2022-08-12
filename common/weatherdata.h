@@ -9,7 +9,7 @@
 #include <QDBusArgument>
 #include <QDebug>
 
-#include "namespace.h"
+#include "global.h"
 
 BEGIN_USER_NAMESPACE
 
@@ -29,41 +29,29 @@ enum WeatherOverview {
     RAINY2SUNNY
 };
 
-class WeatherData {
-public:
+struct WeatherData {
+    WeatherOverview overview;
+    TemperatureUnit unit;
+    double          currentTemperature;
+    double          lowestTemperature;
+    double          highestTemperature;
+    QString         location;
+    
     WeatherData(
-        WeatherOverview overview = WeatherOverview::SUNNY,
+        WeatherOverview overview = WeatherOverview::RAINY,
         TemperatureUnit unit = TemperatureUnit::CELSIUS,
         double currentTemperature = 0,
         double lowestTemperature = 0,
         double highestTemperature = 0,
         QString location = ""
         );
-    ~WeatherData();
-    WeatherOverview             getWeatherOverview() const;
-    double                      getCurrentTemperature() const;
-    double                      getLowestTemperature() const;
-    double                      getHighestTemperature() const;
-    TemperatureUnit             getTemperatureUnit() const;
-    QString                     getLocation() const;
+    
+    void changeTemperatureUnit(TemperatureUnit unit);
 
-    void                        setWeatherOverview(WeatherOverview overview);
-    void                        setCurrentTemperature(double currentTemper);
-    void                        setLowestTemperature(double lowestTemper);
-    void                        setHighestTemperature(double highestTemper);
-    void                        setLocation(QString location);
-    void                        setTemperatureUnit(TemperatureUnit unit);
     friend QDBusArgument        &operator<<(QDBusArgument &argument, const WeatherData &data);
     friend const QDBusArgument  &operator>>(const QDBusArgument &argument, WeatherData &data);
     friend QDebug               &operator<<(QDebug &debug, const WeatherData &data);
-
-private:
-    WeatherOverview m_weatherOverview;
-    TemperatureUnit m_unit;
-    double          m_currentTemperature;
-    double          m_lowestTemperature;
-    double          m_highestTemperature;
-    QString         m_location;
+    
 };
 
 END_USER_NAMESPACE

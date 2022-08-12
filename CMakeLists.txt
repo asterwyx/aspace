@@ -14,6 +14,20 @@ project(aspace
     DESCRIPTION "A space for weather and rest."
     VERSION ${VERSION})
 
+
+if (NOT DEFINED DBUS_SERVICE_NAME)
+    set(DBUS_SERVICE_NAME "org.deepin.aspace")
+endif()
+add_compile_definitions("-D${DBUS_SERVICE_NAME}")
+message(STATUS $ENV{HOME})
+set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local")
+set(CMAKE_INSTALL_BINDIR "bin")
+set(CMAKE_INSTALL_LIBDIR "lib/aspace")
+set(CMAKE_INSTALL_SCHEMADIR "/usr/share/glib-2.0/schemas")
+set(CMAKE_INSTALL_DBUSDIR "share/dbus-1/services")
+set(CMAKE_INSTALL_SYSTEMDDIR "/etc/systemd/user")
+set(CMAKE_INSTALL_ENTRYDIR "share/applications")
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(GNUInstallDirs)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -56,3 +70,8 @@ target_link_libraries(aspace PRIVATE
     Qt5::UiPlugin
     widgets
     common)
+
+install(TARGETS aspace RUNTIME DESTINATION ${CMAKE_ISNTALL_BINDIR})
+install(FILES misc/org.deepin.aspace.gschema.xml DESTINATION ${CMAKE_INSTALL_SCHEMADIR})
+install(FILES misc/aspace.service DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
+install(FILES misc/org.deepin.aspace.desktop DESTINATION ${CMAKE_INSTALL_ENTRYDIR})

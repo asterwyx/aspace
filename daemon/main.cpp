@@ -11,8 +11,9 @@ USE_USER_NAMESPACE
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    auto weather = Weather::getInstance();
+    auto weather = new Weather();
     weather->setLocation(QString::fromUtf8("武汉"));
+    weather->setTemperatureUnit(TemperatureUnit::FAHRENHEIT);
     Weather::registerWeatherMetaTypes();
     qDebug() << "daemon started.";
     return a.exec();
