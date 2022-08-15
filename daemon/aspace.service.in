@@ -1,0 +1,12 @@
+[Unit]
+Description=aspace daemon
+After=network.target
+
+[Service]
+Type=dbus
+BusName=@DBUS_SERVICE_NAME@
+ExecStart=@DAEMON_BIN@
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

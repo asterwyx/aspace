@@ -5,9 +5,9 @@
 set(PLUGIN_NAME "power")
 
 project(${PLUGIN_NAME})
-#include_directories("widgets")
-file(GLOB_RECURSE POWER_SRCS "*.cpp")
+file(GLOB POWER_SRCS ".h" "*.cpp")
 find_package(Qt5 REQUIRED COMPONENTS UiPlugin)
 
-add_library(power SHARED ${POWER_SRCS})
-target_link_libraries(power PRIVATE Qt5::Widgets Qt5::UiPlugin)
+add_library(${PLUGIN_NAME} SHARED ${POWER_SRCS})
+target_link_libraries(${PLUGIN_NAME} PRIVATE Qt5::Widgets Qt5::UiPlugin)
+install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_PLUGINDIR})

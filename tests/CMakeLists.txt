@@ -10,14 +10,7 @@ project(aspace-unit-test
 
 find_package(GTest REQUIRED)
 
-aux_source_directory("." TEST_SRCS)
-
-link_directories(
-    "../plugins/echoeditor"
-    "../plugins/weather"
-    "../plugins/power"
-    "../widgets"
-)
+file(GLOB TEST_SRCS "*.cpp")
 
 add_executable(aspace-unit-test ${TEST_SRCS})
 
@@ -26,5 +19,5 @@ target_link_libraries(aspace-unit-test PRIVATE
     Qt::UiPlugin
     GTest::GTest
     GTest::Main
-    widgets
+    ${ASPACE_WIDGETS}
     )

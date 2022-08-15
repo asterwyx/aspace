@@ -5,8 +5,8 @@
 set(PLUGIN_NAME "echo-editor")
 
 project(${PLUGIN_NAME})
+file(GLOB ECHO_EDITOR_SRCS ".h" "*.cpp")
 
-aux_source_directory("." ECHO_EDITOR_SRCS)
-
-add_library(echoeditor SHARED ${ECHO_EDITOR_SRCS})
-target_link_libraries(echoeditor PRIVATE Qt5::Widgets)
+add_library(${PLUGIN_NAME} SHARED ${ECHO_EDITOR_SRCS})
+target_link_libraries(${PLUGIN_NAME} PRIVATE Qt5::Widgets)
+install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_PLUGINDIR})

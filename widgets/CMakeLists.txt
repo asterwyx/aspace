@@ -2,23 +2,23 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-project(widgets
+project(${ASPACE_WIDGETS}
     LANGUAGES CXX
     HOMEPAGE_URL https://github.com/asterwyx/aspace
     DESCRIPTION "User defined widgets."
     VERSION ${VERSION})
 
-file(GLOB SRCS "*.h" "*.cpp")
-add_library(widgets SHARED ${SRCS})
+file(GLOB WIDGET_SRCS "*.h" "*.cpp")
+add_library(${ASPACE_WIDGETS} SHARED ${WIDGET_SRCS})
 
 # only find necessary package in its own project scope
 find_package(Qt5 REQUIRED COMPONENTS Xml)
 
-target_link_libraries(widgets PRIVATE
+target_link_libraries(${ASPACE_WIDGETS} PRIVATE
     Qt::Widgets
     Qt::UiPlugin
     Qt::Svg
     Qt::Xml
 )
 
-install(TARGETS widgets LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS ${ASPACE_WIDGETS} LIBRARY)

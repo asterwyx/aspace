@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=@CLIENT_NAME@
+Type=Application
+Exec=@CLIENT_BIN@ %U
+Icon=gnome-weather

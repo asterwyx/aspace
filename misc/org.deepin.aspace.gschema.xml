@@ -12,7 +12,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
             <description>If not initialized, initialize it.</description>
         </key>
         <key name="location" type="s">
-            <default></default>
+            <default>""</default>
             <summary>Location</summary>
             <description>If null, we don't load weather plugin</description>
         </key>
