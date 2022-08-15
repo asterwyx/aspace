@@ -4,12 +4,6 @@ Upstream-Contact: Astrea Wang <wangyixue@uniontech.com>
 Source: https://github.com/asterwyx/aspace
 Copyright: Astrea Wang
 
-# Sample paragraph, commented out:
-#
-# Files: src/*
-# Copyright: $YEAR $NAME <$CONTACT>
-# License: ...
-
 # debian
 Files: debian/*
 Copyright: None
@@ -21,7 +15,7 @@ Copyright: None
 License: CC0-1.0
 
 # assets
-Files: plugins/weather/icons/*
+Files: plugins/weather/icons/* frame/icons/*
 Copyright: None
 License: CC0-1.0
 
@@ -29,4 +23,9 @@ License: CC0-1.0
 Files: archlinux/*
 Copyright: None
 License: CC0-1.0
+
+# configure file
+Files: *.in
+Copyright: Astrea Wang
+License: GPL-3.0-or-later
 
