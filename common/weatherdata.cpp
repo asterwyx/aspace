@@ -4,6 +4,7 @@
 
 #include "weatherdata.h"
 #include "enumdbus.h"
+#include <QDBusMetaType>
 
 BEGIN_USER_NAMESPACE
 WeatherData::WeatherData(
@@ -44,6 +45,19 @@ void WeatherData::changeTemperatureUnit(TemperatureUnit unit)
         lowestTemperature = (5.0 / 9.0) * (fLowest - 32.0);
         highestTemperature = (5.0 / 9.0) * (fHighest - 32.0);
     }
+}
+
+void WeatherData::registerMetaTypes()
+{
+    qRegisterMetaType<WeatherData>("WeatherData");
+    qDBusRegisterMetaType<WeatherData>();
+    qRegisterMetaType<WeatherOverview>("WeatherOverview");
+    qDBusRegisterMetaType<WeatherOverview>();
+    qRegisterMetaType<TemperatureUnit>("TemperatureUnit");
+    qDBusRegisterMetaType<TemperatureUnit>();
+    qRegisterMetaType<QList<WeatherData>>("QList<WeatherData>");
+    qDBusRegisterMetaType<QList<WeatherData>>();
+    qDebug() << "Meta types for weather registered.";
 }
 
 

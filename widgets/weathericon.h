@@ -10,7 +10,7 @@
 
 BEGIN_USER_NAMESPACE
 class WeatherIconPrivate;
-class  WeatherIcon : public QWidget
+class WeatherIcon : public QWidget
 {
     Q_OBJECT
 
@@ -29,8 +29,6 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     void loadSvgData();
-    
-    
 
 private:
     Q_DECLARE_PRIVATE(WeatherIcon)

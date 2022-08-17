@@ -1,0 +1,9 @@
+[Unit]
+Description=Update weather automatically.
+
+[Timer]
+OnUnitActiveSec=2h
+Unit=@CLIENT_NAME@.service
+
+[Install]
+WantedBy=timers.target

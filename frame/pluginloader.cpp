@@ -68,9 +68,16 @@ bool PluginLoaderPrivate::loadPlugins() {
     foreach (QString pluginDir, m_pluginDirs)
     {
         QDir pluginsDir(appRunPrefix);
-//        pluginsDir.cdUp();
-        pluginsDir.cd(pluginDir);
-        foreach (QString fileName, pluginsDir.entryList(QDir::Files | QDir::Executable)) {
+        if (pluginDir.startsWith('/'))
+        {
+            // absolute path
+            pluginsDir = QDir(pluginDir); 
+        }
+        {
+            pluginsDir.cd(pluginDir);
+        }
+        foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
+            
             QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
             QObject *plugin = pluginLoader.instance();
             PluginInterface *loadedInterface = qobject_cast<PluginInterface *>(plugin);

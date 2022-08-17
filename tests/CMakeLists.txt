@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-project(aspace-unit-test
+project(ut-aspace
     LANGUAGES CXX
     HOMEPAGE_URL https://github.com/asterwyx/aspace
     DESCRIPTION "A space for weather and rest."
@@ -12,9 +12,9 @@ find_package(GTest REQUIRED)
 
 file(GLOB TEST_SRCS "*.cpp")
 
-add_executable(aspace-unit-test ${TEST_SRCS})
+add_executable(ut-aspace ${TEST_SRCS})
 
-target_link_libraries(aspace-unit-test PRIVATE
+target_link_libraries(ut-aspace PRIVATE
     Qt::Widgets
     Qt::UiPlugin
     GTest::GTest

@@ -19,13 +19,18 @@ set(CLIENT_NAME "aspace")
 if (NOT DEFINED DBUS_SERVICE_NAME)
 set(DBUS_SERVICE_NAME "org.deepin.aspace")
 endif()
+if (NOT DEFINED PLUGIN_DIR)
+set(PLUGIN_DIR "${CMAKE_INSTALL_PREFIX}/lib/aspace/plugins")
+endif()
+
 add_compile_definitions(DBUS_SERVICE_NAME="${DBUS_SERVICE_NAME}")
+add_compile_definitions(PLUGIN_DIR="${PLUGIN_DIR}")
 
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_LIBDIR "lib/aspace")
 set(CMAKE_INSTALL_SCHEMADIR "share/glib-2.0/schemas")
 set(CMAKE_INSTALL_DBUSDIR "share/dbus-1/services")
-set(CMAKE_INSTALL_SYSTEMDDIR "/etc/systemd/user")
+set(CMAKE_INSTALL_SYSTEMDDIR "lib/systemd/user")
 set(CMAKE_INSTALL_ENTRYDIR "share/applications")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -54,9 +59,7 @@ include_directories(
     "common"
     )
 link_directories(
-    "plugins/echoeditor"
     "plugins/weather"
-    "plugins/power"
     "widgets"
 )
 
@@ -73,6 +76,7 @@ add_executable(${CLIENT_NAME} ${FRAME_SRCS})
 target_link_libraries(${CLIENT_NAME} PRIVATE
     Qt5::Widgets
     Qt5::UiPlugin
+    Qt5::DBus
     ${ASPACE_WIDGETS}
     ${ASPACE_COMMON}
 )

@@ -37,6 +37,8 @@ struct WeatherData {
     double          highestTemperature;
     QString         location;
     
+    static void registerMetaTypes();
+
     WeatherData(
         WeatherOverview overview = WeatherOverview::RAINY,
         TemperatureUnit unit = TemperatureUnit::CELSIUS,

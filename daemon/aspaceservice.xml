@@ -1,0 +1,19 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.deepin.aspace">
+    <signal name="quitService">
+    </signal>
+    <signal name="weatherUpdated">
+        <arg name="weather" type="(iiii)" direction="out" />
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="WeatherData"/>
+    </signal>
+    <method name="getCurrentWeather">
+        <arg type="(iiii)" direction="out" />
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="WeatherData"/>
+    </method>
+    <method name="getFutureWeather">
+        <arg type="(iiii)" direction="out" />
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="WeatherData"/>
+    </method>
+  </interface>
+</node>

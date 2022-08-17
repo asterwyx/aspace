@@ -12,7 +12,7 @@ file(GLOB DAEMON_SRCS "*.h" "*.cpp")
 
 add_executable(aspace-daemon ${DAEMON_SRCS})
 target_link_libraries(aspace-daemon PRIVATE
-    Qt5::Widgets
+    Qt5::Core
     Qt5::DBus
     ${ASPACE_COMMON}
 )
@@ -25,3 +25,6 @@ install(FILES "${PROJECT_BINARY_DIR}/${DBUS_SERVICE_NAME}.service" DESTINATION $
 
 configure_file(aspace.service.in "${CLIENT_NAME}.service")
 install(FILES "${PROJECT_BINARY_DIR}/${CLIENT_NAME}.service" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
+
+configure_file(update-weather.timer.in update-weather.timer)
+install(FILES "${PROJECT_BINARY_DIR}/update-weather.timer" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})

@@ -17,15 +17,14 @@
 
 #include "weatherdata.h"
 #include "weathericon.h"
-
-#include "enumdbus.h"
+#include "weatherinterface.h"
 
 BEGIN_USER_NAMESPACE
 
 WeatherPlugin::WeatherPlugin() : d_ptr(new WeatherPluginPrivate(this)) {}
 WeatherPlugin::~WeatherPlugin() = default;
 
-QString WeatherPlugin::pluginName() const { return {"dde-weather"}; }
+QString WeatherPlugin::pluginName() const { return {"aspace-weather"}; }
 QString WeatherPlugin::pluginDisplayName() const { return {"Weather"}; }
 
 QWidget *WeatherPlugin::pluginWidget(const QString &key) {
@@ -54,23 +53,17 @@ QWidget *WeatherPlugin::pluginWidget(const QString &key) {
     {   
         Q_UNUSED(checked)
         QtConcurrent::run([=] {
-            // This is a temporary call, make sure daemon can exit after call
             QDBusConnection bus = QDBusConnection::sessionBus();
-            QDBusInterface iface("org.deepin.aspace", "/weather", "org.deepin.aspace.Weather", bus);
-            QDBusMessage replyMsg = iface.call("getCurrentWeather");
-            if (replyMsg.type() == QDBusMessage::ReplyMessage)
+            WeatherInterface weatherInterface(DBUS_SERVICE_NAME, DBUS_ASPACE_PATH, bus);
+            QDBusPendingReply<WeatherData> reply = weatherInterface.getCurrentWeather();
+            reply.waitForFinished();
+            if (reply.isError())
             {
-                QList<QVariant> arguments = replyMsg.arguments();
-                WeatherData weather = qdbus_cast<WeatherData>(arguments.takeFirst());
-                onWeatherChanged(weather);
-            }
-            else if (replyMsg.type() == QDBusMessage::ErrorMessage)
-            {
-                qWarning() << "calling getCurrentWeather get a error message: " << replyMsg.errorMessage();
+                qWarning() << reply.error().message();
             }
             else
             {
-                qWarning() << "calling getCurrentWeather get a unknown message type: " << replyMsg.type();
+                onWeatherChanged(reply.value());
             }
         });
 
@@ -89,18 +82,12 @@ WeatherPluginPrivate::WeatherPluginPrivate(WeatherPlugin *q)
     m_weatherIconName("WeatherPluginWidget::WeatherIcon"),
     m_locationLabelName("WeatherPluginWidget::LocationLabel"),
     m_temperatureLabelName("WeatherPluginWidget::TemperatureLabel"),
-    m_size(400, 200),
-    m_connection(QDBusConnection::sessionBus()),
-    m_interface(nullptr)
+    m_size(400, 200)
 {
 
 }
 
-WeatherPluginPrivate::~WeatherPluginPrivate()
-{
-    // We should manage interface in plugin private, connection should be managed by itself.
-    delete m_interface;
-}
+WeatherPluginPrivate::~WeatherPluginPrivate() = default;
 
 
 void WeatherPlugin::onWeatherChanged(const WeatherData &weather)

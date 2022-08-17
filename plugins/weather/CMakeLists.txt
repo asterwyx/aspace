@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(PLUGIN_NAME "weather")
+set(PLUGIN_NAME "aspace-weather")
 
 project(${PLUGIN_NAME})
 file(GLOB WEATHER_SRCS "*.h" "*.cpp" "*.qrc")

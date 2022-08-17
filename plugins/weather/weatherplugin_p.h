@@ -19,7 +19,5 @@ private:
     QString         m_locationLabelName;
     QString         m_temperatureLabelName;
     QSize           m_size;
-    QDBusConnection m_connection;
-    QDBusInterface  *m_interface;
 };
 END_USER_NAMESPACE

@@ -2,19 +2,30 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "weather.h"
-#include <QApplication>
+#include <QCoreApplication>
 #include <QDebug>
+#include "weatherservice.h"
+
 
 USE_USER_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    auto weather = new Weather();
-    weather->setLocation(QString::fromUtf8("武汉"));
-    weather->setTemperatureUnit(TemperatureUnit::FAHRENHEIT);
-    Weather::registerWeatherMetaTypes();
-    qDebug() << "daemon started.";
-    return a.exec();
+    QCoreApplication app(argc, argv);
+    WeatherData::registerMetaTypes();
+    Aspace asp;
+    asp.setLocation(QString::fromUtf8("武汉"));
+    asp.setTemperatureUnit(TemperatureUnit::FAHRENHEIT);
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    WeatherService ws(&asp);
+    if (connection.registerService(DBUS_SERVICE_NAME) && connection.registerObject(DBUS_ASPACE_PATH, &asp, QDBusConnection::ExportAdaptors))
+    {
+        qInfo() << "Successfully registered service" << DBUS_SERVICE_NAME << "and object" << DBUS_ASPACE_PATH".";
+    }
+    else
+    {
+        qCritical() << "Cannot get a DBus service name, is another process running?";
+        app.quit();
+    }
+    return app.exec();
 }
