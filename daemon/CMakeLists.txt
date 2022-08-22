@@ -14,6 +14,7 @@ add_executable(aspace-daemon ${DAEMON_SRCS})
 target_link_libraries(aspace-daemon PRIVATE
     Qt5::Core
     Qt5::DBus
+    Qt5::Network
     ${ASPACE_COMMON}
 )
 
