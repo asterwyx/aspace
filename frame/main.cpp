@@ -11,7 +11,7 @@ USE_USER_NAMESPACE
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    WeatherData::registerMetaTypes();
+    utils::registerAllMetaTypes();
     QMainWindow w;
     QIcon applicationIcon = QIcon::fromTheme("gnome-weather", QIcon(":/icons/gnome-weather.svg"));
     w.setWindowIcon(applicationIcon);

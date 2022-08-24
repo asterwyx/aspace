@@ -55,7 +55,7 @@ QWidget *WeatherPlugin::pluginWidget(const QString &key) {
         QtConcurrent::run([=] {
             QDBusConnection bus = QDBusConnection::sessionBus();
             WeatherInterface weatherInterface(DBUS_SERVICE_NAME, DBUS_ASPACE_PATH, bus);
-            QDBusPendingReply<WeatherData> reply = weatherInterface.getCurrentWeather();
+            QDBusPendingReply<CurrentWeather> reply = weatherInterface.getCurrentWeather();
             reply.waitForFinished();
             if (reply.isError())
             {
@@ -69,9 +69,10 @@ QWidget *WeatherPlugin::pluginWidget(const QString &key) {
 
     });
     updateButton->move(0, d->m_size.height() / 3 * 2);
-    WeatherIcon *icon = new WeatherIcon("", box);
+    WeatherIcon *icon = new WeatherIcon;
+    icon->setParent(box);
     icon->setObjectName(d->m_weatherIconName);
-    icon->setSvgColor(Qt::yellow);
+    icon->setColor(Qt::yellow);
     icon->move(d->m_size.width() / 2, 0);
     icon->resize(d->m_size / 2);
     return box;
@@ -90,7 +91,7 @@ WeatherPluginPrivate::WeatherPluginPrivate(WeatherPlugin *q)
 WeatherPluginPrivate::~WeatherPluginPrivate() = default;
 
 
-void WeatherPlugin::onWeatherChanged(const WeatherData &weather)
+void WeatherPlugin::onWeatherChanged(const CurrentWeather &weather)
 {
     qDebug() << "weather changed, slot triggered.";
     Q_D(WeatherPlugin);
@@ -102,36 +103,21 @@ void WeatherPlugin::onWeatherChanged(const WeatherData &weather)
         {
             // weather icon
             WeatherIcon *icon = qobject_cast<WeatherIcon *>(obj);
-            switch (weather.overview) {
-            case SUNNY:
-                icon->setIcon(":/icons/sunny.svg");
-                break;
-            case RAINY:
-                icon->setIcon(":/icons/slightly_rainy.svg");
-                break;
-            case CLOUDY:
-            case WINDY:
-            case SUNNY2RAINY:
-            case SUNNY2CLOUDY:
-            case CLOUDY2SUNNY:
-            case RAINY2SUNNY:
-            default:
-                break;
-            }
+            icon->setIconFromName(weather.iconName);
         }
         else if (obj->objectName() == d->m_locationLabelName)
         {
             // location label
             QLabel *locationLabel = qobject_cast<QLabel *>(obj);
-            locationLabel->setText(weather.location);
+            locationLabel->setText(weather.location.name);
         }
         else if (obj->objectName() == d->m_temperatureLabelName)
         {
             // temperature label
             QLabel *temperatureLabel = qobject_cast<QLabel *>(obj);
-            QString temperatureStr = QString::number(weather.currentTemperature, 10, 0);
+            QString temperatureStr = QString::number(weather.temperature, 10, 0);
             temperatureStr += "\u00B0";
-            if (weather.unit == TemperatureUnit::CELSIUS)
+            if (weather.temperatureUnit == TemperatureUnit::CELSIUS)
             {
                 temperatureStr += "C";
             }
@@ -147,7 +133,7 @@ void WeatherPlugin::onWeatherChanged(const WeatherData &weather)
 void WeatherPlugin::weatherUpdated(QDBusMessage weatherMsg)
 {
     qDebug() << "weather updated.";
-    WeatherData weather;
+    CurrentWeather weather;
     if (weatherMsg.type() == QDBusMessage::ErrorMessage)
     {
         qWarning() << "can't get weather, get a error a message.";
@@ -156,7 +142,7 @@ void WeatherPlugin::weatherUpdated(QDBusMessage weatherMsg)
     else if (weatherMsg.type() == QDBusMessage::ReplyMessage)
     {
         QList<QVariant> arguments = weatherMsg.arguments();
-        weather = qdbus_cast<WeatherData>(arguments.takeFirst());
+        weather = qdbus_cast<CurrentWeather>(arguments.takeFirst());
         onWeatherChanged(weather);
     }
     else

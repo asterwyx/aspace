@@ -10,25 +10,22 @@
 
 BEGIN_USER_NAMESPACE
 class WeatherIconPrivate;
+/**
+ * @brief SVG Weather Icon
+ */
 class WeatherIcon : public QWidget
 {
     Q_OBJECT
-
 public:
-    enum IconType {
-        PNG,
-        SVG
-    };
-
-public:
-    explicit WeatherIcon(const QString& iconPath, QWidget *parent = nullptr, double scaleFactor = 1.0, IconType type = SVG);
-    ~WeatherIcon() override;
-    void setSvgColor(QColor color = Qt::yellow);
-    void setIcon(const QString& iconPath, IconType type = SVG);
+    explicit WeatherIcon(const QString& iconPath = "", QWidget *parent = nullptr, double scaleFactor = 1.0);
+    ~WeatherIcon();
+    void setColor(QColor color = Qt::yellow);
+    void setIconFromPath(const QString& iconPath);
+    void setIconFromName(const QString& iconName);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void loadSvgData();
+    void loadData();
 
 private:
     Q_DECLARE_PRIVATE(WeatherIcon)

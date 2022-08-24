@@ -12,10 +12,9 @@ USE_USER_NAMESPACE
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    WeatherData::registerMetaTypes();
+    utils::registerAllMetaTypes();
     Aspace asp;
-    asp.setLocation(QString::fromUtf8("武汉"));
-    asp.setTemperatureUnit(TemperatureUnit::FAHRENHEIT);
+    asp.setLocationName(QString::fromUtf8("武汉"));
     QDBusConnection connection = QDBusConnection::sessionBus();
     WeatherService ws(&asp);
     if (connection.registerService(DBUS_SERVICE_NAME) && connection.registerObject(DBUS_ASPACE_PATH, &asp, QDBusConnection::ExportAdaptors))

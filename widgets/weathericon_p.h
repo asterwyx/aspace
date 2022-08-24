@@ -20,8 +20,7 @@ private:
     WeatherIcon             *q_ptr;
     QString                 m_iconPath;
     QColor                  m_iconColor; // This is only valid for svg icon
-    WeatherIcon::IconType   m_iconType;
     QByteArray              m_svgData;
-    QPixmap                 m_iconPixmap;
+    bool                    m_loaded;    // If there is an actual svg icon loaded.
 };
 END_USER_NAMESPACE

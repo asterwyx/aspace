@@ -25,7 +25,7 @@ public:
     QWidget *pluginWidget(const QString &key) override;
 private slots:
     void weatherUpdated(QDBusMessage weatherMsg);
-    void onWeatherChanged(const WeatherData &weather);
+    void onWeatherChanged(const CurrentWeather &weather);
 private:
     Q_DECLARE_PRIVATE(WeatherPlugin)
     QScopedPointer<WeatherPluginPrivate> d_ptr;

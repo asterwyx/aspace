@@ -19,11 +19,11 @@ public:
     inline Aspace *parent() const;
 
 public slots:
-    WeatherData getCurrentWeather();
-    QList<WeatherData> getFutureWeather();
+    CurrentWeather getCurrentWeather();
+    // QList<WeatherData> getFutureWeather();
 
 signals:
-    void weatherUpdated(WeatherData weather);
+    void weatherUpdated(CurrentWeather weather);
     void quitService();
 private:
     QScopedPointer<QTimer> m_serviceTimer;

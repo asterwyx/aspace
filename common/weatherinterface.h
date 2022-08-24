@@ -19,19 +19,19 @@ public:
     ~WeatherInterface();
 
 public slots:
-    inline QDBusPendingReply<WeatherData> getCurrentWeather()
+    inline QDBusPendingReply<CurrentWeather> getCurrentWeather()
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QLatin1String("getCurrentWeather"), argumentList);
     }
 
-    inline QDBusPendingReply<WeatherData> getFutureWeather()
-    {
-        QList<QVariant> argumentList;
-        return asyncCallWithArgumentList(QLatin1String("getFutureWeather"), argumentList);
-    }
+    // inline QDBusPendingReply<WeatherData> getFutureWeather()
+    // {
+    //     QList<QVariant> argumentList;
+    //     return asyncCallWithArgumentList(QLatin1String("getFutureWeather"), argumentList);
+    // }
 signals:
-    void weatherUpdated(WeatherData weather);
+    void weatherUpdated(CurrentWeather weather);
     void quitService();
 };
 
