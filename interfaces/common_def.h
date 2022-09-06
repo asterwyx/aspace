@@ -15,6 +15,14 @@
 #define BEGIN_USER_NAMESPACE            namespace USER_NAMESPACE {
 #define END_USER_NAMESPACE              }
 
+#if not defined(SCHEMA_ID)
+#define SCHEMA_ID                       "org.deepin.aspace"
+#endif
+
+#if not defined(SCHEMA_PATH)
+#define SCHEMA_PATH                     "/org/deepin/aspace/"
+#endif
+
 #if not defined(PLUGIN_DIR)
 #define PLUGIN_DIR                      "/usr/lib/aspace/plugins"
 #endif

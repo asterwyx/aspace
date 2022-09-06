@@ -1,5 +1,5 @@
 #pragma once
-#include "global.h"
+#include "common_def.h"
 #include <QDBusAbstractAdaptor>
 #include <QTimer>
 

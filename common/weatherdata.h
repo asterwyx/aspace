@@ -10,7 +10,7 @@
 #include <QDebug>
 #include <QDateTime>
 
-#include "global.h"
+#include "common_def.h"
 
 BEGIN_USER_NAMESPACE
 

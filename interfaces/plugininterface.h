@@ -3,40 +3,69 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
+#include "common_def.h"
 #include <QWidget>
+BEGIN_USER_NAMESPACE
+class FrameProxyInterface;
+class PluginInterfacePrivate;
 class PluginInterface {
 public:
+    explicit PluginInterface(FrameProxyInterface *frameProxy = nullptr);
+    /**
+    * @brief Destroy the Plugin Interface object
+    *
+    */
+    virtual ~PluginInterface();
 
-  /**
-   * @brief Destroy the Plugin Interface object
-   *
-   */
-  virtual ~PluginInterface() {}
+    /**
+     * @brief PreInitialize a plugin, if frameProxy is nullptr, use m_frameProxy
+     * 
+     * @param frameProxy 
+     */
+    virtual void preInitialize(FrameProxyInterface *frameProxy = nullptr) {Q_UNUSED(frameProxy)}
 
-  /**
-   * @brief Return the only name of a plugin, this is a must-need name
-   *
-   * @return const QString
-   */
-  virtual QString pluginName() const = 0;
+    /**
+     * @brief Initialize a plugin, if frameProxy is nullptr, use m_frameProxy
+     * 
+     * @param frameProxy 
+     */
+    virtual void initialize(FrameProxyInterface *frameProxy = nullptr) = 0;
 
-  /**
-   * @brief Overwrite this function if you want a different display name
-   *
-   * @return const QString
-   */
-  virtual QString pluginDisplayName() const { return QString(""); }
+    void setFrameProxy(FrameProxyInterface *frameProxy);
+    
+    FrameProxyInterface *frameProxy();
 
-  /**
-   * @brief Get the widget of the plugin
-   *
-   * @param key the only identifier for the plugin
-   * @return QWidget* the widget
-   */
-  virtual QWidget *pluginWidget(const QString &key) = 0;
+    /**
+    * @brief Return the only name of a plugin, this is a must-need name
+    *
+    * @return const QString
+    */
+    virtual QString pluginName() const = 0;
+
+    /**
+    * @brief Overwrite this function if you want a different display name
+    *
+    * @return const QString
+    */
+    virtual QString pluginDisplayName() const { return QObject::tr(""); }
+
+    /**
+    * @brief Get the widget of the plugin
+    *
+    * @param itemKey the only identifier for the plugin
+    * @return QWidget* the widget
+    */
+    virtual QWidget *pluginItemWidget(const QString &itemKey) = 0;
+private:
+    Q_DECLARE_PRIVATE(PluginInterface)
+    PluginInterfacePrivate *d_ptr;
 };
 
-#define PLUGIN_INTERFACE_ID "org.deepin.dde.space.plugin"
+
+END_USER_NAMESPACE
+
+#define PLUGIN_INTERFACE_IID "org.deepin.aspace.plugin/1.0"
+
 QT_BEGIN_NAMESPACE
-Q_DECLARE_INTERFACE(PluginInterface, PLUGIN_INTERFACE_ID)
+Q_DECLARE_INTERFACE(USER_NAMESPACE::PluginInterface, PLUGIN_INTERFACE_IID)
 QT_END_NAMESPACE

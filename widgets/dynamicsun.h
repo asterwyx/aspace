@@ -5,7 +5,7 @@
 #pragma once
 #include <QWidget>
 #include <QDesignerExportWidget>
-#include "global.h"
+#include "common_def.h"
 
 BEGIN_USER_NAMESPACE
 class QDESIGNER_WIDGET_EXPORT DynamicSun : public QWidget {

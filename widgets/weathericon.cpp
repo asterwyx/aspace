@@ -49,8 +49,13 @@ void WeatherIcon::loadData()
         QFile iconFile(d->m_iconPath);
         iconFile.open(QIODevice::ReadOnly);
         d->m_svgData = iconFile.readAll();
+        // Synchronize size with widget        
+        QSvgRenderer renderer;
+        renderer.load(d->m_svgData);
+        resize(renderer.defaultSize());
         iconFile.close();
-        setColor(d->m_iconColor); // Sync color setting
+        // Synchronize color setting
+        setColor(d->m_iconColor);
     }
 }
 
@@ -88,6 +93,36 @@ void WeatherIcon::setIconFromName(const QString &iconName)
     if (iconName.isEmpty())
         return;
     setIconFromPath(":icons/" + iconName + ".svg");
+}
+
+void WeatherIcon::setScaleFactor(double scaleFactor)
+{
+    Q_D(WeatherIcon);
+    d->m_scaleFactor = scaleFactor;
+}
+
+double WeatherIcon::scaleFactor() const
+{
+    const WeatherIconPrivate *const d = d_func();
+    return d->m_scaleFactor;
+}
+
+QColor WeatherIcon::color() const
+{
+    const WeatherIconPrivate *const d = d_func();
+    return d->m_iconColor;
+}
+
+bool WeatherIcon::isLoaded() const
+{
+    const WeatherIconPrivate *const d = d_func();
+    return d->m_loaded;
+}
+
+QString WeatherIcon::iconPath() const
+{
+    const WeatherIconPrivate *const d = d_func();
+    return d->m_iconPath;
 }
 
 WeatherIcon::~WeatherIcon() = default;

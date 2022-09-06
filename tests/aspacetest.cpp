@@ -6,7 +6,7 @@
 #include "battery.h"
 #include <QMainWindow>
 #include <QApplication>
-#include "global.h"
+#include "common_def.h"
 
 USE_USER_NAMESPACE
 

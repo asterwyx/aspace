@@ -22,9 +22,18 @@ endif()
 if (NOT DEFINED PLUGIN_DIR)
 set(PLUGIN_DIR "${CMAKE_INSTALL_PREFIX}/lib/aspace/plugins")
 endif()
-
-add_compile_definitions(DBUS_SERVICE_NAME="${DBUS_SERVICE_NAME}")
-add_compile_definitions(PLUGIN_DIR="${PLUGIN_DIR}")
+if(NOT DEFINED SCHEMA_ID)
+    set(SCHEMA_ID "org.deepin.aspace")
+endif()
+if(NOT DEFINED SCHEMA_PATH)
+    set(SCHEMA_PATH "/org/deepin/aspace/")
+endif()
+add_compile_definitions(
+    DBUS_SERVICE_NAME="${DBUS_SERVICE_NAME}"
+    PLUGIN_DIR="${PLUGIN_DIR}"
+    SCHEMA_ID="${SCHEMA_ID}"
+    SCHEMA_PATH="${SCHEMA_PATH}"
+)
 
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_LIBDIR "lib/aspace")
@@ -46,7 +55,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fPIC -Wall -Wextra")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--as-needed")
 
 # find qt related package
+find_package(PkgConfig REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets Gui UiPlugin LinguistTools Svg DBus Network)
+pkg_search_module(QGSettings REQUIRED gsettings-qt)
 
 # create qt files
 set(TS_FILES translations/aspace_zh_CN.ts)
@@ -57,7 +68,7 @@ include_directories(
     "interfaces"
     "widgets"
     "common"
-    )
+)
 link_directories(
     "plugins/weather"
     "widgets"
@@ -73,13 +84,17 @@ add_subdirectory("tests")
 
 file(GLOB FRAME_SRCS "frame/*.h" "frame/*.cpp" "frame/*.qrc")
 add_executable(${CLIENT_NAME} ${FRAME_SRCS})
+target_include_directories(${CLIENT_NAME} PRIVATE
+    ${QGSettings_INCLUDE_DIRS}
+    )
 target_link_libraries(${CLIENT_NAME} PRIVATE
     Qt5::Widgets
     Qt5::UiPlugin
     Qt5::DBus
+    ${QGSettings_LIBRARIES}
     ${ASPACE_WIDGETS}
     ${ASPACE_COMMON}
-)
+    )
 
 install(TARGETS ${CLIENT_NAME} RUNTIME)
 set(CLIENT_BIN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CLIENT_NAME}")

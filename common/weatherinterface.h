@@ -2,7 +2,7 @@
 
 #include <QDBusAbstractInterface>
 #include <QDBusPendingReply>
-#include "global.h"
+#include "common_def.h"
 #include "weatherdata.h"
 
 BEGIN_USER_NAMESPACE

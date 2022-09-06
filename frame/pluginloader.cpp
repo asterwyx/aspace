@@ -37,7 +37,7 @@ bool PluginLoader::loadPlugins() {
 void PluginLoader::showAllPlugins(QWidget *parent) {
     Q_D(PluginLoader);
     foreach (PluginInterface *plugin, d->m_plugins) {
-        QWidget *widget = plugin->pluginWidget("");
+        QWidget *widget = plugin->pluginItemWidget("");
         widget->setParent(parent);
     }
 }

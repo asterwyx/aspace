@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QWidget>
 
-#include "global.h"
+#include "common_def.h"
 
 BEGIN_USER_NAMESPACE
 class WeatherIconPrivate;
@@ -22,6 +22,13 @@ public:
     void setColor(QColor color = Qt::yellow);
     void setIconFromPath(const QString& iconPath);
     void setIconFromName(const QString& iconName);
+    void setScaleFactor(double scaleFactor);
+
+    double  scaleFactor() const;
+    QColor  color() const;
+    bool    isLoaded() const;
+    QString iconPath() const;
+
 
 protected:
     void paintEvent(QPaintEvent *event) override;

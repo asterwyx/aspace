@@ -7,7 +7,7 @@
 #include <QDesignerExportWidget>
 #include <QColor>
 #include <QSize>
-#include "global.h"
+#include "common_def.h"
 
 BEGIN_USER_NAMESPACE
 class QDESIGNER_WIDGET_EXPORT Battery : public QWidget {

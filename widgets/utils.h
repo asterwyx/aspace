@@ -4,7 +4,7 @@
 
 #pragma once
 #include <QDomElement>
-#include "global.h"
+#include "common_def.h"
 
 BEGIN_USER_NAMESPACE
 class Utils

@@ -6,13 +6,13 @@
 #include "plugininterface.h"
 #include <QScopedPointer>
 #include <QWidget>
-#include "global.h"
+#include "common_def.h"
 
 BEGIN_USER_NAMESPACE
 class PowerPluginPrivate;
 class PowerPlugin : public QObject, public PluginInterface {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_ID)
+    Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_IID)
     Q_INTERFACES(PluginInterface)
 
 public:
