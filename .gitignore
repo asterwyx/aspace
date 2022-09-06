@@ -16,15 +16,16 @@
 *.la
 *.a
 
+# binary file
+.vscode/
+.idea/
+.cache/
+obj-x86_64-linux-gnu/
 build*/
 *.pro.user*
 CMakeLists.txt.user*
 *.DS_Store
 *.qm
 .directory
-
-# binary file
-dde-space
-.vscode/
-.idea/
-.cache/
+debian/.debhelper
+debian/aspace
