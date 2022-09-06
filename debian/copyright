@@ -1,0 +1,34 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: aspace
+Source: <url://example.com>
+#
+# Please double check copyright with the licensecheck(1) command.
+
+Files: *
+Copyright: Astrea Wang
+License: GPL-3.0-or-later
+
+# debian
+Files: debian/*
+Copyright: None
+License: CC0-1.0
+
+# qrc
+Files: *.qrc
+Copyright: None
+License: CC0-1.0
+
+# assets
+Files: plugins/weather/icons/* frame/icons/*
+Copyright: None
+License: CC0-1.0
+
+# Arch
+Files: archlinux/*
+Copyright: None
+License: CC0-1.0
+
+# configure file
+Files: *.in
+Copyright: Astrea Wang
+License: GPL-3.0-or-later
