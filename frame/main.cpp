@@ -15,11 +15,12 @@ int main(int argc, char *argv[]) {
     MainWindow w;
     QIcon applicationIcon = QIcon::fromTheme("gnome-weather", QIcon(":/icons/gnome-weather.svg"));
     w.setWindowIcon(applicationIcon);
-    PluginLoader loader(PLUGIN_DIR);
-    loader.loadPlugins();
-    loader.showAllPlugins(&w);
-    // Use GSettings to save default size.
     w.loadDefaultSize();
+    PluginLoader loader(PLUGIN_DIR);
+    loader.loadPlugins(&w);
+    w.initializeAllPlugins();
+    // Use GSettings to save default size.
+    w.dumpObjectTree();
     w.show();
     return a.exec();
 }

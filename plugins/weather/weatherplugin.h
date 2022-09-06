@@ -12,7 +12,7 @@
 #include "common_def.h"
 #include "weatherdata.h"
 #include "weathericon.h"
-#include "weathermodel.h"
+#include "weathercontroller.h"
 #include "locationselector.h"
 
 BEGIN_USER_NAMESPACE
@@ -38,32 +38,32 @@ public:
     QString pluginDisplayName() const override;
     QWidget *pluginItemWidget(const QString &key) override;
     
-    void preInitialize(FrameProxyInterface *frameProxy) override;
-    void initialize(FrameProxyInterface *frameProxy) override;
+    void preInitialize() override;
+    void initialize() override;
+    void adjustSize(QResizeEvent *event, const QMap<QString, QWidget *> &items) override;
 
 signals:
     void temperatureFontPointSizeChanged(int fontPointSize);
     void temperatureFontWeightChanged(int fontWeight);
     void temperatureFontFamilyChanged(QString fontFamily);
-    void currentWeatherWidthChanged(int minumumWidth);
-    void currentWeatherHeightChanged(int minumumHeight);
+    void currentWeatherWidthChanged(int currentWidth);
+    void currentWeatherHeightChanged(int currentHeight);
 
 private slots:
-    void weatherUpdated(QDBusMessage weatherMsg);
-    void onWeatherChanged(const CurrentWeather &weather);
+    void onCurrentWeatherChanged(const CurrentWeather &weather);
 private:
-    QWidget             *m_currentWeatherWidget;
-    WeatherIcon         *m_weatherIcon;
-    QLabel              *m_temperatureLabel;
-    LocationSelector    *m_locationSelector;
-    int                 m_temperatureFontPointSize;
-    int                 m_temperatureFontWeight;
-    QString             m_temperatureFontFamily;
-    int                 m_currentWeatherWidth;
-    int                 m_currentWeatherHeight;
-    QSize               m_size;
-    WeatherModel        *m_model;
-
+    QWidget                             *m_currentWeatherWidget;
+    WeatherIcon                         *m_weatherIcon;
+    QLabel                              *m_temperatureLabel;
+    LocationSelector                    *m_locationSelector;
+    int                                 m_temperatureFontPointSize;
+    int                                 m_temperatureFontWeight;
+    QString                             m_temperatureFontFamily;
+    int                                 m_currentWeatherWidth;
+    int                                 m_currentWeatherHeight;
+    QSize                               m_size;
+    QScopedPointer<WeatherController>   m_controller;
+    QSharedPointer<WeatherModel>        m_model;
 };
 
 END_USER_NAMESPACE

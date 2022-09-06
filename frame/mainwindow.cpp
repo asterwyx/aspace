@@ -3,6 +3,7 @@
 #include <QList>
 #include <QVariant>
 #include <QDebug>
+#include <QResizeEvent>
 
 BEGIN_USER_NAMESPACE
 
@@ -11,6 +12,15 @@ MainWindow::MainWindow(QWidget *parent)
     m_windowSettings(new QGSettings(SCHEMA_ID, SCHEMA_PATH, this)),
     m_saveLastWindowSize(false)
 {
+    this->setMinimumSize(200, 200);
+}
+
+void MainWindow::initializeAllPlugins()
+{
+    foreach(PluginInterface *plugin, m_plugins)
+    {
+        plugin->initialize();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -20,7 +30,7 @@ MainWindow::~MainWindow()
         this->setSize(this->size());
 }
 
-QSize MainWindow::getSize()
+QSize MainWindow::getFrameSize()
 {
     return this->size();
 }
@@ -40,6 +50,11 @@ void MainWindow::loadDefaultSize() {
         return;
     }
     this->resize(width, height);
+}
+void MainWindow::addPlugin(PluginInterface *plugin)
+{
+    FrameProxyInterface::addPlugin(plugin);
+    m_plugins.push_back(plugin);
 }
 
 bool MainWindow::isSaveLastWindowSize() {
@@ -66,19 +81,37 @@ void MainWindow::setSize(const QSize &size) {
     }
 }
 
-void MainWindow::itemAdded(PluginInterface *pluginToAdd, const QString &itemKey) {
-    if (!m_plugins.contains(pluginToAdd)) {
-        m_plugins.append(pluginToAdd);
+void MainWindow::addItem(PluginInterface *pluginToAdd, const QString &itemKey) {
+    if (!m_itemMap.contains(itemKey))
+    {
+        QWidget *itemWidget = pluginToAdd->pluginItemWidget(itemKey);
+        itemWidget->setParent(this);
+        m_itemMap.insert(itemKey, itemWidget);
     }
-    m_itemMap.insert(itemKey, {pluginToAdd, pluginToAdd->pluginItemWidget(itemKey)});
+    else
+    {
+        if (!m_plugins.contains(pluginToAdd))
+        {
+            qWarning() << "Please specify a unique item ket among all plugin items.";
+        }
+        else
+        {
+            qWarning() << "Item" << itemKey << "is already added.";
+        }
+    }
 }
 
-void MainWindow::itemRemoved(const QString &itemKey) {
+void MainWindow::removeItem(const QString &itemKey) {
     m_itemMap.remove(itemKey);
 }
 
-void MainWindow::itemUpdated(const QString &itemKey) {
-    m_itemMap[itemKey].second->update();
+void MainWindow::updateItem(const QString &itemKey) {
+    m_itemMap[itemKey]->update();
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event) {
+
+    QWidget::resizeEvent(event);
 }
 
 

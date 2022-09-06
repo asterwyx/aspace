@@ -13,7 +13,7 @@ public:
     ~PluginLoaderPrivate();
 
 protected:
-    bool loadPlugins();
+    bool loadPlugins(FrameProxyInterface *proxy);
 
 private:
     Q_DECLARE_PUBLIC(PluginLoader)

@@ -15,10 +15,13 @@ class MainWindow : public QMainWindow, public FrameProxyInterface
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
-    void itemAdded(PluginInterface *pluginToAdd, const QString &itemKey) override;
-    void itemRemoved(const QString &itemKey) override;
-    void itemUpdated(const QString &itemKey) override;
-    QSize getSize() override;
+
+    void addItem(PluginInterface *pluginToAdd, const QString &itemKey) override;
+    void removeItem(const QString &itemKey) override;
+    void updateItem(const QString &itemKey) override;
+    QSize getFrameSize() override;
+    void initializeAllPlugins() override;
+    void addPlugin(PluginInterface *plugin) override;
 
     // Window size
     void loadDefaultSize();
@@ -31,9 +34,11 @@ public:
      */
     void setSize(const QSize &size);
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QMap<QString, QPair<PluginInterface *, QWidget *>>  m_itemMap;
+    QMap<QString, QWidget *>                            m_itemMap;
     QList<PluginInterface *>                            m_plugins;
     QGSettings                                          *m_windowSettings;
     bool                                                m_saveLastWindowSize;

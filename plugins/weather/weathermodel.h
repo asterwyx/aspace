@@ -1,7 +1,6 @@
 #pragma once
 #include "common_def.h"
 #include "weatherdata.h"
-#include "weatherinterface.h"
 #include <QDBusConnection>
 
 
@@ -10,16 +9,15 @@ class WeatherModel : public QObject {
     Q_OBJECT
 public:
     WeatherModel(QObject *parent = nullptr);
-    void updateCurrentWeather();
+
+    void setCurrentWeather(const CurrentWeather &weather);
     CurrentWeather getCurrentWeather();
 
 signals:
-    void currentWeatherUpdated(CurrentWeather weather);
+    void currentWeatherChanged(CurrentWeather weather);
 
 private:
     CurrentWeather      m_currentWeather;
-    QDBusConnection     m_busConn;
-    WeatherInterface    *m_weatherDBusInterface;
 };
 
 END_USER_NAMESPACE

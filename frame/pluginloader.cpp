@@ -29,9 +29,9 @@ PluginLoader::PluginLoader(const QString &pluginDir, PluginLoaderPrivate &dd)
 
 PluginLoader::~PluginLoader() = default;
 
-bool PluginLoader::loadPlugins() {
+bool PluginLoader::loadPlugins(FrameProxyInterface *proxy) {
     Q_D(PluginLoader);
-    return d->loadPlugins();
+    return d->loadPlugins(proxy);
 }
 
 void PluginLoader::showAllPlugins(QWidget *parent) {
@@ -63,7 +63,7 @@ PluginLoaderPrivate::~PluginLoaderPrivate()
     }
 }
 
-bool PluginLoaderPrivate::loadPlugins() {
+bool PluginLoaderPrivate::loadPlugins(FrameProxyInterface *proxy) {
     QString appRunPrefix = qApp->applicationDirPath();
     foreach (QString pluginDir, m_pluginDirs)
     {
@@ -80,10 +80,11 @@ bool PluginLoaderPrivate::loadPlugins() {
             
             QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
             QObject *plugin = pluginLoader.instance();
-            PluginInterface *loadedInterface = qobject_cast<PluginInterface *>(plugin);
-            if (loadedInterface) {
+            PluginInterface *loadedPlugin = qobject_cast<PluginInterface *>(plugin);
+            if (loadedPlugin) {
                 qDebug() << "Load plugin" << plugin->metaObject()->className() << "successfully!";
-                this->m_plugins.push_back(loadedInterface);
+                proxy->addPlugin(loadedPlugin);
+                this->m_plugins.push_back(loadedPlugin);
             }
         }
     }

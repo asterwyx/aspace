@@ -5,6 +5,7 @@
 #pragma once
 #include "common_def.h"
 #include <QWidget>
+#include <QResizeEvent>
 BEGIN_USER_NAMESPACE
 class FrameProxyInterface;
 class PluginInterfacePrivate;
@@ -19,17 +20,17 @@ public:
 
     /**
      * @brief PreInitialize a plugin, if frameProxy is nullptr, use m_frameProxy
-     * 
+     * preInitialize can not require any high level resources, usually, some properties are set here.
      * @param frameProxy 
      */
-    virtual void preInitialize(FrameProxyInterface *frameProxy = nullptr) {Q_UNUSED(frameProxy)}
+    virtual void preInitialize() {}
 
     /**
      * @brief Initialize a plugin, if frameProxy is nullptr, use m_frameProxy
-     * 
+     * Full initialize of a plugin, after this function, a plugin is fully loaded, and may show on screen.
      * @param frameProxy 
      */
-    virtual void initialize(FrameProxyInterface *frameProxy = nullptr) = 0;
+    virtual void initialize() = 0;
 
     void setFrameProxy(FrameProxyInterface *frameProxy);
     
@@ -56,6 +57,9 @@ public:
     * @return QWidget* the widget
     */
     virtual QWidget *pluginItemWidget(const QString &itemKey) = 0;
+
+
+    virtual void adjustSize(QResizeEvent *event, const QMap<QString, QWidget *> &items) = 0;
 private:
     Q_DECLARE_PRIVATE(PluginInterface)
     PluginInterfacePrivate *d_ptr;

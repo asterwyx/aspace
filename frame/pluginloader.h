@@ -4,6 +4,7 @@
 
 #pragma once
 #include "plugininterface.h"
+#include "frameproxyinterface.h"
 #include <QList>
 #include <QScopedPointer>
 #include <QtGlobal>
@@ -17,7 +18,7 @@ public:
     explicit PluginLoader(const QString &pluginDir);
     PluginLoader(const QString &pluginDir, PluginLoaderPrivate &d);
     ~PluginLoader();
-    bool                            loadPlugins();
+    bool                            loadPlugins(FrameProxyInterface *proxy);
     void                            showAllPlugins(QWidget *parent);
     void                            addPluginDir(QString pluginDir);
     const QList<PluginInterface *>  *getPlugins();
