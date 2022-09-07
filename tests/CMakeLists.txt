@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-project(ut-aspace
+project(ut-${CLIENT}
     LANGUAGES CXX
     HOMEPAGE_URL https://github.com/asterwyx/aspace
     DESCRIPTION "A space for weather and rest."
@@ -10,14 +10,33 @@ project(ut-aspace
 
 find_package(GTest REQUIRED)
 
-file(GLOB TEST_SRCS "*.cpp")
+file(GLOB_RECURSE TEST_SRCS "frame/*.cpp" "*.cpp")
 
-add_executable(ut-aspace ${TEST_SRCS})
-
-target_link_libraries(ut-aspace PRIVATE
-    Qt::Widgets
-    Qt::UiPlugin
-    GTest::GTest
-    GTest::Main
-    ${ASPACE_WIDGETS}
+add_executable(${PROJECT_NAME}
+    ${TEST_SRCS}
+    ../frame/mainwindow.cpp
+    ../frame/pluginloader.cpp
+    ../frame/res.qrc
     )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::DBus
+    Qt${QT_VERSION_MAJOR}::Network
+    GTest::GTest
+    ${QGSettings_LIBRARIES}
+    ${WIDGETS}
+    ${COMMON}
+    pthread
+    gcov
+    )
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-instr-generate -ftest-coverage)
+endif ()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
+endif ()
+
+add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})

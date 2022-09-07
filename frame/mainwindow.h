@@ -6,10 +6,9 @@
 #include <QMap>
 #include <QPair>
 #include <QGSettings>
+#include <ostream>
 
 BEGIN_USER_NAMESPACE
-
-
 class MainWindow : public QMainWindow, public FrameProxyInterface
 {
 public:
@@ -25,7 +24,7 @@ public:
 
     // Window size
     void loadDefaultSize();
-    bool isSaveLastWindowSize();
+    [[nodiscard]] bool isSaveLastWindowSize() const;
     void setSaveLastWindowSize(bool enable);
     /**
      * Set GSettings window width and height, notice that this function will not resize the window, just write the config.

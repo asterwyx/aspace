@@ -1,7 +1,5 @@
 #include "mainwindow.h"
-#include <QMap>
 #include <QList>
-#include <QVariant>
 #include <QDebug>
 #include <QResizeEvent>
 
@@ -57,7 +55,7 @@ void MainWindow::addPlugin(PluginInterface *plugin)
     m_plugins.push_back(plugin);
 }
 
-bool MainWindow::isSaveLastWindowSize() {
+bool MainWindow::isSaveLastWindowSize() const {
     return m_saveLastWindowSize;
 }
 

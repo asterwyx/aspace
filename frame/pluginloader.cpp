@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 Uniontech Software Technology Co., Ltd
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,7 +11,6 @@
 #include <QApplication>
 #include <QDir>
 #include <QString>
-#include <QDebug>
 #include <QPluginLoader>
 
 BEGIN_USER_NAMESPACE

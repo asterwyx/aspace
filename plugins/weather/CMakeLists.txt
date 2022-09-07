@@ -9,10 +9,10 @@ file(GLOB WEATHER_SRCS "*.h" "*.cpp" "*.qrc")
 find_package(Qt5 REQUIRED COMPONENTS DBus Concurrent)
 add_library(${PLUGIN_NAME} SHARED ${WEATHER_SRCS})
 target_link_libraries(${PLUGIN_NAME} PRIVATE
-    Qt5::Widgets
-    Qt5::DBus
-    Qt5::Concurrent
-    ${ASPACE_WIDGETS}
-    ${ASPACE_COMMON}
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::DBus
+    Qt${QT_VERSION_MAJOR}::Concurrent
+    ${WIDGETS}
+    ${COMMON}
 )
 install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_PLUGINDIR})
