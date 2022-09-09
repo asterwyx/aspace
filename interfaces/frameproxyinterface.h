@@ -18,9 +18,13 @@ public:
     // Add a plugin
     virtual void addPlugin(PluginInterface *plugin)
     {
-        plugin->setFrameProxy(this);
-        plugin->preInitialize();
+        if (plugin)
+        {
+            plugin->setFrameProxy(this);
+            plugin->preInitialize();
+        }
     }
+    virtual QList<PluginInterface *> plugins() = 0;
     // Get the current size of the frame proxy, for plugin layout convenience
     virtual QSize getFrameSize() = 0;
 };

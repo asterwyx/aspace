@@ -13,6 +13,7 @@
 #include <QDBusArgument>
 #include <QPushButton>
 #include <QtConcurrent>
+#include <QListView>
 
 #include "frameproxyinterface.h"
 #include "weatherdata.h"
@@ -23,6 +24,7 @@ BEGIN_USER_NAMESPACE
 
 
 const QString WeatherPlugin::CURRENT_WEATHER_ITEM =  "current-weather";
+const QString WeatherPlugin::FUTURE_WEATHER_ITEM = "future-weather";
 
 WeatherPlugin::WeatherPlugin(FrameProxyInterface *frameProxy, QObject *parent)
     : QObject(parent), PluginInterface(frameProxy),
@@ -93,6 +95,10 @@ QWidget *WeatherPlugin::pluginItemWidget(const QString &key) {
     if (key == CURRENT_WEATHER_ITEM)
     {
         return this->m_currentWeatherWidget;
+    }
+    else if (key == FUTURE_WEATHER_ITEM)
+    {
+        return new QLabel;
     }
     else
     {

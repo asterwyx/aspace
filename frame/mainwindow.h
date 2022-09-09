@@ -21,6 +21,7 @@ public:
     QSize getFrameSize() override;
     void initializeAllPlugins() override;
     void addPlugin(PluginInterface *plugin) override;
+    QList<PluginInterface *> plugins() override;
 
     // Window size
     void loadDefaultSize();

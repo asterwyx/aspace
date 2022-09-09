@@ -8,6 +8,8 @@ project(ut-${CLIENT}
     DESCRIPTION "A space for weather and rest."
     VERSION ${VERSION})
 
+add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
+
 find_package(GTest REQUIRED)
 
 file(GLOB_RECURSE TEST_SRCS "frame/*.cpp" "*.cpp")
@@ -18,17 +20,18 @@ add_executable(${PROJECT_NAME}
     ../frame/pluginloader.cpp
     ../frame/res.qrc
     )
-
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::DBus
     Qt${QT_VERSION_MAJOR}::Network
-    GTest::GTest
+    GTest::gtest
+    GTest::gmock
     ${QGSettings_LIBRARIES}
     ${WIDGETS}
     ${COMMON}
-    pthread
     gcov
+    dl
+    ${CLIENT}-weather
     )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -39,4 +42,5 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
 endif ()
 
-add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
+target_compile_options(${PROJECT_NAME} PRIVATE -fno-access-control)
+

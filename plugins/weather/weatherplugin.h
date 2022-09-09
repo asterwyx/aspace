@@ -30,6 +30,7 @@ public:
 
 public:
     static const QString CURRENT_WEATHER_ITEM;
+    static const QString FUTURE_WEATHER_ITEM;
 
 public:
     WeatherPlugin(FrameProxyInterface *frameProxy = nullptr, QObject *parent = nullptr);

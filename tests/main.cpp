@@ -4,15 +4,13 @@
 
 #include <gtest/gtest.h>
 #include <QApplication>
-#include <sanitizer/asan_interface.h>
+#include "weatherdata.h"
+USE_USER_NAMESPACE
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    utils::registerAllMetaTypes();
     testing::InitGoogleTest(&argc, argv);
-    int ret = RUN_ALL_TESTS();
-#ifdef QT_DEBUG
-    __sanitizer_set_report_path("asan_aspace.log");
-#endif
-    return ret;
+    return RUN_ALL_TESTS();
 }

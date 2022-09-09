@@ -52,7 +52,10 @@ void MainWindow::loadDefaultSize() {
 void MainWindow::addPlugin(PluginInterface *plugin)
 {
     FrameProxyInterface::addPlugin(plugin);
-    m_plugins.push_back(plugin);
+    if (plugin)
+    {
+        m_plugins.push_back(plugin);
+    }
 }
 
 bool MainWindow::isSaveLastWindowSize() const {
@@ -80,11 +83,23 @@ void MainWindow::setSize(const QSize &size) {
 }
 
 void MainWindow::addItem(PluginInterface *pluginToAdd, const QString &itemKey) {
+    if (itemKey.isEmpty())
+    {
+        qWarning() << "Item key cannot be empty.";
+        return;
+    }
     if (!m_itemMap.contains(itemKey))
     {
         QWidget *itemWidget = pluginToAdd->pluginItemWidget(itemKey);
-        itemWidget->setParent(this);
-        m_itemMap.insert(itemKey, itemWidget);
+        if (itemWidget)
+        {
+            itemWidget->setParent(this);
+            m_itemMap.insert(itemKey, itemWidget);
+        }
+        else
+        {
+            qWarning() << "Item key" << itemKey << "cannot get a item widget from plugin" << pluginToAdd;
+        }
     }
     else
     {
@@ -104,12 +119,16 @@ void MainWindow::removeItem(const QString &itemKey) {
 }
 
 void MainWindow::updateItem(const QString &itemKey) {
-    m_itemMap[itemKey]->update();
+    m_itemMap[itemKey]->repaint();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
 
     QWidget::resizeEvent(event);
+}
+
+QList<PluginInterface *> MainWindow::plugins() {
+    return m_plugins;
 }
 
 
