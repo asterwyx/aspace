@@ -119,7 +119,7 @@ void MainWindow::removeItem(const QString &itemKey) {
 }
 
 void MainWindow::updateItem(const QString &itemKey) {
-    m_itemMap[itemKey]->repaint();
+    m_itemMap[itemKey]->update();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {

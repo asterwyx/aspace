@@ -2,11 +2,10 @@
 // Created by astrea on 9/8/22.
 //
 #pragma once
-#include <QWidget>
-#include <dlfcn.h>
 
-typedef void (*update_t) ();
+//typedef void (*update_t) ();
 
+void update_stub(void *obj);
 
-bool isMocked();
-void setMocked(bool enable);
+//bool isMocked();
+//void setMocked(bool enable);

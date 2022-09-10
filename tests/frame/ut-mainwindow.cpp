@@ -10,6 +10,7 @@
 #include <QCoreApplication>
 #include "weatherplugin.h"
 #include "qwidgetmock.h"
+#include "stub.h"
 
 
 USE_USER_NAMESPACE
@@ -156,8 +157,10 @@ TEST_F(MainWindowTest, UpdateItem)
     ASSERT_FALSE(widget.updated);
     m_window->m_itemMap.insert("test-widget", &widget);
     ASSERT_FALSE(widget.updated);
-    setMocked(true);
+//    setMocked(true);
+    Stub stub;
+    stub.set((void (QWidget::*)())&QWidget::update, update_stub);
     m_window->updateItem("test-widget");
     EXPECT_TRUE(widget.updated);
-    setMocked(false);
+//    setMocked(false);
 }
