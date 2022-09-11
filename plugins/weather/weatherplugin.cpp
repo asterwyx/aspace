@@ -81,7 +81,7 @@ void WeatherPlugin::initialize()
     m_temperatureLabel = new QLabel();
     m_temperatureLabel->setParent(m_currentWeatherWidget);
     m_temperatureLabel->setFont(labelFont);
-    m_temperatureLabel->resize(currentWeatherWidth - currentWeatherHeight, currentWeatherHeight / 3.0 * 2.0);
+    m_temperatureLabel->resize(currentWeatherWidth - currentWeatherHeight, currentWeatherHeight / 3 * 2);
     m_temperatureLabel->move(currentWeatherHeight, currentWeatherHeight / 3);
     m_locationSelector = new LocationSelector(m_currentWeatherWidget);
     m_locationSelector->resize(currentWeatherWidth - currentWeatherHeight, currentWeatherHeight / 3);

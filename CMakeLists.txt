@@ -78,6 +78,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Gui UiPlugin LinguistTools Svg DBus Network)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(QGSettings REQUIRED gsettings-qt)
+find_package(DtkWidget REQUIRED)
 
 # create qt files
 set(TS_FILES translations/aspace_zh_CN.ts)
@@ -92,6 +93,7 @@ include_directories(
     "plugins/weather"
     "widgets"
     ${QGSettings_INCLUDE_DIRS}
+    ${DtkWidget_INCLUDE_DIRS}
 )
 
 link_directories(
@@ -116,11 +118,13 @@ file(GLOB_RECURSE FRAME_SRCS "frame/*.h" "frame/*.cpp" "frame/*.qrc")
 add_executable(${CLIENT}
     ${FRAME_SRCS}
     )
+
 target_link_libraries(${CLIENT} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::UiPlugin
     Qt${QT_VERSION_MAJOR}::DBus
     ${QGSettings_LIBRARIES}
+    ${DtkWidget_LIBRARIES}
     ${WIDGETS}
     ${COMMON}
     )

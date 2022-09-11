@@ -16,7 +16,6 @@
 #include "locationselector.h"
 
 BEGIN_USER_NAMESPACE
-class WeatherPluginPrivate;
 class WeatherPlugin : public QObject, public PluginInterface {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_IID)

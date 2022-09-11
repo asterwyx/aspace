@@ -1,7 +1,3 @@
-//
-// Created by astrea on 9/7/22.
-//
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "common_def.h"
@@ -157,10 +153,136 @@ TEST_F(MainWindowTest, UpdateItem)
     ASSERT_FALSE(widget.updated);
     m_window->m_itemMap.insert("test-widget", &widget);
     ASSERT_FALSE(widget.updated);
-//    setMocked(true);
     Stub stub;
     stub.set((void (QWidget::*)())&QWidget::update, update_stub);
     m_window->updateItem("test-widget");
     EXPECT_TRUE(widget.updated);
-//    setMocked(false);
+}
+
+TEST_F(MainWindowTest, SetSizeQSize)
+{
+    bool ok = false;
+    int width = windowSettings->get("window-width").toInt(&ok);
+    ASSERT_TRUE(ok);
+    int height = windowSettings->get("window-height").toInt(&ok);
+    ASSERT_TRUE(ok);
+    m_window->setSize({width + 100, height + 100});
+    int newWidth = windowSettings->get("window-width").toInt(&ok);
+    ASSERT_TRUE(ok);
+    int newHeight = windowSettings->get("window-height").toInt(&ok);
+    ASSERT_TRUE(ok);
+    EXPECT_EQ(width + 100, newWidth);
+    EXPECT_EQ(height + 100, newHeight);
+    windowSettings->set("window-width", width);
+    windowSettings->set("window-height", height);
+}
+
+TEST_F(MainWindowTest, SetSize)
+{
+    bool ok = false;
+    int width = windowSettings->get("window-width").toInt(&ok);
+    ASSERT_TRUE(ok);
+    int height = windowSettings->get("window-height").toInt(&ok);
+    ASSERT_TRUE(ok);
+    m_window->setSize(width + 100, height + 100);
+    int newWidth = windowSettings->get("window-width").toInt(&ok);
+    ASSERT_TRUE(ok);
+    int newHeight = windowSettings->get("window-height").toInt(&ok);
+    ASSERT_TRUE(ok);
+    EXPECT_EQ(width + 100, newWidth);
+    EXPECT_EQ(height + 100, newHeight);
+    windowSettings->set("window-width", width);
+    windowSettings->set("window-height", height);
+}
+
+TEST_F(MainWindowTest, SetSaveLastWindowSize)
+{
+    bool ok = false;
+    int width = windowSettings->get("window-width").toInt(&ok);
+    ASSERT_TRUE(ok);
+    int height = windowSettings->get("window-height").toInt(&ok);
+    ASSERT_TRUE(ok);
+    bool originalSetting = windowSettings->get("save-window-size").toBool();
+    if (originalSetting)
+    {
+        m_window->setSaveLastWindowSize(false);
+        m_window->resize(width, height);
+        m_window->resize(width + 100, height + 100);
+        delete m_window;
+        int newWidth = windowSettings->get("window-width").toInt(&ok);
+        ASSERT_TRUE(ok);
+        int newHeight = windowSettings->get("window-height").toInt(&ok);
+        ASSERT_TRUE(ok);
+        EXPECT_EQ(width, newWidth);
+        EXPECT_EQ(height, newHeight);
+        m_window = new MainWindow;
+        m_window->setSaveLastWindowSize(true);
+        m_window->resize(width, height);
+        m_window->resize(width + 100, height + 100);
+        delete m_window;
+        m_window = nullptr;
+        newWidth = windowSettings->get("window-width").toInt(&ok);
+        ASSERT_TRUE(ok);
+        newHeight = windowSettings->get("window-height").toInt(&ok);
+        ASSERT_TRUE(ok);
+        EXPECT_EQ(width + 100, newWidth);
+        EXPECT_EQ(height + 100, newHeight);
+    }
+    else
+    {
+        // original is false
+        qDebug() << "Original is false.";
+        m_window->setSaveLastWindowSize(true);
+        m_window->resize(width, height);
+        m_window->resize(width + 100, height + 100);
+        delete m_window;
+        int newWidth = windowSettings->get("window-width").toInt(&ok);
+        ASSERT_TRUE(ok);
+        int newHeight = windowSettings->get("window-height").toInt(&ok);
+        ASSERT_TRUE(ok);
+        EXPECT_EQ(width + 100, newWidth);
+        EXPECT_EQ(height + 100, newHeight);
+        m_window = new MainWindow;
+        width = windowSettings->get("window-width").toInt(&ok);
+        ASSERT_TRUE(ok);
+        height = windowSettings->get("window-height").toInt(&ok);
+        ASSERT_TRUE(ok);
+        m_window->setSaveLastWindowSize(false);
+        m_window->resize(width, height);
+        m_window->resize(width + 100, height + 100);
+        delete m_window;
+        m_window = nullptr;
+        newWidth = windowSettings->get("window-width").toInt(&ok);
+        ASSERT_TRUE(ok);
+        newHeight = windowSettings->get("window-height").toInt(&ok);
+        ASSERT_TRUE(ok);
+        EXPECT_EQ(width, newWidth);
+        EXPECT_EQ(height, newHeight);
+    }
+    windowSettings->set("save-window-size", originalSetting);
+}
+
+TEST_F(MainWindowTest, SaveWindowSize)
+{
+    bool saveWindowSize = windowSettings->get("save-window-size").toBool();
+    EXPECT_EQ(saveWindowSize, m_window->saveLastWindowSize());
+}
+
+TEST_F(MainWindowTest, SetSaveWindowSize)
+{
+    bool originSetting = windowSettings->get("save-window-size").toBool();
+    if (originSetting)
+    {
+        // true, set false
+        m_window->setSaveLastWindowSize(false);
+        bool nowSetting = windowSettings->get("save-window-size").toBool();
+        EXPECT_FALSE(nowSetting);
+    }
+    else
+    {
+        // false, set true
+        m_window->setSaveLastWindowSize(true);
+        bool nowSetting = windowSettings->get("save-window-size").toBool();
+        EXPECT_TRUE(nowSetting);
+    }
 }

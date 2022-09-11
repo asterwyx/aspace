@@ -8,9 +8,10 @@ project(ut-${CLIENT}
     DESCRIPTION "A space for weather and rest."
     VERSION ${VERSION})
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
-find_package(GTest REQUIRED)
+message(STATUS ${CMAKE_MODULE_PATH})
 
 file(GLOB_RECURSE TEST_SRCS "frame/*.cpp" "*.cpp")
 
@@ -20,12 +21,16 @@ add_executable(${PROJECT_NAME}
     ../frame/pluginloader.cpp
     ../frame/res.qrc
     )
+
+find_package(GTest REQUIRED)
+find_package(GMock REQUIRED)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::DBus
     Qt${QT_VERSION_MAJOR}::Network
     GTest::gtest
-    GTest::gmock
+    ${GMOCK_BOTH_LIBRARIES}
     ${QGSettings_LIBRARIES}
     ${WIDGETS}
     ${COMMON}

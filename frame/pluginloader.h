@@ -16,10 +16,8 @@ class PluginLoader {
 public:
     PluginLoader();
     explicit PluginLoader(const QString &pluginDir);
-    PluginLoader(const QString &pluginDir, PluginLoaderPrivate &d);
     ~PluginLoader();
     bool                            loadPlugins(FrameProxyInterface *proxy);
-    void                            showAllPlugins(QWidget *parent);
     void                            addPluginDir(QString pluginDir);
     const QList<PluginInterface *>  *getPlugins();
 

@@ -1,16 +1,26 @@
 #include "mainwindow.h"
 #include <QList>
-#include <QDebug>
 #include <QResizeEvent>
-
+#include <DTitlebar>
+#include <QDebug>
+#include <QLabel>
 BEGIN_USER_NAMESPACE
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent),
+    : DMainWindow(parent),
     m_windowSettings(new QGSettings(SCHEMA_ID, SCHEMA_PATH, this)),
-    m_saveLastWindowSize(false)
+    m_refreshButton(new HoverButton)
 {
+    DTitlebar *titleBar = this->titlebar();
+    titleBar->setIcon(QIcon::fromTheme("gnome-weather"));
     this->setMinimumSize(200, 200);
+    m_refreshButton->setIcon(QIcon::fromTheme("aspace_refresh"));
+    m_refreshButton->setIconSize({30,30});
+    m_refreshButton->setBorderRadius(5);
+    m_refreshButton->getBackgroundFromWidget(titleBar);
+    m_refreshButton->setParent(titleBar);
+    titleBar->addWidget(m_refreshButton, Qt::AlignLeft);
+    this->setWindowIcon(QIcon::fromTheme("gnome-weather"));
 }
 
 void MainWindow::initializeAllPlugins()
@@ -24,7 +34,7 @@ void MainWindow::initializeAllPlugins()
 MainWindow::~MainWindow()
 {
     // Save window size if save last window size option is on
-    if (m_saveLastWindowSize)
+    if (saveLastWindowSize())
         this->setSize(this->size());
 }
 
@@ -58,28 +68,18 @@ void MainWindow::addPlugin(PluginInterface *plugin)
     }
 }
 
-bool MainWindow::isSaveLastWindowSize() const {
-    return m_saveLastWindowSize;
+bool MainWindow::saveLastWindowSize() const {
+    bool saveWindowSize = m_windowSettings->get("save-window-size").toBool();
+    return saveWindowSize;
 }
 
-void MainWindow::setSaveLastWindowSize(bool enable) {
-    m_saveLastWindowSize = enable;
+void MainWindow::setSaveLastWindowSize(bool enable)
+{
+    m_windowSettings->set("save-window-size", enable);
 }
 
 void MainWindow::setSize(const QSize &size) {
-    bool set = m_windowSettings->trySet("window-width", size.width());
-    if (set)
-    {
-        set = m_windowSettings->trySet("window-height", size.height());
-        if (!set)
-        {
-            qWarning() << "Window height set failed, but width is still set!";
-        }
-    }
-    else
-    {
-        qWarning() << "Window width set failed!";
-    }
+    setSize(size.width(), size.height());
 }
 
 void MainWindow::addItem(PluginInterface *pluginToAdd, const QString &itemKey) {
@@ -123,7 +123,6 @@ void MainWindow::updateItem(const QString &itemKey) {
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
-
     QWidget::resizeEvent(event);
 }
 
@@ -131,5 +130,24 @@ QList<PluginInterface *> MainWindow::plugins() {
     return m_plugins;
 }
 
+void MainWindow::setSize(int width, int height) {
+    bool set = m_windowSettings->trySet("window-width", width);
+    if (set)
+    {
+        set = m_windowSettings->trySet("window-height", height);
+        if (!set)
+        {
+            qWarning() << "Window height set failed, but width is still set!";
+        }
+    }
+    else
+    {
+        qWarning() << "Window width set failed!";
+    }
+}
+
+void MainWindow::refresh() {
+    update();
+}
 
 END_USER_NAMESPACE

@@ -15,13 +15,8 @@
 
 BEGIN_USER_NAMESPACE
 PluginLoader::PluginLoader(const QString &pluginDir)
-    : d_ptr(new PluginLoaderPrivate(this)) {
-    Q_D(PluginLoader);
-    d->m_pluginDirs.push_back(pluginDir);
-}
-
-PluginLoader::PluginLoader(const QString &pluginDir, PluginLoaderPrivate &dd)
-    : d_ptr(&dd) {
+: d_ptr(new PluginLoaderPrivate(this))
+{
     Q_D(PluginLoader);
     d->m_pluginDirs.push_back(pluginDir);
 }
@@ -33,15 +28,8 @@ bool PluginLoader::loadPlugins(FrameProxyInterface *proxy) {
     return d->loadPlugins(proxy);
 }
 
-void PluginLoader::showAllPlugins(QWidget *parent) {
-    Q_D(PluginLoader);
-    foreach (PluginInterface *plugin, d->m_plugins) {
-        QWidget *widget = plugin->pluginItemWidget("");
-        widget->setParent(parent);
-    }
-}
 
-PluginLoader::PluginLoader() : d_ptr(new PluginLoaderPrivate(this)){}
+PluginLoader::PluginLoader() : d_ptr(new PluginLoaderPrivate(this)){ }
 
 void PluginLoader::addPluginDir(QString pluginDir) {
     Q_D(PluginLoader);
@@ -82,7 +70,10 @@ bool PluginLoaderPrivate::loadPlugins(FrameProxyInterface *proxy) {
             PluginInterface *loadedPlugin = qobject_cast<PluginInterface *>(plugin);
             if (loadedPlugin) {
                 qDebug() << "Load plugin" << plugin->metaObject()->className() << "successfully!";
-                proxy->addPlugin(loadedPlugin);
+                if (proxy)
+                {
+                    proxy->addPlugin(loadedPlugin);
+                }
                 this->m_plugins.push_back(loadedPlugin);
             }
         }

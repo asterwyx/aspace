@@ -2,16 +2,22 @@
 #include "frameproxyinterface.h"
 #include "plugininterface.h"
 
-#include <QMainWindow>
+#include <DMainWindow>
 #include <QMap>
 #include <QPair>
 #include <QGSettings>
 #include <ostream>
+#include <QHBoxLayout>
+#include "hoverbutton.h"
 
+DWIDGET_USE_NAMESPACE
 BEGIN_USER_NAMESPACE
-class MainWindow : public QMainWindow, public FrameProxyInterface
+class MainWindow : public DMainWindow, public FrameProxyInterface
 {
 public:
+
+    Q_PROPERTY(bool saveLastWindowSize READ saveLastWindowSize WRITE setSaveLastWindowSize)
+
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
@@ -25,7 +31,7 @@ public:
 
     // Window size
     void loadDefaultSize();
-    [[nodiscard]] bool isSaveLastWindowSize() const;
+    [[nodiscard]] bool saveLastWindowSize() const;
     void setSaveLastWindowSize(bool enable);
     /**
      * Set GSettings window width and height, notice that this function will not resize the window, just write the config.
@@ -33,15 +39,19 @@ public:
      * @param size size to set
      */
     void setSize(const QSize &size);
+    void setSize(int width, int height);
+public slots:
+    void refresh();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QMap<QString, QWidget *>                            m_itemMap;
-    QList<PluginInterface *>                            m_plugins;
-    QGSettings                                          *m_windowSettings;
-    bool                                                m_saveLastWindowSize;
+    QMap<QString, QWidget *>    m_itemMap;
+    QList<PluginInterface *>    m_plugins;
+    QGSettings                  *m_windowSettings;
+    HoverButton                 *m_refreshButton;
+    QHBoxLayout                 *m_infoLabel;
 };
 
 END_USER_NAMESPACE
