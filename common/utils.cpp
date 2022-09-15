@@ -3,6 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "utils.h"
+#include "weatherdata.h"
+#include <QtDBus>
+#include "enumdbus.h"
 
 BEGIN_USER_NAMESPACE
 
@@ -21,5 +24,16 @@ QDomElement Utils::setXmlAttrValueRecurse(QDomElement elem, const QString &attrN
     }
     return elem;
 }
+
+void Utils::registerAllMetaTypes()
+{
+    qRegisterMetaType<TemperatureUnit>("TemperatureUnit");
+    qDBusRegisterMetaType<TemperatureUnit>();
+    qInfo() << "Meta types for TemperatureUnit registered.";
+    Location::registerMetaTypes();
+    CurrentWeather::registerMetaTypes();
+    FutureWeather::registerMetaTypes();
+}
+
 
 END_USER_NAMESPACE

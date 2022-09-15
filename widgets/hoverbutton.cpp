@@ -58,7 +58,7 @@ QColor darkenColor(const QColor &color)
     blue -= delta;
     red = qMax(0, red);
     green = qMax(0, green);
-    blue = qMax(255, blue);
+    blue = qMax(0, blue);
     return {red, green, blue};
 }
 

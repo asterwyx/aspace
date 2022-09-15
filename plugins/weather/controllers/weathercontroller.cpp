@@ -21,7 +21,7 @@ WeatherController::WeatherController(QObject *parent)
     });
 }
 
-void WeatherController::setWeatherModel(CurrentWeatherModel *model)
+void WeatherController::setCurrentWeatherModel(CurrentWeatherModel *model)
 {
     m_currentWeatherModel.reset(model);
 }

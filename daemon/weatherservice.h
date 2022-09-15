@@ -7,7 +7,7 @@
 #include "aspace.h"
 
 BEGIN_USER_NAMESPACE
-class WeatherService : QDBusAbstractAdaptor
+class WeatherService : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", DBUS_WEATHER_INTERFACE_NAME)
@@ -16,7 +16,10 @@ public:
     explicit WeatherService(Aspace *parent = nullptr);
     ~WeatherService() override;
 
-    [[nodiscard]] inline Aspace *context() const;
+    inline Aspace *context() const
+    {
+        return dynamic_cast<Aspace *>(parent());
+    }
 signals:
     void currentWeatherUpdated(const CurrentWeather &currentWeather);
     void futureWeatherUpdated(const QList<FutureWeather> &futureWeather);

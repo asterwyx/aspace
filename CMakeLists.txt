@@ -75,7 +75,7 @@ endif ()
 
 # find qt related package
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Gui UiPlugin LinguistTools Svg DBus Network Concurrent)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Gui UiPlugin LinguistTools Svg DBus Network Concurrent Xml)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(QGSettings REQUIRED gsettings-qt)
 find_package(DtkWidget REQUIRED)
@@ -115,7 +115,7 @@ if(BUILD_TEST)
     add_subdirectory("tests")
 endif()
 
-file(GLOB_RECURSE FRAME_SRCS "frame/*.h" "frame/*.cpp" "frame/*.qrc")
+file(GLOB_RECURSE FRAME_SRCS "frame/*.h" "frame/*.cpp" "frame/assets/*.qrc")
 add_executable(${CLIENT}
     ${FRAME_SRCS}
     )
@@ -125,6 +125,7 @@ target_link_libraries(${CLIENT} PRIVATE
     Qt${QT_VERSION_MAJOR}::UiPlugin
     Qt${QT_VERSION_MAJOR}::DBus
     Qt${QT_VERSION_MAJOR}::Concurrent
+    Qt${QT_VERSION_MAJOR}::Xml
     ${QGSettings_LIBRARIES}
     ${DtkWidget_LIBRARIES}
     ${WIDGETS}
@@ -135,8 +136,16 @@ install(TARGETS ${CLIENT} RUNTIME)
 set(CLIENT_BIN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CLIENT}")
 configure_file(misc/org.deepin.aspace.desktop.in "${DBUS_SERVICE_NAME}.desktop")
 install(FILES "${PROJECT_BINARY_DIR}/org.deepin.aspace.desktop" DESTINATION ${CMAKE_INSTALL_ENTRYDIR})
-dconfig_meta_files(APPID org.deepin.aspace FILES ./misc/org.deepin.aspace.json)
+dconfig_meta_files(APPID org.deepin.aspace FILES misc/org.deepin.aspace.json)
 install(FILES misc/org.deepin.aspace.gschema.xml DESTINATION ${CMAKE_INSTALL_SCHEMADIR})
+set(DAEMON_BIN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${DAEMON}")
+configure_file(misc/org.deepin.aspace.service.in "${DBUS_SERVICE_NAME}.service")
+install(FILES "${PROJECT_BINARY_DIR}/${DBUS_SERVICE_NAME}.service" DESTINATION ${CMAKE_INSTALL_DBUSDIR})
+configure_file(misc/aspace.service.in "${CLIENT}.service")
+install(FILES "${PROJECT_BINARY_DIR}/${CLIENT}.service" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
+configure_file(misc/update-weather.timer.in update-weather.timer)
+install(FILES "${PROJECT_BINARY_DIR}/update-weather.timer" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
+
 
 add_custom_target(uninstall COMMENT "Uninstall installed files")
 add_custom_command(

@@ -7,6 +7,7 @@
 #include "weatherservice.h"
 #include <QScopedPointer>
 #include <DConfig>
+#include "utils.h"
 DCORE_USE_NAMESPACE
 
 
@@ -15,7 +16,7 @@ USE_USER_NAMESPACE
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    utils::registerAllMetaTypes();
+    Utils::registerAllMetaTypes();
     Aspace asp;
     QDBusConnection connection = QDBusConnection::sessionBus();
     WeatherService ws(&asp);

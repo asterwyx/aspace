@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "common_def.h"
 #include "aspace.h"
 
@@ -12,18 +11,13 @@ public:
     
     ~AspaceTest() { delete m_aspace; }
 
-    static void SetUpTestCase()
-    {
-        utils::registerAllMetaTypes();
-    }
 protected:
     Aspace  *m_aspace;
 };
 
 TEST_F(AspaceTest, ApiKey)
 {
-    const char *key = m_aspace->apiKey();
-    EXPECT_STREQ(key, "b3aeb3cb72a74857b66a1f423c15bb89");
+    EXPECT_STREQ(Aspace::apiKey(), "b3aeb3cb72a74857b66a1f423c15bb89");
 }
 
 TEST_F(AspaceTest, LookForLocations)
@@ -48,4 +42,14 @@ TEST_F(AspaceTest, GetFutureWeather)
     QList<FutureWeather> futureWeather = m_aspace->getFutureWeather("101010100", &ok);
     EXPECT_TRUE(ok);
     EXPECT_EQ(futureWeather.size(), 3);
+}
+
+TEST_F(AspaceTest, ParseApiCode)
+{
+    EXPECT_TRUE(Aspace::parseApiCode(200));
+    EXPECT_FALSE(Aspace::parseApiCode(204));
+    EXPECT_FALSE(Aspace::parseApiCode(400));
+    EXPECT_FALSE(Aspace::parseApiCode(401));
+    EXPECT_FALSE(Aspace::parseApiCode(402));
+    EXPECT_FALSE(Aspace::parseApiCode(1024));
 }

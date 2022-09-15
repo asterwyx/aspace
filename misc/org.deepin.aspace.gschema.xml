@@ -11,25 +11,5 @@ SPDX-License-Identifier: GPL-3.0-or-later
             <summary>Whether initialized</summary>
             <description>If not initialized, initialize it.</description>
         </key>
-        <key name="location" type="s">
-            <default>""</default>
-            <summary>Location</summary>
-            <description>If null, we don't load weather plugin</description>
-        </key>
-        <key name="window-width" type="i">
-            <default>800</default>
-            <summary>Main window width</summary>
-            <description>This may be saved when save window size option is on, or it's always default value</description>
-        </key>
-        <key name="window-height" type="i">
-            <default>600</default>
-            <summary>Main window height</summary>
-            <description>This may be saved when save window size option is on, or it's always default value</description>
-        </key>
-        <key name="save-window-size" type="b">
-            <default>false</default>
-            <summary>If we save our last window size</summary>
-            <description>If true, we will save our last window size which may be adjusted by user</description>
-        </key>
     </schema>
 </schemalist>

@@ -7,19 +7,6 @@
 #include <QDBusMetaType>
 
 BEGIN_USER_NAMESPACE
-
-namespace utils {
-void registerAllMetaTypes()
-{
-    qRegisterMetaType<TemperatureUnit>("TemperatureUnit");
-    qDBusRegisterMetaType<TemperatureUnit>();
-    qInfo() << "Meta types for TemperatureUnit registered.";
-    Location::registerMetaTypes();
-    CurrentWeather::registerMetaTypes();
-    FutureWeather::registerMetaTypes();
-}
-}
-
 void Location::registerMetaTypes()
 {
     qRegisterMetaType<Location>("Location");

@@ -15,11 +15,6 @@ WeatherService::WeatherService(Aspace *parent)
 
 WeatherService::~WeatherService() = default;
 
-Aspace *WeatherService::context() const
-{
-    return dynamic_cast<Aspace *>(parent());
-}
-
 CurrentWeather WeatherService::getCurrentWeather(const QString &cityCode)
 {
     m_serviceTimer->start();

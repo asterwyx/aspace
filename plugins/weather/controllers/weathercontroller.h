@@ -22,7 +22,7 @@ public slots:
     QList<USER_NAMESPACE::Location> lookForLocations(const QString &cityName);
     void                            setLocation(const USER_NAMESPACE::Location &location);
 
-    void setWeatherModel(USER_NAMESPACE::CurrentWeatherModel *model);
+    void setCurrentWeatherModel(USER_NAMESPACE::CurrentWeatherModel *model);
     QSharedPointer<USER_NAMESPACE::CurrentWeatherModel> getCurrentWeatherModel();
 
     void setFutureWeatherModel(USER_NAMESPACE::FutureWeatherModel *model);

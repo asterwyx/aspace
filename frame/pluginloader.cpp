@@ -33,7 +33,8 @@ PluginLoader::PluginLoader() : d_ptr(new PluginLoaderPrivate(this)){ }
 
 void PluginLoader::addPluginDir(QString pluginDir) {
     Q_D(PluginLoader);
-    d->m_pluginDirs.push_back(pluginDir);
+    if (!pluginDir.isEmpty())
+        d->m_pluginDirs.push_back(pluginDir);
 }
 
 const QList<PluginInterface *> *PluginLoader::getPlugins()
@@ -59,7 +60,7 @@ bool PluginLoaderPrivate::loadPlugins(FrameProxyInterface *proxy) {
         {
             // absolute path
             pluginsDir = QDir(pluginDir); 
-        }
+        } else
         {
             pluginsDir.cd(pluginDir);
         }

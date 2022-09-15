@@ -10,10 +10,10 @@ project(${COMMON}
 
 file(GLOB COMMON_SRCS "*.h" "*.cpp")
 add_library(${COMMON} SHARED ${COMMON_SRCS})
-
 target_link_libraries(${COMMON} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::DBus
+    Qt${QT_VERSION_MAJOR}::Xml
 )
 
 install(TARGETS ${COMMON} LIBRARY)

@@ -11,5 +11,6 @@ class Utils
 {
 public:
     static QDomElement setXmlAttrValueRecurse(QDomElement elem, const QString &attrName, const QString &attrValue);
+    static void registerAllMetaTypes();
 };
 END_USER_NAMESPACE

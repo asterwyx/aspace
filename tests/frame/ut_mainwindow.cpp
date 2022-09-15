@@ -8,7 +8,7 @@
 #include "qwidgetmock.h"
 #include "weathercontrollermock.h"
 #include "stub.h"
-//#include <DTitlebar>
+#include <DTitlebar>
 
 
 USE_USER_NAMESPACE
@@ -26,7 +26,9 @@ public:
         windowSettings = nullptr;
     }
 
-    MainWindowTest() : m_window{new MainWindow} {}
+    MainWindowTest() : m_window{new MainWindow} {
+        m_window->show();
+    }
 
     ~MainWindowTest() override { delete m_window; }
 
@@ -146,9 +148,13 @@ TEST_F(MainWindowTest, UpdateItem)
     ASSERT_FALSE(widget.updated);
     m_window->m_itemMap.insert("test-widget", &widget);
     ASSERT_FALSE(widget.updated);
+//    widget.show();
+//    EXPECT_TRUE(widget.updated);
+//    widget.updated = false;
     Stub stub;
     stub.set((void (QWidget::*)()) &QWidget::update, updateStub);
     m_window->updateItem("test-widget");
+//    QCoreApplication::sendPostedEvents();
     EXPECT_TRUE(widget.updated);
 }
 
@@ -195,26 +201,26 @@ TEST_F(MainWindowTest, LoadData)
 TEST_F(MainWindowTest, ShowContents)
 {
 //    m_window->setAttribute(Qt::WA_WState_ExplicitShowHide);
-//    m_window->m_loadingPage->setVisible(true);
-//    m_window->m_contentFrame->setVisible(false);
-//    ASSERT_TRUE(m_window->m_loadingPage->isVisible());
-//    ASSERT_FALSE(m_window->m_contentFrame->isVisible());
-//    m_window->showContents();
-//    EXPECT_FALSE(m_window->m_loadingPage->isVisible());
-//    EXPECT_TRUE(m_window->m_contentFrame->isVisible());
+    m_window->m_loadingPage->setVisible(true);
+    ASSERT_TRUE(m_window->m_loadingPage->isVisible());
+    m_window->m_contentFrame->setVisible(false);
+    ASSERT_FALSE(m_window->m_contentFrame->isVisible());
+    m_window->showContents();
+    EXPECT_FALSE(m_window->m_loadingPage->isVisible());
+    EXPECT_TRUE(m_window->m_contentFrame->isVisible());
     // hide() and show() functions are invalid, possibly because Qt::WA_WState_ExplicitShowHide is false
     // Try using QTest to test this function, or explicitly
 }
 
 TEST_F(MainWindowTest, ShowSplash)
 {
-//    m_window->m_loadingPage->hide();
-//    m_window->m_contentFrame->show();
-//    ASSERT_FALSE(m_window->m_loadingPage->isVisible());
-//    ASSERT_TRUE(m_window->m_contentFrame->isVisible());
-//    m_window->showSplash();
-//    EXPECT_TRUE(m_window->m_loadingPage->isVisible());
-//    EXPECT_FALSE(m_window->m_contentFrame->isVisible());
+    m_window->m_loadingPage->hide();
+    m_window->m_contentFrame->show();
+    ASSERT_FALSE(m_window->m_loadingPage->isVisible());
+    ASSERT_TRUE(m_window->m_contentFrame->isVisible());
+    m_window->showSplash();
+    EXPECT_TRUE(m_window->m_loadingPage->isVisible());
+    EXPECT_FALSE(m_window->m_contentFrame->isVisible());
 }
 
 TEST_F(MainWindowTest, GetWindowSettings)
@@ -245,14 +251,12 @@ TEST_F(MainWindowTest, Refresh)
 
 TEST_F(MainWindowTest, ResizeEvent)
 {
-//    m_window->resize(1024, 1024);
-//    Stub stub;
-//    stub.set((void (QWidget::*)(int, int))ADDR(QWidget, resize), resizeStub);
-//    auto width = m_window->width();
-//    auto height = m_window->height();
-//    m_window->resize(width / 2, height / 2);
-//    EXPECT_EQ(width / 2, m_window->m_contentFrame->width());
-//    EXPECT_EQ(height / 2 - m_window->titlebar()->height(), m_window->m_contentFrame->height());
+    m_window->resize(1024, 1024);
+    EXPECT_EQ(m_window->width(), m_window->m_contentFrame->width());
+    EXPECT_EQ(m_window->height() - m_window->titlebar()->height(), m_window->m_contentFrame->height());
+    m_window->resize(512, 512);
+    EXPECT_EQ(m_window->width(), m_window->m_contentFrame->width());
+    EXPECT_EQ(m_window->height() - m_window->titlebar()->height(), m_window->m_contentFrame->height());
     // Try using QTest to simulate resize event to test resizeEvent function
 }
 

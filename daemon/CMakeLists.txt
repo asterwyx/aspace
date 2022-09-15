@@ -18,18 +18,9 @@ target_link_libraries(${DAEMON} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
     Qt${QT_VERSION_MAJOR}::Network
+    Qt${QT_VERSION_MAJOR}::Xml
     ${DtkCore_LIBRARIES}
     ${COMMON}
 )
 
 install(TARGETS ${DAEMON} RUNTIME)
-set(DAEMON_BIN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${DAEMON}")
-
-configure_file(org.deepin.aspace.service.in "${DBUS_SERVICE_NAME}.service")
-install(FILES "${PROJECT_BINARY_DIR}/${DBUS_SERVICE_NAME}.service" DESTINATION ${CMAKE_INSTALL_DBUSDIR})
-
-configure_file(aspace.service.in "${CLIENT}.service")
-install(FILES "${PROJECT_BINARY_DIR}/${CLIENT}.service" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
-
-configure_file(update-weather.timer.in update-weather.timer)
-install(FILES "${PROJECT_BINARY_DIR}/update-weather.timer" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})

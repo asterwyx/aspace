@@ -12,11 +12,6 @@
 #include "common_def.h"
 
 BEGIN_USER_NAMESPACE
-
-namespace utils {
-void registerAllMetaTypes();
-}
-
 enum TemperatureUnit {
     CELSIUS,
     FAHRENHEIT
@@ -45,7 +40,7 @@ struct Location {
 struct CurrentWeather {
     QDateTime       observedTime;                               // 该天气情况被观察到的时间
     TemperatureUnit temperatureUnit = TemperatureUnit::CELSIUS; // 当前温度单位
-    double          temperature = 0.0;                          // 当前温度，默认摄氏度
+    double          temperature = -300;                          // 当前温度，默认摄氏度
     double          feelsLikeTemperature = 0.0;                 // 体感温度，默认摄氏度
     QString         iconName;                                   // 天气图标名，内部使用
     QString         description;                                // 天气描述
