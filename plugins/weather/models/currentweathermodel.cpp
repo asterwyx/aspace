@@ -1,15 +1,14 @@
-#include "weathermodel.h"
-
+#include "currentweathermodel.h"
 #include <QDBusInterface>
 
 
 BEGIN_USER_NAMESPACE
-WeatherModel::WeatherModel(QObject *parent)
+CurrentWeatherModel::CurrentWeatherModel(QObject *parent)
     : QObject(parent)
 {}
 
 
-void WeatherModel::setCurrentWeather(const CurrentWeather &weather)
+void CurrentWeatherModel::setCurrentWeather(const CurrentWeather &weather)
 {
     m_currentWeather = weather;
     // Here we cannot easily decide whether a current weather is changed.
@@ -18,10 +17,12 @@ void WeatherModel::setCurrentWeather(const CurrentWeather &weather)
 }
 
 
-CurrentWeather WeatherModel::getCurrentWeather()
+CurrentWeather CurrentWeatherModel::getCurrentWeather()
 {
     return m_currentWeather;
 }
+
+CurrentWeatherModel::~CurrentWeatherModel() = default;
 
 
 END_USER_NAMESPACE

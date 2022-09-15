@@ -7,7 +7,7 @@
 
 BEGIN_USER_NAMESPACE
 
-class WeatherInterface : QDBusAbstractInterface {
+class WeatherInterface : public QDBusAbstractInterface {
     Q_OBJECT
 public:
     static inline const char * staticInterfaceName()
@@ -16,23 +16,34 @@ public:
     }
 public:
     WeatherInterface(const QString &service, const QString &path, const QDBusConnection &connection, QObject *parent=nullptr);
-    ~WeatherInterface();
+    ~WeatherInterface() override;
+
+signals:
+    void currentWeatherUpdated(const CurrentWeather &currentWeather);
+    void futureWeatherUpdated(const QList<FutureWeather> &futureWeather);
 
 public slots:
-    inline QDBusPendingReply<CurrentWeather> getCurrentWeather()
+    inline QDBusPendingReply<CurrentWeather> getCurrentWeather(const QString &cityCode)
     {
         QList<QVariant> argumentList;
+        argumentList << cityCode;
         return asyncCallWithArgumentList(QLatin1String("getCurrentWeather"), argumentList);
     }
 
-    // inline QDBusPendingReply<WeatherData> getFutureWeather()
-    // {
-    //     QList<QVariant> argumentList;
-    //     return asyncCallWithArgumentList(QLatin1String("getFutureWeather"), argumentList);
-    // }
-signals:
-    void weatherUpdated(CurrentWeather weather);
-    void quitService();
+    inline QDBusPendingReply<QList<FutureWeather>> getFutureWeather(const QString &cityCode)
+    {
+        QList<QVariant> argumentList;
+        argumentList << cityCode;
+        return asyncCallWithArgumentList(QLatin1String("getFutureWeather"), argumentList);
+    }
+
+    inline QDBusPendingReply<QList<Location>> lookForLocations(const QString &cityName)
+    {
+        QList<QVariant> argumentList;
+        argumentList << cityName;
+        return asyncCallWithArgumentList(QLatin1String("lookForLocations"), argumentList);
+    }
+
 };
 
 END_USER_NAMESPACE

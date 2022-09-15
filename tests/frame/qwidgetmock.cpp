@@ -1,11 +1,18 @@
 #include "qwidgetmock.h"
 #include <QWidget>
 #include <QDebug>
+#include <QResizeEvent>
 
-void update_stub(void *obj)
+void updateStub(void *obj)
 {
     auto *o = reinterpret_cast<QWidget *>(obj);
-    qDebug() << "Function" << __FUNCTION__ << "is called.";
-    qDebug() << "Starting paint event!";
+    qDebug() << "Function" << __func__ << "is called.";
     o->paintEvent(nullptr);
+}
+
+void resizeStub(void *obj, int w, int h) {
+    auto *o = reinterpret_cast<QWidget *>(obj);
+    qDebug() << "Function" << __func__ << "is called.";
+    QResizeEvent event(QSize(w, h), o->size());
+    o->resizeEvent(&event);
 }

@@ -1,0 +1,24 @@
+{
+    "magic": "dsg.config.meta",
+    "version": "1.0",
+    "contents": {
+        "locationId": {
+            "value": "",
+            "serial": 0,
+            "flags": ["global"],
+            "name": "unique id",
+            "description": "unique id for city, queried by daemon",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "locationName": {
+            "value": "",
+            "serial": 0,
+            "flags": ["global"],
+            "name": "city name",
+            "description": "city name selected by user, used to query location id",
+            "permissions": "readwrite",
+            "visibility": "private"
+        }
+    }
+}

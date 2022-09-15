@@ -6,6 +6,8 @@
 #include "common_def.h"
 #include <QWidget>
 #include <QResizeEvent>
+#include <QSize>
+
 BEGIN_USER_NAMESPACE
 class FrameProxyInterface;
 class PluginInterfacePrivate;
@@ -19,18 +21,17 @@ public:
     virtual ~PluginInterface();
 
     /**
-     * @brief PreInitialize a plugin, if frameProxy is nullptr, use m_frameProxy
-     * preInitialize can not require any high level resources, usually, some properties are set here.
-     * @param frameProxy 
-     */
-    virtual void preInitialize() {}
-
-    /**
      * @brief Initialize a plugin, if frameProxy is nullptr, use m_frameProxy
      * Full initialize of a plugin, after this function, a plugin is fully loaded, and may show on screen.
      * @param frameProxy 
      */
     virtual void initialize() = 0;
+
+    /**
+     * @brief Can only manipulate data, do not add a parent crossing thread
+     * 
+     */
+    virtual void loadData() = 0;
 
     void setFrameProxy(FrameProxyInterface *frameProxy);
     

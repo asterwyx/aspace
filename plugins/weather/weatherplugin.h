@@ -8,12 +8,11 @@
 #include <QLabel>
 #include <QScopedPointer>
 #include <QDBusMessage>
-
+#include <QGroupBox>
 #include "common_def.h"
 #include "weatherdata.h"
 #include "weathericon.h"
-#include "weathercontroller.h"
-#include "locationselector.h"
+#include "controllers/weathercontroller.h"
 
 BEGIN_USER_NAMESPACE
 class WeatherPlugin : public QObject, public PluginInterface {
@@ -33,13 +32,15 @@ public:
 
 public:
     WeatherPlugin(FrameProxyInterface *frameProxy = nullptr, QObject *parent = nullptr);
+
+
     ~WeatherPlugin() override;
     QString pluginName() const override;
     QString pluginDisplayName() const override;
     QWidget *pluginItemWidget(const QString &key) override;
     
-    void preInitialize() override;
     void initialize() override;
+    void loadData() override;
     void adjustSize(QResizeEvent *event, const QMap<QString, QWidget *> &items) override;
 
 signals:
@@ -52,18 +53,22 @@ signals:
 private slots:
     void onCurrentWeatherChanged(const CurrentWeather &weather);
 private:
-    QWidget                             *m_currentWeatherWidget;
+    QGroupBox                           *m_currentWeatherWidget;
     WeatherIcon                         *m_weatherIcon;
     QLabel                              *m_temperatureLabel;
-    LocationSelector                    *m_locationSelector;
+    QLabel                              *m_locationLabel;
+    QLabel                              *m_updateTime;
+    QLabel                              *m_feelLikeLabel;
+    ListView                            *m_futureWeatherList;
     int                                 m_temperatureFontPointSize;
     int                                 m_temperatureFontWeight;
     QString                             m_temperatureFontFamily;
     int                                 m_currentWeatherWidth;
     int                                 m_currentWeatherHeight;
-    QSize                               m_size;
     QScopedPointer<WeatherController>   m_controller;
-    QSharedPointer<WeatherModel>        m_model;
+    QSharedPointer<CurrentWeatherModel> m_currentWeatherModel;
+    QSharedPointer<FutureWeatherModel>  m_futureWeatherModel;
+
 };
 
 END_USER_NAMESPACE

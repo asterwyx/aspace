@@ -15,6 +15,8 @@
 #define BEGIN_USER_NAMESPACE            namespace USER_NAMESPACE {
 #define END_USER_NAMESPACE              }
 
+#define DCONFIG_FILE                    "org.deepin.aspace"
+
 #if not defined(SCHEMA_ID)
 #define SCHEMA_ID                       "org.deepin.aspace"
 #endif
@@ -26,3 +28,7 @@
 #if not defined(PLUGIN_DIR)
 #define PLUGIN_DIR                      "/usr/lib/aspace/plugins"
 #endif
+
+static constexpr int LIST_WIDGET_WIDTH = 160;
+static constexpr int LIST_WIDGET_HEIGHT = 480;
+static constexpr int LISTVIEW_ITEM_SPACING = 20;

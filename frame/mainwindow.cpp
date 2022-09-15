@@ -9,18 +9,31 @@ BEGIN_USER_NAMESPACE
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent),
     m_windowSettings(new QGSettings(SCHEMA_ID, SCHEMA_PATH, this)),
-    m_refreshButton(new HoverButton)
+    m_refreshButton(new HoverButton),
+    m_infoArea(new QWidget(this)),
+    m_contentFrame(new QWidget(this)),
+    m_infoLayout(new QHBoxLayout(m_infoArea)),
+    m_contentLayout(new QVBoxLayout(m_contentFrame)),
+    m_loadingPage(new LoadingPage(this))
 {
     DTitlebar *titleBar = this->titlebar();
     titleBar->setIcon(QIcon::fromTheme("gnome-weather"));
-    this->setMinimumSize(200, 200);
+    setMinimumSize(200, 200);
     m_refreshButton->setIcon(QIcon::fromTheme("aspace_refresh"));
     m_refreshButton->setIconSize({30,30});
     m_refreshButton->setBorderRadius(5);
     m_refreshButton->getBackgroundFromWidget(titleBar);
     m_refreshButton->setParent(titleBar);
     titleBar->addWidget(m_refreshButton, Qt::AlignLeft);
-    this->setWindowIcon(QIcon::fromTheme("gnome-weather"));
+    setWindowIcon(QIcon::fromTheme("gnome-weather"));
+    m_contentFrame->move(0, titleBar->height()); // Move to the content area.
+    m_contentFrame->setWindowFlag(Qt::FramelessWindowHint);
+    m_contentFrame->setAttribute(Qt::WA_TranslucentBackground);
+    m_loadingPage->move(0, titleBar->height());
+    connect(m_refreshButton, &HoverButton::clicked, this, &MainWindow::refresh);
+    setFixedSize(LIST_WIDGET_WIDTH * 3 + LISTVIEW_ITEM_SPACING * 3, LIST_WIDGET_WIDTH + LIST_WIDGET_HEIGHT + titleBar->height() + LISTVIEW_ITEM_SPACING);
+    m_contentFrame->resize(width(), height() - titleBar->height());
+    m_loadingPage->resize(width(), height() - titleBar->height());
 }
 
 void MainWindow::initializeAllPlugins()
@@ -31,56 +44,71 @@ void MainWindow::initializeAllPlugins()
     }
 }
 
+void MainWindow::loadData()
+{
+    foreach(PluginInterface *plugin, m_plugins)
+    {
+        plugin->loadData();
+    }
+    showContents();
+}
+
+void MainWindow::showContents()
+{
+    m_loadingPage->hide();
+    m_contentFrame->show();
+    update();
+}
+QGSettings *MainWindow::getWindowSettings()
+{
+    return m_windowSettings;
+}
 MainWindow::~MainWindow()
 {
     // Save window size if save last window size option is on
-    if (saveLastWindowSize())
-        this->setSize(this->size());
+    // if (saveLastWindowSize())
+    //     this->setSize(this->size());
 }
 
 QSize MainWindow::getFrameSize()
 {
-    return this->size();
+    return this->m_contentFrame->size();
 }
 
-void MainWindow::loadDefaultSize() {
-    bool wOk = false, hOk = false;
-    int width = m_windowSettings->get("window-width").toInt(&wOk);
-    if (!wOk)
-    {
-        qWarning() << "Cannot convert window width gsetting value to int.";
-        return;
-    }
-    int height = m_windowSettings->get("window-height").toInt(&hOk);
-    if (!hOk)
-    {
-        qWarning() << "Cannot convert window height gsetting value to int.";
-        return;
-    }
-    this->resize(width, height);
-}
-void MainWindow::addPlugin(PluginInterface *plugin)
+// void MainWindow::loadDefaultSize() {
+//     bool wOk = false, hOk = false;
+//     int width = m_windowSettings->get("window-width").toInt(&wOk);
+//     if (!wOk)
+//     {
+//         qWarning() << "Cannot convert window width gsetting value to int.";
+//         return;
+//     }
+//     int height = m_windowSettings->get("window-height").toInt(&hOk);
+//     if (!hOk)
+//     {
+//         qWarning() << "Cannot convert window height gsetting value to int.";
+//         return;
+//     }
+//     this->resize(width, height);
+// }
+void MainWindow::pluginAdded(PluginInterface *plugin)
 {
-    FrameProxyInterface::addPlugin(plugin);
-    if (plugin)
-    {
-        m_plugins.push_back(plugin);
-    }
+    m_plugins.push_back(plugin);
 }
 
-bool MainWindow::saveLastWindowSize() const {
-    bool saveWindowSize = m_windowSettings->get("save-window-size").toBool();
-    return saveWindowSize;
-}
+// bool MainWindow::saveLastWindowSize() const {
+//     bool saveWindowSize = m_windowSettings->get("save-window-size").toBool();
+//     return saveWindowSize;
+// }
 
-void MainWindow::setSaveLastWindowSize(bool enable)
-{
-    m_windowSettings->set("save-window-size", enable);
-}
+// void MainWindow::setSaveLastWindowSize(bool enable)
+// {
+//     m_windowSettings->set("save-window-size", enable);
+// }
 
-void MainWindow::setSize(const QSize &size) {
-    setSize(size.width(), size.height());
-}
+// void MainWindow::setSize(const QSize &size) {
+//     setSize(size.width(), size.height());
+// }
 
 void MainWindow::addItem(PluginInterface *pluginToAdd, const QString &itemKey) {
     if (itemKey.isEmpty())
@@ -93,7 +121,7 @@ void MainWindow::addItem(PluginInterface *pluginToAdd, const QString &itemKey) {
         QWidget *itemWidget = pluginToAdd->pluginItemWidget(itemKey);
         if (itemWidget)
         {
-            itemWidget->setParent(this);
+            m_contentLayout->addWidget(itemWidget, Qt::AlignCenter);
             m_itemMap.insert(itemKey, itemWidget);
         }
         else
@@ -123,30 +151,39 @@ void MainWindow::updateItem(const QString &itemKey) {
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
-    QWidget::resizeEvent(event);
+    m_contentFrame->resize(event->size().width(), event->size().height() - titlebar()->height());
+    DMainWindow::resizeEvent(event);
 }
 
 QList<PluginInterface *> MainWindow::plugins() {
     return m_plugins;
 }
 
-void MainWindow::setSize(int width, int height) {
-    bool set = m_windowSettings->trySet("window-width", width);
-    if (set)
-    {
-        set = m_windowSettings->trySet("window-height", height);
-        if (!set)
-        {
-            qWarning() << "Window height set failed, but width is still set!";
-        }
-    }
-    else
-    {
-        qWarning() << "Window width set failed!";
-    }
-}
+// void MainWindow::setSize(int width, int height) {
+//     bool set = m_windowSettings->trySet("window-width", width);
+//     if (set)
+//     {
+//         set = m_windowSettings->trySet("window-height", height);
+//         if (!set)
+//         {
+//             qWarning() << "Window height set failed, but width is still set!";
+//         }
+//     }
+//     else
+//     {
+//         qWarning() << "Window width set failed!";
+//     }
+// }
 
 void MainWindow::refresh() {
+    qDebug() << "Refresh.";
+    loadData();
+}
+
+void MainWindow::showSplash()
+{
+    m_contentFrame->hide();
+    m_loadingPage->show();
     update();
 }
 

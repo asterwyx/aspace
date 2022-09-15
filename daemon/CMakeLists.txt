@@ -18,6 +18,7 @@ target_link_libraries(${DAEMON} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
     Qt${QT_VERSION_MAJOR}::Network
+    ${DtkCore_LIBRARIES}
     ${COMMON}
 )
 

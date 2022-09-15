@@ -1,34 +1,39 @@
 #include "weatherservice.h"
 #include <QCoreApplication>
+#include <utility>
 
 BEGIN_USER_NAMESPACE
 
 WeatherService::WeatherService(Aspace *parent)
     : QDBusAbstractAdaptor(parent), m_serviceTimer(new QTimer)
 {
+    setAutoRelaySignals(true);
     m_serviceTimer->setInterval(SERVICE_TIME);
-    // Connect parent's signals
-    connect(parent, &Aspace::weatherUpdated, this, [=](CurrentWeather weather) {emit this->weatherUpdated(weather);});
     connect(m_serviceTimer.data(), &QTimer::timeout, qApp, &QCoreApplication::quit);
     m_serviceTimer->start();
 }
 
-WeatherService::~WeatherService() {}
+WeatherService::~WeatherService() = default;
 
-Aspace *WeatherService::parent() const
+Aspace *WeatherService::context() const
 {
-    return static_cast<Aspace *>(QObject::parent());
+    return dynamic_cast<Aspace *>(parent());
 }
 
-CurrentWeather WeatherService::getCurrentWeather()
+CurrentWeather WeatherService::getCurrentWeather(const QString &cityCode)
 {
     m_serviceTimer->start();
-    return parent()->getCurrentWeather();
+    return context()->getCurrentWeather(cityCode);
 }
 
-// QList<WeatherData> WeatherService::getFutureWeather()
-// {
-//     m_serviceTimer->start();
-//     return parent()->getFutureWeather();
-// }
+QList<FutureWeather> WeatherService::getFutureWeather(const QString &cityCode) {
+    m_serviceTimer->start();
+    return context()->getFutureWeather(cityCode);
+}
+
+QList<Location> WeatherService::lookForLocations(const QString &cityName) {
+    m_serviceTimer->start();
+    return context()->lookForLocations(cityName);
+}
+
 END_USER_NAMESPACE

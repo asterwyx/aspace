@@ -14,17 +14,18 @@ class WeatherService : QDBusAbstractAdaptor
 public:
     static constexpr int SERVICE_TIME = 30000; // in milliseconds, actually 30 seconds
     explicit WeatherService(Aspace *parent = nullptr);
-    virtual ~WeatherService();
+    ~WeatherService() override;
 
-    inline Aspace *parent() const;
+    [[nodiscard]] inline Aspace *context() const;
+signals:
+    void currentWeatherUpdated(const CurrentWeather &currentWeather);
+    void futureWeatherUpdated(const QList<FutureWeather> &futureWeather);
 
 public slots:
-    CurrentWeather getCurrentWeather();
-    // QList<WeatherData> getFutureWeather();
+    USER_NAMESPACE::CurrentWeather          getCurrentWeather(const QString &cityCode);
+    QList<USER_NAMESPACE::FutureWeather>    getFutureWeather(const QString &cityCode);
+    QList<USER_NAMESPACE::Location>         lookForLocations(const QString &cityName);
 
-signals:
-    void weatherUpdated(CurrentWeather weather);
-    void quitService();
 private:
     QScopedPointer<QTimer> m_serviceTimer;
 };

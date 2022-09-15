@@ -13,13 +13,14 @@ add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
 message(STATUS ${CMAKE_MODULE_PATH})
 
-file(GLOB_RECURSE TEST_SRCS "frame/*.cpp" "*.cpp")
+file(GLOB_RECURSE TEST_SRCS "daemon/*.cpp" "frame/*.cpp" "*.cpp")
 
 add_executable(${PROJECT_NAME}
     ${TEST_SRCS}
     ../frame/mainwindow.cpp
     ../frame/pluginloader.cpp
     ../frame/res.qrc
+    ../daemon/aspace.cpp
     )
 
 find_package(GTest REQUIRED)
@@ -32,6 +33,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     GTest::gtest
     ${GMOCK_BOTH_LIBRARIES}
     ${QGSettings_LIBRARIES}
+    ${DtkWidget_LIBRARIES}
     ${WIDGETS}
     ${COMMON}
     gcov

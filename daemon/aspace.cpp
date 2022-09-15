@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "aspace.h"
-#include <QDBusConnection>
-#include <QDBusMetaType>
 #include <QDebug>
 #include <QDBusError>
 #include <QCoreApplication>
@@ -13,7 +11,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QSharedPointer>
 #include <QJsonArray>
 #include <QDateTime>
 #include <QEventLoop>
@@ -49,14 +46,14 @@ bool Aspace::parseApiCode(int apiCode)
     }
 }
 
-bool Aspace::updateLocationId(const QString &name)
+QList<Location> Aspace::lookForLocations(const QString &cityName, bool *ok)
 {
-    bool result = false;
-    setLocationName(name);
+    QList<Location> result;
+    bool queried = false;
     QString urlString("https://geoapi.qweather.com/v2/city/lookup?key=");
     urlString += apiKey();
     urlString += "&location=";
-    urlString += name;
+    urlString += cityName;
     qInfo() << "Request url:" << urlString;
     QUrl url = QUrl::fromUserInput(urlString);
     assert(url.isValid());
@@ -81,7 +78,7 @@ bool Aspace::updateLocationId(const QString &name)
             QByteArray rawBody = reply->readAll();
             QString bodyStr = QString::fromLocal8Bit(rawBody);
             qDebug() << "Reply body:" << bodyStr;
-            QJsonParseError parseErr;
+            QJsonParseError parseErr{};
             QJsonDocument rootDoc = QJsonDocument::fromJson(rawBody, &parseErr);
             if (parseErr.error == QJsonParseError::NoError) {
                 // extract api status code and city code
@@ -91,30 +88,26 @@ bool Aspace::updateLocationId(const QString &name)
                 bool continued = parseApiCode(apiCode);
                 if (continued)
                 {
-                    QJsonValue citys = rootObj.value("location");
-                    QJsonObject cityLocation;
-                    if (citys.isArray())
+                    QJsonArray cityArr = rootObj.value("location").toArray();
+                    foreach(QJsonValue city, cityArr)
                     {
-                        QJsonArray cityArr = citys.toArray();
-                        // TODO: Add result filter
-                        cityLocation = cityArr[0].toObject();
+                        QJsonObject cityLocation = city.toObject();
+                        Location location;
+                        location.name = cityLocation.value("name").toString();
+                        location.id = cityLocation.value("id").toString();
+                        location.latitude = cityLocation.value("lat").toString().toDouble();
+                        location.longitude = cityLocation.value("lon").toString().toDouble();
+                        location.adm2 = cityLocation.value("adm2").toString();
+                        location.adm1 = cityLocation.value("adm1").toString();
+                        location.country = cityLocation.value("country").toString();
+                        location.timezone = cityLocation.value("tz").toString();
+                        location.utcOffset = cityLocation.value("utcOffset").toString();
+                        location.isDst = cityLocation.value("isDst").toString().toInt();
+                        location.type = cityLocation.value("type").toString();
+                        location.rank = cityLocation.value("rank").toString().toInt();
+                        result.append(location);
                     }
-                    else
-                    {
-                        cityLocation = citys.toObject();
-                    }                
-                    m_currentWeather.location.name = cityLocation.value("name").toString();
-                    m_currentWeather.location.id = cityLocation.value("id").toString();
-                    m_currentWeather.location.latitude = cityLocation.value("lat").toString().toDouble();
-                    m_currentWeather.location.longitude = cityLocation.value("lon").toString().toDouble();
-                    m_currentWeather.location.adm2 = cityLocation.value("adm2").toString();
-                    m_currentWeather.location.adm1 = cityLocation.value("adm1").toString();
-                    m_currentWeather.location.country = cityLocation.value("country").toString();
-                    m_currentWeather.location.timezone = cityLocation.value("tz").toString();
-                    m_currentWeather.location.utcOffset = cityLocation.value("utcOffset").toString();
-                    m_currentWeather.location.isDst = cityLocation.value("isDst").toString().toInt();
-                    emit locationIdUpdated(m_currentWeather.location.id);
-                    result = true;
+                    queried = true; 
                 }
             }
             else
@@ -134,19 +127,35 @@ bool Aspace::updateLocationId(const QString &name)
     }
     reply->close();
     reply->deleteLater();
-    return result;
+    if (ok)
+    {
+        *ok = queried;
+    }
+    if (queried)
+    {
+        return result;
+    }
+    else
+    {
+        sendErrorReply(QDBusError::Failed, "Failed to look for locations!");
+        return {};
+    }
 }
 
-bool Aspace::updateWeather(QString locationId)
+CurrentWeather Aspace::getCurrentWeather(const QString &cityCode, bool *ok)
 {
-    bool result = false;
-    if (locationId.isEmpty())
-        locationId = m_currentWeather.location.id;
-    qDebug() << "Updating weather, city code:" << locationId;
+    CurrentWeather result;
+    bool updated = false;
+    if (cityCode.isEmpty())
+    {
+        sendErrorReply(QDBusError::InvalidArgs, "City code cannot be empty!");
+        return {};
+    }
+    qDebug() << "Getting weather, city code:" << cityCode;
     QString urlStr("https://devapi.qweather.com/v7/weather/now?key=");
     urlStr += apiKey();
     urlStr += "&location=";
-    urlStr += locationId;
+    urlStr += cityCode;
     qInfo() << "Request url:" << urlStr;
     QUrl url = QUrl::fromUserInput(urlStr);
     QNetworkRequest request(url);
@@ -158,8 +167,7 @@ bool Aspace::updateWeather(QString locationId)
             loop.quit();
     }); // Setting wait timeout
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec(QEventLoop::ExcludeUserInputEvents); // Just wait for non user input events
-
+    loop.exec(QEventLoop::ExcludeUserInputEvents); // Just wait for non-user input events
     if (reply->isFinished())
     {
         // Check normally finished or timeout
@@ -171,7 +179,7 @@ bool Aspace::updateWeather(QString locationId)
             QByteArray rawBody = reply->readAll();
             QString bodyStr = QString::fromLocal8Bit(rawBody);
             qDebug() << "Reply body:" << bodyStr;
-            QJsonParseError parseErr;
+            QJsonParseError parseErr{};
             QJsonDocument rootDoc = QJsonDocument::fromJson(rawBody, &parseErr);
             if (parseErr.error == QJsonParseError::NoError) {
                 // extract api status code and city code
@@ -183,23 +191,22 @@ bool Aspace::updateWeather(QString locationId)
                 {
                     // extract weather info
                     QJsonObject currentWeather = rootObj.value("now").toObject();
-                    m_currentWeather.observedTime = QDateTime::fromString(currentWeather.value("obsTime").toString(), Qt::ISODate);
-                    m_currentWeather.temperature = currentWeather.value("temp").toString().toDouble();
-                    m_currentWeather.feelsLikeTemperature = currentWeather.value("feelsLike").toString().toDouble();
-                    m_currentWeather.iconName = currentWeather.value("icon").toString();
-                    m_currentWeather.description = currentWeather.value("text").toString();
-                    m_currentWeather.wind360 = currentWeather.value("wind360").toString().toDouble();
-                    m_currentWeather.windDirection = currentWeather.value("windDir").toString().toDouble();
-                    m_currentWeather.windScale = currentWeather.value("windScale").toString().toDouble();
-                    m_currentWeather.windSpeed = currentWeather.value("windSpeed").toString().toDouble();
-                    m_currentWeather.humidity = currentWeather.value("humidity").toString().toDouble();
-                    m_currentWeather.precip = currentWeather.value("precip").toString().toDouble();
-                    m_currentWeather.pressure = currentWeather.value("pressure").toString().toDouble();
-                    m_currentWeather.visibility = currentWeather.value("vis").toString().toDouble();
-                    m_currentWeather.cloud = currentWeather.value("cloud").isNull() ? 0.0 : currentWeather.value("cloud").toString().toDouble();
-                    m_currentWeather.dew = currentWeather.value("dew").isNull() ? 0.0 : currentWeather.value("dew").toString().toDouble();
-                    emit weatherUpdated(m_currentWeather);
-                    result = true;
+                    result.observedTime = QDateTime::fromString(currentWeather.value("obsTime").toString(), Qt::ISODate);
+                    result.temperature = currentWeather.value("temp").toString().toDouble();
+                    result.feelsLikeTemperature = currentWeather.value("feelsLike").toString().toDouble();
+                    result.iconName = currentWeather.value("icon").toString();
+                    result.description = currentWeather.value("text").toString();
+                    result.wind360 = currentWeather.value("wind360").toString().toDouble();
+                    result.windDirection = currentWeather.value("windDir").toString();
+                    result.windScale = currentWeather.value("windScale").toString();
+                    result.windSpeed = currentWeather.value("windSpeed").toString().toDouble();
+                    result.humidity = currentWeather.value("humidity").toString().toDouble();
+                    result.precip = currentWeather.value("precip").toString().toDouble();
+                    result.pressure = currentWeather.value("pressure").toString().toDouble();
+                    result.visibility = currentWeather.value("vis").toString().toDouble();
+                    result.cloud = currentWeather.value("cloud").isNull() ? 0.0 : currentWeather.value("cloud").toString().toDouble();
+                    result.dew = currentWeather.value("dew").isNull() ? 0.0 : currentWeather.value("dew").toString().toDouble();
+                    updated = true;
                 }
             }
             else
@@ -219,18 +226,14 @@ bool Aspace::updateWeather(QString locationId)
     }
     reply->close();
     reply->deleteLater();
-    return result;
-}
-
-void Aspace::setLocationName(QString location)
-{
-    m_currentWeather.location.name = location;
-}
-
-CurrentWeather Aspace::getCurrentWeather()
-{
-    if (updateLocationId(m_currentWeather.location.name) && updateWeather())
-        return m_currentWeather;
+    if(ok)
+    {
+        *ok = updated;
+    }
+    if(updated)
+    {
+        return result;
+    }
     else
     {
         sendErrorReply(QDBusError::Failed, "Location or weather update failed!");
@@ -238,17 +241,118 @@ CurrentWeather Aspace::getCurrentWeather()
     }
 }
 
-// QList<WeatherData> Aspace::getFutureWeather()
-// {
-//     // TODO implement the data acquiring.
-//     return {
-//         {WeatherOverview::SUNNY, TemperatureUnit::CELSIUS, 36, 30, 38, QString::fromUtf8("武汉")},
-//         {WeatherOverview::SUNNY, TemperatureUnit::CELSIUS, 34, 28, 38, QString::fromUtf8("北京")}
-//         };
-// }
-
-void Aspace::setTemperatureUnit(TemperatureUnit unit)
-{
-    m_currentWeather.changeTemperatureUnit(unit);
+QList<FutureWeather> Aspace::getFutureWeather(const QString &cityCode, bool *ok) {
+    QList<FutureWeather> result;
+    bool updated = false;
+    if (cityCode.isEmpty())
+    {
+        sendErrorReply(QDBusError::InvalidArgs, "City code cannot be empty!");
+        return {};
+    }
+    qDebug() << "Getting future weather, city code:" << cityCode;
+    QString urlStr("https://devapi.qweather.com/v7/weather/3d?key=");
+    urlStr += apiKey();
+    urlStr += "&location=";
+    urlStr += cityCode;
+    qInfo() << "Request url:" << urlStr;
+    QUrl url = QUrl::fromUserInput(urlStr);
+    QNetworkRequest request(url);
+    QNetworkReply *reply = m_networkManager.get(request);
+    // Use local event loop to wait
+    QEventLoop loop;
+    QTimer::singleShot(REQUEST_TIMEOUT, &loop, [&]{
+        if (loop.isRunning())
+            loop.quit();
+    }); // Setting wait timeout
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec(QEventLoop::ExcludeUserInputEvents); // Just wait for non-user input events
+    if (reply->isFinished())
+    {
+        // Check normally finished or timeout
+        int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qInfo() << "Reply status code:" << statusCode;
+        if (reply->error() == QNetworkReply::NoError)
+        {
+            // successful, get raw data and log(debug), convert to json document
+            QByteArray rawBody = reply->readAll();
+            QString bodyStr = QString::fromLocal8Bit(rawBody);
+            qDebug() << "Reply body:" << bodyStr;
+            QJsonParseError parseErr{};
+            QJsonDocument rootDoc = QJsonDocument::fromJson(rawBody, &parseErr);
+            if (parseErr.error == QJsonParseError::NoError) {
+                // extract api status code and city code
+                QJsonObject rootObj = rootDoc.object();
+                int apiCode = rootObj.value("code").toString().toInt();
+                qDebug() << "Api code:" << apiCode;
+                bool continued = parseApiCode(apiCode);
+                if (continued)
+                {
+                    // extract weather info
+                    QJsonArray dailyWeathers = rootObj.value("daily").toArray();
+                    foreach(QJsonValue dailyWeather, dailyWeathers)
+                    {
+                        QJsonObject weatherObj = dailyWeather.toObject();
+                        FutureWeather futureWeather;
+                        futureWeather.forecastDate = QDate::fromString(weatherObj.value("fxDate").toString(), Qt::ISODate);
+                        futureWeather.sunriseTime = QTime::fromString(weatherObj.value("sunrise").toString(), Qt::ISODate);
+                        futureWeather.sunsetTime = QTime::fromString(weatherObj.value("sunset").toString(), Qt::ISODate);
+                        futureWeather.moonriseTime = QTime::fromString(weatherObj.value("moonrise").toString(), Qt::ISODate);
+                        futureWeather.moonsetTime = QTime::fromString(weatherObj.value("moonset").toString(), Qt::ISODate);
+                        futureWeather.moonPhase = weatherObj.value("moonPhase").toString();
+                        futureWeather.maxTemperature = weatherObj.value("tempMax").toString().toDouble();
+                        futureWeather.minTemperature = weatherObj.value("tempMin").toString().toDouble();
+                        futureWeather.iconDay = weatherObj.value("iconDay").toString();
+                        futureWeather.textDay = weatherObj.value("textDay").toString();
+                        futureWeather.iconNight = weatherObj.value("iconNight").toString();
+                        futureWeather.textNight = weatherObj.value("textNight").toString();
+                        futureWeather.wind360Day = weatherObj.value("wind360Day").toString().toDouble();
+                        futureWeather.windDirectionDay = weatherObj.value("windDirDay").toString();
+                        futureWeather.windScaleDay = weatherObj.value("windScaleDay").toString();
+                        futureWeather.windSpeedDay = weatherObj.value("windSpeedDay").toString().toDouble();
+                        futureWeather.wind360Night = weatherObj.value("wind360Night").toString().toDouble();
+                        futureWeather.windDirectionNight = weatherObj.value("windDirNight").toString();
+                        futureWeather.windScaleNight = weatherObj.value("windScaleNight").toString();
+                        futureWeather.windSpeedNight = weatherObj.value("windSpeedNight").toString().toDouble();
+                        futureWeather.humidity = weatherObj.value("humidity").toString().toDouble();
+                        futureWeather.precip = weatherObj.value("precip").toString().toDouble();
+                        futureWeather.pressure = weatherObj.value("pressure").toString().toDouble();
+                        futureWeather.visibility = weatherObj.value("vis").toString().toDouble();
+                        futureWeather.cloud = weatherObj.value("cloud").toString().toDouble();
+                        futureWeather.uvIndex = weatherObj.value("uvIndex").toString().toDouble();
+                        result.append(futureWeather);
+                    }
+                    updated = true;
+                }
+            }
+            else
+            {
+                qWarning() << "Parse json error:" << parseErr.error << parseErr.errorString();
+            }
+        }
+        else
+        {
+            qWarning() << "Request" << urlStr << "error:" << reply->error() << reply->errorString();
+        }
+    }
+    else
+    {
+        reply->abort();
+        qWarning() << "Request" << urlStr << "timeout.";
+    }
+    reply->close();
+    reply->deleteLater();
+    if(ok)
+    {
+        *ok = updated;
+    }
+    if(updated)
+    {
+        return result;
+    }
+    else
+    {
+        sendErrorReply(QDBusError::Failed, "Location or weather update failed!");
+        return {};
+    }
 }
 END_USER_NAMESPACE

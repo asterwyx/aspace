@@ -67,11 +67,12 @@ HoverButton::HoverButton(QWidget *parent)
 : QAbstractButton(parent), d_ptr(new HoverButtonPrivate(this))
 {
     this->setAttribute(Qt::WA_TranslucentBackground);
-//    this->setWindowFlag(Qt::FramelessWindowHint);
+    this->setWindowFlag(Qt::FramelessWindowHint);
 }
 
 void HoverButton::paintEvent(QPaintEvent *e) {
     Q_D(HoverButton);
+    Q_UNUSED(e)
     getBackgroundFromWidget(parentWidget());
     QIcon savedIcon = this->icon();
     QSize requestSize = iconSize();

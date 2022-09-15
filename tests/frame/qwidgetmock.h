@@ -1,3 +1,4 @@
 #pragma once
 
-void update_stub(void *obj);
+void updateStub(void *obj);
+void resizeStub(void *obj, int w, int h);

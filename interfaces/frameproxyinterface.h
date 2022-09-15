@@ -16,14 +16,15 @@ public:
     // Initialize all plugins which is implicitly added by addItem function
     virtual void initializeAllPlugins() = 0;
     // Add a plugin
-    virtual void addPlugin(PluginInterface *plugin)
+    void addPlugin(PluginInterface *plugin)
     {
         if (plugin)
         {
             plugin->setFrameProxy(this);
-            plugin->preInitialize();
+            pluginAdded(plugin);
         }
     }
+    virtual void pluginAdded(PluginInterface *plugin) = 0;
     virtual QList<PluginInterface *> plugins() = 0;
     // Get the current size of the frame proxy, for plugin layout convenience
     virtual QSize getFrameSize() = 0;

@@ -16,6 +16,7 @@ void registerAllMetaTypes()
     qInfo() << "Meta types for TemperatureUnit registered.";
     Location::registerMetaTypes();
     CurrentWeather::registerMetaTypes();
+    FutureWeather::registerMetaTypes();
 }
 }
 
@@ -27,6 +28,21 @@ void Location::registerMetaTypes()
     qDBusRegisterMetaType<QList<Location>>();
     qInfo() << "Meta types for Location registered.";
 
+}
+
+void CurrentWeather::registerMetaTypes()
+{
+    qRegisterMetaType<CurrentWeather>("CurrentWeather");
+    qDBusRegisterMetaType<CurrentWeather>();
+    qInfo() << "Meta types for CurrentWeather registered.";
+}
+
+void FutureWeather::registerMetaTypes() {
+    qRegisterMetaType<FutureWeather>("FutureWeather");
+    qDBusRegisterMetaType<FutureWeather>();
+    qRegisterMetaType<QList<FutureWeather>>("QList<FutureWeather>");
+    qDBusRegisterMetaType<QList<FutureWeather>>();
+    qInfo() << "Meta types for FutureWeather registered.";
 }
 
 QDBusArgument &operator<<(QDBusArgument &argument, const Location &data)
@@ -65,7 +81,7 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, Location &data)
     return argument;
 }
 
-QDebug &operator<<(QDebug &debug, const Location &data)
+QDebug operator<<(QDebug debug, const Location &data)
 {
     debug << "{";
     debug << data.name << ",";
@@ -80,14 +96,6 @@ QDebug &operator<<(QDebug &debug, const Location &data)
     debug << data.isDst << ",";
     debug << data.type << "}";
     return debug;
-}
-
-
-void CurrentWeather::registerMetaTypes()
-{
-    qRegisterMetaType<CurrentWeather>("CurrentWeather");
-    qDBusRegisterMetaType<CurrentWeather>();
-    qInfo() << "Meta types for CurrentWeather registered.";
 }
 
 void CurrentWeather::changeTemperatureUnit(TemperatureUnit unit)
@@ -108,11 +116,9 @@ void CurrentWeather::changeTemperatureUnit(TemperatureUnit unit)
     this->temperatureUnit = unit;
 }
 
-
 QDBusArgument &operator<<(QDBusArgument &argument, const CurrentWeather &data)
 {
     argument.beginStructure();
-    argument << data.location;
     argument << data.observedTime.toTime_t();
     argument << data.temperatureUnit;
     argument << data.temperature;
@@ -135,7 +141,6 @@ QDBusArgument &operator<<(QDBusArgument &argument, const CurrentWeather &data)
 const QDBusArgument &operator>>(const QDBusArgument &argument, CurrentWeather &data)
 {
     argument.beginStructure();
-    argument >> data.location;
     uint timeStamp;
     argument >> timeStamp;
     data.observedTime.setTime_t(timeStamp);
@@ -157,11 +162,9 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, CurrentWeather &d
     return argument;
 }
 
-
-QDebug &operator<<(QDebug &debug, const CurrentWeather &data)
+QDebug operator<<(QDebug debug, const CurrentWeather& data)
 {
     debug << "{";
-    debug << data.location << ",";
     debug << data.observedTime.toTime_t() << ",";
     debug << data.temperatureUnit << ",";
     debug << data.temperature << ",";
@@ -180,97 +183,90 @@ QDebug &operator<<(QDebug &debug, const CurrentWeather &data)
     return debug;
 }
 
+QDebug operator<<(QDebug debug, const FutureWeather &weather) {
+    debug << "{forecastDate: " << weather.forecastDate << " sunriseTime: "
+          << weather.sunriseTime << " sunsetTime: " << weather.sunsetTime << " moonriseTime: " << weather.moonriseTime
+          << " moonsetTime: " << weather.moonsetTime << " moonPhase: " << weather.moonPhase << " moonPhaseIcon: "
+          << weather.moonPhaseIcon << " temperatureUnit: " << weather.temperatureUnit << " maxTemperature: " << weather.maxTemperature << " minTemperature: "
+          << weather.minTemperature << " iconDay: " << weather.iconDay << " textDay: " << weather.textDay << " iconNight: "
+          << weather.iconNight << " textNight: " << weather.textNight << " wind360Day: " << weather.wind360Day
+          << " windDirectionDay: " << weather.windDirectionDay << " windScaleDay: " << weather.windScaleDay
+          << " windSpeedDay: " << weather.windSpeedDay << " wind360Night: " << weather.wind360Night
+          << " windDirectionNight: " << weather.windDirectionNight << " windScaleNight: " << weather.windScaleNight
+          << " windSpeedNight: " << weather.windSpeedNight << " humidity: " << weather.humidity << " precip: "
+          << weather.precip << " pressure: " << weather.pressure << " visibility: " << weather.visibility << " cloud: "
+          << weather.cloud << " uvIndex: " << weather.uvIndex << "}";
+    return debug;
+}
 
-// WeatherData::WeatherData(
-//     WeatherOverview overview,
-//     TemperatureUnit unit,
-//     double currentTemperature,
-//     double lowestTemperature,
-//     double highestTemperature,
-//     QString location
-//     ) : overview(overview),
-//         unit(unit),
-//         currentTemperature(currentTemperature),
-//         lowestTemperature(lowestTemperature),
-//         highestTemperature(highestTemperature),
-//         location(location)
-// {}
+QDBusArgument &operator<<(QDBusArgument &arg, const FutureWeather &weather) {
+    arg.beginStructure();
+    arg << weather.forecastDate;
+    arg << weather.sunriseTime;
+    arg << weather.sunsetTime;
+    arg << weather.moonriseTime;
+    arg << weather.moonsetTime;
+    arg << weather.moonPhase;
+    arg << weather.moonPhaseIcon;
+    arg << weather.temperatureUnit;
+    arg << weather.maxTemperature;
+    arg << weather.minTemperature;
+    arg << weather.iconDay;
+    arg << weather.textDay;
+    arg << weather.iconNight;
+    arg << weather.textNight;
+    arg << weather.wind360Day;
+    arg << weather.windDirectionDay;
+    arg << weather.windScaleDay;
+    arg << weather.windSpeedDay;
+    arg << weather.wind360Night;
+    arg << weather.windDirectionNight;
+    arg << weather.windScaleNight;
+    arg << weather.windSpeedNight;
+    arg << weather.humidity;
+    arg << weather.precip;
+    arg << weather.pressure;
+    arg << weather.visibility;
+    arg << weather.cloud;
+    arg << weather.uvIndex;
+    arg.endStructure();
+    return arg;
+}
 
-// void WeatherData::changeTemperatureUnit(TemperatureUnit unit)
-// {
-//     this->unit = unit;
-//     if (unit == TemperatureUnit::FAHRENHEIT)
-//     {
-//         // celsius to fahrenheit
-//         double cCurrent = currentTemperature;
-//         double cLowest = lowestTemperature;
-//         double cHighest = highestTemperature;
-//         currentTemperature = 9.0 / 5.0 * cCurrent + 32.0;
-//         lowestTemperature = 9.0 / 5.0 * cLowest + 32.0;
-//         highestTemperature = 9.0 / 5.0 * cHighest + 32.0;
-//     }
-//     else
-//     {
-//         // fahrenheit to celsius
-//         double fCurrent = currentTemperature;
-//         double fLowest = lowestTemperature;
-//         double fHighest = highestTemperature;
-//         currentTemperature = (5.0 / 9.0) * (fCurrent - 32.0);
-//         lowestTemperature = (5.0 / 9.0) * (fLowest - 32.0);
-//         highestTemperature = (5.0 / 9.0) * (fHighest - 32.0);
-//     }
-// }
-
-// void WeatherData::registerMetaTypes()
-// {
-//     qRegisterMetaType<WeatherData>("WeatherData");
-//     qDBusRegisterMetaType<WeatherData>();
-//     qRegisterMetaType<WeatherOverview>("WeatherOverview");
-//     qDBusRegisterMetaType<WeatherOverview>();
-//     qRegisterMetaType<TemperatureUnit>("TemperatureUnit");
-//     qDBusRegisterMetaType<TemperatureUnit>();
-//     qRegisterMetaType<QList<WeatherData>>("QList<WeatherData>");
-//     qDBusRegisterMetaType<QList<WeatherData>>();
-//     qDebug() << "Meta types for weather registered.";
-// }
-
-
-// QDBusArgument &operator<<(QDBusArgument &argument, const WeatherData &data)
-// {
-//     argument.beginStructure();
-//     argument << data.overview;
-//     argument << data.unit;
-//     argument << data.currentTemperature;
-//     argument << data.lowestTemperature;
-//     argument << data.highestTemperature;
-//     argument << data.location;
-//     argument.endStructure();
-//     return argument;
-// }
-
-// const QDBusArgument &operator>>(const QDBusArgument &argument, WeatherData &data)
-// {
-//     argument.beginStructure();
-//     argument >> data.overview;
-//     argument >> data.unit;
-//     argument >> data.currentTemperature;
-//     argument >> data.lowestTemperature;
-//     argument >> data.highestTemperature;
-//     argument >> data.location;
-//     argument.endStructure();
-//     return argument;
-// }
-
-// QDebug &operator<<(QDebug &debug, const WeatherData &data)
-// {
-//     debug << "{";
-//     debug << data.overview << ",";
-//     debug << data.unit << ",";
-//     debug << data.currentTemperature << ",";
-//     debug << data.lowestTemperature << ",";
-//     debug << data.highestTemperature << ",";
-//     debug << data.location << "}";
-//     return debug;
-// }
+const QDBusArgument &operator>>(const QDBusArgument &arg, FutureWeather &weather) {
+    arg.beginStructure();
+    arg >> weather.forecastDate;
+    arg >> weather.sunriseTime;
+    arg >> weather.sunsetTime;
+    arg >> weather.moonriseTime;
+    arg >> weather.moonsetTime;
+    arg >> weather.moonPhase;
+    arg >> weather.moonPhaseIcon;
+    arg >> weather.temperatureUnit;
+    arg >> weather.maxTemperature;
+    arg >> weather.minTemperature;
+    arg >> weather.iconDay;
+    arg >> weather.textDay;
+    arg >> weather.iconNight;
+    arg >> weather.textNight;
+    arg >> weather.wind360Day;
+    arg >> weather.windDirectionDay;
+    arg >> weather.windScaleDay;
+    arg >> weather.windSpeedDay;
+    arg >> weather.wind360Night;
+    arg >> weather.windDirectionNight;
+    arg >> weather.windScaleNight;
+    arg >> weather.windSpeedNight;
+    arg >> weather.humidity;
+    arg >> weather.precip;
+    arg >> weather.pressure;
+    arg >> weather.visibility;
+    arg >> weather.cloud;
+    arg >> weather.uvIndex;
+    arg.endStructure();
+    return arg;
+}
 
 END_USER_NAMESPACE
+
+

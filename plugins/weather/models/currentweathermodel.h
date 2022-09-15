@@ -5,19 +5,21 @@
 
 
 BEGIN_USER_NAMESPACE
-class WeatherModel : public QObject {
+class CurrentWeatherModel : public QObject {
     Q_OBJECT
 public:
-    WeatherModel(QObject *parent = nullptr);
+    explicit CurrentWeatherModel(QObject *parent = nullptr);
+    ~CurrentWeatherModel() override;
 
     void setCurrentWeather(const CurrentWeather &weather);
     CurrentWeather getCurrentWeather();
 
+
 signals:
-    void currentWeatherChanged(CurrentWeather weather);
+    void currentWeatherChanged(const CurrentWeather &weather);
 
 private:
-    CurrentWeather      m_currentWeather;
+    CurrentWeather          m_currentWeather;
 };
 
 END_USER_NAMESPACE

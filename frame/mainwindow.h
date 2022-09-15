@@ -9,6 +9,7 @@
 #include <ostream>
 #include <QHBoxLayout>
 #include "hoverbutton.h"
+#include "loadingpage.h"
 
 DWIDGET_USE_NAMESPACE
 BEGIN_USER_NAMESPACE
@@ -25,21 +26,28 @@ public:
     void removeItem(const QString &itemKey) override;
     void updateItem(const QString &itemKey) override;
     QSize getFrameSize() override;
+    
     void initializeAllPlugins() override;
-    void addPlugin(PluginInterface *plugin) override;
+    void pluginAdded(PluginInterface *plugin) override;
+    void loadData();
+
     QList<PluginInterface *> plugins() override;
 
     // Window size
-    void loadDefaultSize();
-    [[nodiscard]] bool saveLastWindowSize() const;
-    void setSaveLastWindowSize(bool enable);
+    // void loadDefaultSize();
+    // [[nodiscard]] bool saveLastWindowSize() const;
+    // void setSaveLastWindowSize(bool enable);
     /**
      * Set GSettings window width and height, notice that this function will not resize the window, just write the config.
      * For a separate storage, width is set first and then height, it is possible that width is set but height is not. Be careful.
      * @param size size to set
      */
-    void setSize(const QSize &size);
-    void setSize(int width, int height);
+    // void setSize(const QSize &size);
+    // void setSize(int width, int height);
+
+    void showContents();
+    void showSplash();
+    QGSettings *getWindowSettings();
 public slots:
     void refresh();
 
@@ -51,7 +59,11 @@ private:
     QList<PluginInterface *>    m_plugins;
     QGSettings                  *m_windowSettings;
     HoverButton                 *m_refreshButton;
-    QHBoxLayout                 *m_infoLabel;
+    QWidget                     *m_infoArea;
+    QWidget                     *m_contentFrame;
+    QHBoxLayout                 *m_infoLayout;
+    QVBoxLayout                 *m_contentLayout;
+    LoadingPage                 *m_loadingPage;
 };
 
 END_USER_NAMESPACE
