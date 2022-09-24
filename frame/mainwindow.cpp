@@ -22,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_refreshButton->setIcon(QIcon::fromTheme("aspace_refresh"));
     m_refreshButton->setIconSize({30,30});
     m_refreshButton->setBorderRadius(5);
+    m_refreshButton->setBackgroundWidget(titleBar);
     m_refreshButton->getBackgroundFromWidget(titleBar);
-    m_refreshButton->setParent(titleBar);
     titleBar->addWidget(m_refreshButton, Qt::AlignLeft);
     setWindowIcon(QIcon::fromTheme("gnome-weather"));
     m_contentFrame->move(0, titleBar->height()); // Move to the content area.

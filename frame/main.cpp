@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
         }
         loader.loadPlugins(&w);
         w.initializeAllPlugins();
+        w.dumpObjectTree();
         QtConcurrent::run([&]{
             w.loadData();
         });

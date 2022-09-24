@@ -8,8 +8,10 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <private/qabstractbutton_p.h>
+#include <dguiapplicationhelper.h>
 
 BEGIN_USER_NAMESPACE
+DGUI_USE_NAMESPACE
 namespace utils {
 QColor revertColor(const QColor &color)
 {
@@ -29,14 +31,9 @@ QColor brightenColor(const QColor &color)
     int red = color.red();
     int green = color.green();
     int blue = color.blue();
-    int minFactor = qMin(qMin(red, green), blue);
-    int delta = minFactor / 5;
-    red += delta;
-    green += delta;
-    blue += delta;
-    red = qMin(255, red);
-    green = qMin(255, green);
-    blue = qMin(255, blue);
+    red = qMin(static_cast<int>(red * 1.2), 255);
+    green = qMin(static_cast<int>(green * 1.2), 255);
+    blue = qMin(static_cast<int>(blue * 1.2), 255);
     return {red, green, blue};
 }
 
@@ -51,14 +48,9 @@ QColor darkenColor(const QColor &color)
     int red = color.red();
     int green = color.green();
     int blue = color.blue();
-    int maxFactor = qMax(qMax(red, green), blue);
-    int delta = maxFactor / 5;
-    red -= delta;
-    green -= delta;
-    blue -= delta;
-    red = qMax(0, red);
-    green = qMax(0, green);
-    blue = qMax(0, blue);
+    red = red * 0.8;
+    green = green * 0.8;
+    blue = blue * 0.8;
     return {red, green, blue};
 }
 
@@ -73,23 +65,25 @@ HoverButton::HoverButton(QWidget *parent)
 void HoverButton::paintEvent(QPaintEvent *e) {
     Q_D(HoverButton);
     Q_UNUSED(e)
-    getBackgroundFromWidget(parentWidget());
+    if (d->m_backgroundWidget) {
+        getBackgroundFromWidget(d->m_backgroundWidget);
+    } else {
+        getBackgroundFromWidget(parentWidget());
+    }
     QIcon savedIcon = this->icon();
     QSize requestSize = iconSize();
     requestSize = savedIcon.actualSize(requestSize);
     this->resize(requestSize / 5 + requestSize);
     QPainter painter(this);
-//    // Set background
-//    QPalette pal(this->palette());
-//    pal.setBrush(QPalette::Window, d->m_background);
-//    QPointer<HoverButton> thisGuard(this);
-//    this->setAutoFillBackground(true);
-//    this->setPalette(pal);
     // draw background
     QColor backgroundColor;
     if (d->m_hovered)
     {
-        backgroundColor = utils::brightenColor(background());
+        if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::DarkType) {
+            backgroundColor = utils::brightenColor(background());
+        } else {
+            backgroundColor = utils::darkenColor(background());
+        }
     }
     else
     {
@@ -113,9 +107,9 @@ void HoverButton::setBackground(const QColor &background) {
     d->setBackground(background);
 }
 
-void HoverButton::getBackgroundFromWidget(QWidget *parent) {
+void HoverButton::getBackgroundFromWidget(QWidget *widget) {
     Q_D(HoverButton);
-    const QPalette& pal = parent->palette();
+    const QPalette& pal = widget->palette();
     const QBrush& brush = pal.window();
     d->m_background = brush.color();
 }
@@ -159,12 +153,25 @@ QSize HoverButton::sizeHint() const {
 
 
 HoverButtonPrivate::HoverButtonPrivate(HoverButton *q)
-: q_ptr(q), m_background(), m_borderRadius(0), m_hovered(false)
+: q_ptr(q), m_backgroundWidget(nullptr), m_background(), m_borderRadius(0), m_hovered(false)
 {}
 
 void HoverButtonPrivate::setBackground(const QColor &background) {
     m_background = background;
 }
+
+void HoverButton::setBackgroundWidget(QWidget *widget)
+{
+    Q_D(HoverButton);
+    d->m_backgroundWidget = widget;
+}
+
+QWidget *HoverButton::backgroundWidget()
+{
+    Q_D(HoverButton);
+    return d->m_backgroundWidget;
+}
+
 END_USER_NAMESPACE
 
 

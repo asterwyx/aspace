@@ -13,6 +13,7 @@ public:
 private:
     Q_DECLARE_PUBLIC(HoverButton)
     HoverButton*    q_ptr;
+    QWidget         *m_backgroundWidget;
     QColor          m_background;
     int             m_borderRadius;
     bool            m_hovered;

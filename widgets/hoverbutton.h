@@ -20,6 +20,8 @@ public:
     ~HoverButton() override = default;
     QColor background();
     void setBackground(const QColor &background);
+    void setBackgroundWidget(QWidget *widget);
+    QWidget *backgroundWidget();
     int borderRadius();
     void setBorderRadius(int radius);
 
