@@ -2,7 +2,18 @@ Source: aspace
 Section: news
 Priority: optional
 Maintainer: Astrea Wang <wangyixue@uniontech.com>
-Build-Depends: cmake, debhelper (>=11~)
+Build-Depends:
+  cmake,
+  debhelper (>=11~),
+  qtbase5-dev,
+  libqt5svg5-dev,
+  libqt5xml5,
+  libdtkcore-dev,
+  libdtkwidget-dev,
+  libgsettings-qt-dev,
+  qtbase5-private-dev,
+  libgtest-dev,
+  libgmock-dev
 Standards-Version: 4.1.4
 Homepage: https://github.com/asterwyx/aspace
 
