@@ -16,7 +16,6 @@ private:
     QWidget         *m_backgroundWidget;
     QColor          m_background;
     int             m_borderRadius;
-    bool            m_hovered;
 };
 
 

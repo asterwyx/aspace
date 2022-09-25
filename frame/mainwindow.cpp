@@ -18,7 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     DTitlebar *titleBar = this->titlebar();
     titleBar->setIcon(QIcon::fromTheme("gnome-weather"));
-    setMinimumSize(200, 200);
     m_refreshButton->setIcon(QIcon::fromTheme("aspace_refresh"));
     m_refreshButton->setIconSize({30,30});
     m_refreshButton->setBorderRadius(5);

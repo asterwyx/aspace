@@ -60,6 +60,7 @@ HoverButton::HoverButton(QWidget *parent)
 {
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setWindowFlag(Qt::FramelessWindowHint);
+    setMouseTracking(true);
 }
 
 void HoverButton::paintEvent(QPaintEvent *e) {
@@ -77,7 +78,7 @@ void HoverButton::paintEvent(QPaintEvent *e) {
     QPainter painter(this);
     // draw background
     QColor backgroundColor;
-    if (d->m_hovered)
+    if (underMouse())
     {
         if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::DarkType) {
             backgroundColor = utils::brightenColor(background());
@@ -124,16 +125,23 @@ void HoverButton::setBorderRadius(int radius) {
     d->m_borderRadius = radius;
 }
 
+// Just repaint when enter and leave
 void HoverButton::enterEvent(QEvent *event) {
-    Q_D(HoverButton);
-    d->m_hovered = true;
-    QWidget::enterEvent(event);
+    event->accept();
+    qDebug() << "Entered button";
+    repaint();
 }
 
 void HoverButton::leaveEvent(QEvent *event) {
-    Q_D(HoverButton);
-    d->m_hovered = false;
-    QWidget::leaveEvent(event);
+    event->accept();
+    qDebug() << "Left button";
+    repaint();
+}
+
+void HoverButton::mouseMoveEvent(QMouseEvent *event)
+{
+    qDebug() << "Mouse pos: x =" << event->x() << ", y =" << event->y();
+    qDebug() << "Global pos: x=" << event->globalX() << ", y =" << event->globalY();
 }
 
 void HoverButton::setIconSize(const QSize &size) {
@@ -153,7 +161,7 @@ QSize HoverButton::sizeHint() const {
 
 
 HoverButtonPrivate::HoverButtonPrivate(HoverButton *q)
-: q_ptr(q), m_backgroundWidget(nullptr), m_background(), m_borderRadius(0), m_hovered(false)
+: q_ptr(q), m_backgroundWidget(nullptr), m_background(), m_borderRadius(0)
 {}
 
 void HoverButtonPrivate::setBackground(const QColor &background) {
