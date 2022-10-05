@@ -7,7 +7,8 @@
 #include <QString>
 #include <qlist.h>
 BEGIN_USER_NAMESPACE
-class PluginLoaderPrivate {
+class PluginLoaderPrivate
+{
 public:
     explicit PluginLoaderPrivate(PluginLoader *q);
     ~PluginLoaderPrivate();
@@ -17,9 +18,9 @@ protected:
 
 private:
     Q_DECLARE_PUBLIC(PluginLoader)
-    PluginLoader                    *q_ptr;
-    QStringList                     m_pluginDirs;
-    QList<PluginInterface *>        m_plugins;
+    PluginLoader *q_ptr;
+    QStringList m_pluginDirs;
+    QList<PluginInterface *> m_plugins;
 };
 
 END_USER_NAMESPACE

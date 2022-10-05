@@ -10,23 +10,22 @@
 #include "stub.h"
 #include <DTitlebar>
 
-
 USE_USER_NAMESPACE
 
-class MainWindowTest : public testing::Test {
-
+class MainWindowTest : public testing::Test
+{
 public:
+    static void SetUpTestCase() { windowSettings = new QGSettings(SCHEMA_ID, SCHEMA_PATH); }
 
-    static void SetUpTestCase() {
-        windowSettings = new QGSettings(SCHEMA_ID, SCHEMA_PATH);
-    }
-
-    static void TearDownTestCase() {
+    static void TearDownTestCase()
+    {
         delete windowSettings;
         windowSettings = nullptr;
     }
 
-    MainWindowTest() : m_window{new MainWindow} {
+    MainWindowTest()
+        : m_window{new MainWindow}
+    {
         m_window->show();
     }
 
@@ -41,10 +40,9 @@ public:
 
 QGSettings *MainWindowTest::windowSettings = nullptr;
 
-
 TEST_F(MainWindowTest, GetFrameSize)
 {
-    m_window->m_contentFrame->resize(1024, 1024); // First resize it.
+    m_window->m_contentFrame->resize(1024, 1024);  // First resize it.
     QSize size = m_window->getFrameSize();
     EXPECT_EQ(1024, size.width());
     EXPECT_EQ(1024, size.height());
@@ -63,7 +61,8 @@ TEST_F(MainWindowTest, GetFrameSize)
 //     EXPECT_EQ(height, m_window->height());
 // }
 
-TEST_F(MainWindowTest, AddPlugin) {
+TEST_F(MainWindowTest, AddPlugin)
+{
     PluginInterface *weatherPlugin1 = new WeatherPlugin;
     ASSERT_NE(nullptr, weatherPlugin1);
     m_window->addPlugin(weatherPlugin1);
@@ -134,11 +133,14 @@ TEST_F(MainWindowTest, RemoveItem)
 
 TEST_F(MainWindowTest, UpdateItem)
 {
-    class MockWidget : public QWidget {
+    class MockWidget : public QWidget
+    {
     public:
         bool updated = false;
+
     protected:
-        void paintEvent(QPaintEvent *event) override {
+        void paintEvent(QPaintEvent *event) override
+        {
             Q_UNUSED(event);
             qDebug() << "Item Widget is updated.";
             updated = true;
@@ -148,13 +150,13 @@ TEST_F(MainWindowTest, UpdateItem)
     ASSERT_FALSE(widget.updated);
     m_window->m_itemMap.insert("test-widget", &widget);
     ASSERT_FALSE(widget.updated);
-//    widget.show();
-//    EXPECT_TRUE(widget.updated);
-//    widget.updated = false;
+    //    widget.show();
+    //    EXPECT_TRUE(widget.updated);
+    //    widget.updated = false;
     Stub stub;
-    stub.set((void (QWidget::*)()) &QWidget::update, updateStub);
+    stub.set((void(QWidget::*)()) & QWidget::update, updateStub);
     m_window->updateItem("test-widget");
-//    QCoreApplication::sendPostedEvents();
+    //    QCoreApplication::sendPostedEvents();
     EXPECT_TRUE(widget.updated);
 }
 
@@ -187,11 +189,12 @@ TEST_F(MainWindowTest, LoadData)
     plugin->initialize();
     stub.set(ADDR(WeatherController, updateCurrentWeather), updateCurrentWeatherStub);
     stub.set(ADDR(WeatherController, updateFutureWeather), updateFutureWeatherStub);
-    QObject::connect(plugin->m_controller->m_currentWeatherModel.data(), &CurrentWeatherModel::currentWeatherChanged, m_window, [&]{
-        currentUpdated = true;
-    });
-    QObject::connect(plugin->m_controller->m_futureWeatherModel.data(), &FutureWeatherModel::dataChanged, m_window, [&]{
-       futureUpdated = true;
+    QObject::connect(plugin->m_controller->m_currentWeatherModel.data(),
+                     &CurrentWeatherModel::currentWeatherChanged,
+                     m_window,
+                     [&] { currentUpdated = true; });
+    QObject::connect(plugin->m_controller->m_futureWeatherModel.data(), &FutureWeatherModel::dataChanged, m_window, [&] {
+        futureUpdated = true;
     });
     m_window->loadData();
     EXPECT_TRUE(currentUpdated);
@@ -200,7 +203,7 @@ TEST_F(MainWindowTest, LoadData)
 
 TEST_F(MainWindowTest, ShowContents)
 {
-//    m_window->setAttribute(Qt::WA_WState_ExplicitShowHide);
+    //    m_window->setAttribute(Qt::WA_WState_ExplicitShowHide);
     m_window->m_loadingPage->setVisible(true);
     ASSERT_TRUE(m_window->m_loadingPage->isVisible());
     m_window->m_contentFrame->setVisible(false);
@@ -238,10 +241,11 @@ TEST_F(MainWindowTest, Refresh)
     plugin->initialize();
     stub.set(ADDR(WeatherController, updateCurrentWeather), updateCurrentWeatherStub);
     stub.set(ADDR(WeatherController, updateFutureWeather), updateFutureWeatherStub);
-    QObject::connect(plugin->m_controller->m_currentWeatherModel.data(), &CurrentWeatherModel::currentWeatherChanged, m_window, [&]{
-        currentUpdated = true;
-    });
-    QObject::connect(plugin->m_controller->m_futureWeatherModel.data(), &FutureWeatherModel::dataChanged, m_window, [&]{
+    QObject::connect(plugin->m_controller->m_currentWeatherModel.data(),
+                     &CurrentWeatherModel::currentWeatherChanged,
+                     m_window,
+                     [&] { currentUpdated = true; });
+    QObject::connect(plugin->m_controller->m_futureWeatherModel.data(), &FutureWeatherModel::dataChanged, m_window, [&] {
         futureUpdated = true;
     });
     m_window->refresh();

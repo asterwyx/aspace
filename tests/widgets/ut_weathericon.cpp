@@ -17,7 +17,6 @@ TEST(WeatherIconTest, SetFromPath)
     EXPECT_THAT(icon.d_ptr->m_svgData, testing::NotNull());
 }
 
-
 TEST(WeatheIconTest, SetFromName)
 {
     WeatherIcon icon;

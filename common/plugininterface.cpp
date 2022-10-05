@@ -3,7 +3,6 @@
 
 BEGIN_USER_NAMESPACE
 
-
 PluginInterface::PluginInterface(FrameProxyInterface *frameProxy)
     : d_ptr(new PluginInterfacePrivate(this))
 {
@@ -32,7 +31,7 @@ PluginInterface::~PluginInterface()
     delete d_ptr;
 }
 
-FrameProxyInterface * PluginInterfacePrivate::frameProxy()
+FrameProxyInterface *PluginInterfacePrivate::frameProxy()
 {
     return m_frameProxy;
 }

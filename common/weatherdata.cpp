@@ -14,7 +14,6 @@ void Location::registerMetaTypes()
     qRegisterMetaType<QList<Location>>("QList<Location>");
     qDBusRegisterMetaType<QList<Location>>();
     qInfo() << "Meta types for Location registered.";
-
 }
 
 void CurrentWeather::registerMetaTypes()
@@ -24,7 +23,8 @@ void CurrentWeather::registerMetaTypes()
     qInfo() << "Meta types for CurrentWeather registered.";
 }
 
-void FutureWeather::registerMetaTypes() {
+void FutureWeather::registerMetaTypes()
+{
     qRegisterMetaType<FutureWeather>("FutureWeather");
     qDBusRegisterMetaType<FutureWeather>();
     qRegisterMetaType<QList<FutureWeather>>("QList<FutureWeather>");
@@ -88,13 +88,10 @@ QDebug operator<<(QDebug debug, const Location &data)
 void CurrentWeather::changeTemperatureUnit(TemperatureUnit unit)
 {
     double temper, feelsLike;
-    if (unit == TemperatureUnit::FAHRENHEIT)
-    {
+    if (unit == TemperatureUnit::FAHRENHEIT) {
         temper = celsiusToFahrenheit(this->temperature);
         feelsLike = celsiusToFahrenheit(this->feelsLikeTemperature);
-    }
-    else
-    {
+    } else {
         temper = fahrenheitToCelsius(this->temperature);
         feelsLike = fahrenheitToCelsius(this->feelsLikeTemperature);
     }
@@ -149,7 +146,7 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, CurrentWeather &d
     return argument;
 }
 
-QDebug operator<<(QDebug debug, const CurrentWeather& data)
+QDebug operator<<(QDebug debug, const CurrentWeather &data)
 {
     debug << "{";
     debug << data.observedTime.toTime_t() << ",";
@@ -170,23 +167,26 @@ QDebug operator<<(QDebug debug, const CurrentWeather& data)
     return debug;
 }
 
-QDebug operator<<(QDebug debug, const FutureWeather &weather) {
-    debug << "{forecastDate: " << weather.forecastDate << " sunriseTime: "
-          << weather.sunriseTime << " sunsetTime: " << weather.sunsetTime << " moonriseTime: " << weather.moonriseTime
-          << " moonsetTime: " << weather.moonsetTime << " moonPhase: " << weather.moonPhase << " moonPhaseIcon: "
-          << weather.moonPhaseIcon << " temperatureUnit: " << weather.temperatureUnit << " maxTemperature: " << weather.maxTemperature << " minTemperature: "
-          << weather.minTemperature << " iconDay: " << weather.iconDay << " textDay: " << weather.textDay << " iconNight: "
-          << weather.iconNight << " textNight: " << weather.textNight << " wind360Day: " << weather.wind360Day
+QDebug operator<<(QDebug debug, const FutureWeather &weather)
+{
+    debug << "{forecastDate: " << weather.forecastDate << " sunriseTime: " << weather.sunriseTime
+          << " sunsetTime: " << weather.sunsetTime << " moonriseTime: " << weather.moonriseTime
+          << " moonsetTime: " << weather.moonsetTime << " moonPhase: " << weather.moonPhase
+          << " moonPhaseIcon: " << weather.moonPhaseIcon << " temperatureUnit: " << weather.temperatureUnit
+          << " maxTemperature: " << weather.maxTemperature << " minTemperature: " << weather.minTemperature
+          << " iconDay: " << weather.iconDay << " textDay: " << weather.textDay << " iconNight: " << weather.iconNight
+          << " textNight: " << weather.textNight << " wind360Day: " << weather.wind360Day
           << " windDirectionDay: " << weather.windDirectionDay << " windScaleDay: " << weather.windScaleDay
           << " windSpeedDay: " << weather.windSpeedDay << " wind360Night: " << weather.wind360Night
           << " windDirectionNight: " << weather.windDirectionNight << " windScaleNight: " << weather.windScaleNight
-          << " windSpeedNight: " << weather.windSpeedNight << " humidity: " << weather.humidity << " precip: "
-          << weather.precip << " pressure: " << weather.pressure << " visibility: " << weather.visibility << " cloud: "
-          << weather.cloud << " uvIndex: " << weather.uvIndex << "}";
+          << " windSpeedNight: " << weather.windSpeedNight << " humidity: " << weather.humidity << " precip: " << weather.precip
+          << " pressure: " << weather.pressure << " visibility: " << weather.visibility << " cloud: " << weather.cloud
+          << " uvIndex: " << weather.uvIndex << "}";
     return debug;
 }
 
-QDBusArgument &operator<<(QDBusArgument &arg, const FutureWeather &weather) {
+QDBusArgument &operator<<(QDBusArgument &arg, const FutureWeather &weather)
+{
     arg.beginStructure();
     arg << weather.forecastDate;
     arg << weather.sunriseTime;
@@ -220,7 +220,8 @@ QDBusArgument &operator<<(QDBusArgument &arg, const FutureWeather &weather) {
     return arg;
 }
 
-const QDBusArgument &operator>>(const QDBusArgument &arg, FutureWeather &weather) {
+const QDBusArgument &operator>>(const QDBusArgument &arg, FutureWeather &weather)
+{
     arg.beginStructure();
     arg >> weather.forecastDate;
     arg >> weather.sunriseTime;
@@ -255,5 +256,3 @@ const QDBusArgument &operator>>(const QDBusArgument &arg, FutureWeather &weather
 }
 
 END_USER_NAMESPACE
-
-

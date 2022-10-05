@@ -15,7 +15,8 @@
 #include "controllers/weathercontroller.h"
 
 BEGIN_USER_NAMESPACE
-class WeatherPlugin : public QObject, public PluginInterface {
+class WeatherPlugin : public QObject, public PluginInterface
+{
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_IID)
     Q_INTERFACES(USER_NAMESPACE::PluginInterface)
@@ -33,12 +34,11 @@ public:
 public:
     WeatherPlugin(FrameProxyInterface *frameProxy = nullptr, QObject *parent = nullptr);
 
-
     ~WeatherPlugin() override;
     QString pluginName() const override;
     QString pluginDisplayName() const override;
     QWidget *pluginItemWidget(const QString &key) override;
-    
+
     void initialize() override;
     void loadData() override;
     void adjustSize(QResizeEvent *event, const QMap<QString, QWidget *> &items) override;
@@ -52,24 +52,23 @@ signals:
 
 private slots:
     void onCurrentWeatherChanged(const CurrentWeather &weather);
-private:
-    QGroupBox                           *m_currentWeatherWidget;
-    WeatherIcon                         *m_weatherIcon;
-    QLabel                              *m_temperatureLabel;
-    QLabel                              *m_locationLabel;
-    QLabel                              *m_updateTime;
-    QLabel                              *m_feelLikeLabel;
-    ListView                            *m_futureWeatherList;
-    int                                 m_temperatureFontPointSize;
-    int                                 m_temperatureFontWeight;
-    QString                             m_temperatureFontFamily;
-    int                                 m_currentWeatherWidth;
-    int                                 m_currentWeatherHeight;
-    QScopedPointer<WeatherController>   m_controller;
-    QSharedPointer<CurrentWeatherModel> m_currentWeatherModel;
-    QSharedPointer<FutureWeatherModel>  m_futureWeatherModel;
 
+private:
+    QGroupBox *m_currentWeatherWidget;
+    WeatherIcon *m_weatherIcon;
+    QLabel *m_temperatureLabel;
+    QLabel *m_locationLabel;
+    QLabel *m_updateTime;
+    QLabel *m_feelLikeLabel;
+    ListView *m_futureWeatherList;
+    int m_temperatureFontPointSize;
+    int m_temperatureFontWeight;
+    QString m_temperatureFontFamily;
+    int m_currentWeatherWidth;
+    int m_currentWeatherHeight;
+    QScopedPointer<WeatherController> m_controller;
+    QSharedPointer<CurrentWeatherModel> m_currentWeatherModel;
+    QSharedPointer<FutureWeatherModel> m_futureWeatherModel;
 };
 
 END_USER_NAMESPACE
-

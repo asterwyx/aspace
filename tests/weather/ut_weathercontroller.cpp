@@ -3,22 +3,21 @@
 #include "models/currentweathermodel.h"
 USE_USER_NAMESPACE
 
-class WeatherControllerTest : public testing::Test {
+class WeatherControllerTest : public testing::Test
+{
 public:
-    WeatherControllerTest() {
+    WeatherControllerTest()
+    {
         m_controller = new WeatherController;
         m_controller->m_locationModel->m_location.id = "101010100";
     }
 
-    ~WeatherControllerTest() override {
-        delete m_controller;
-    }
+    ~WeatherControllerTest() override { delete m_controller; }
 
 protected:
-    QString             m_id = "101010100";
-    WeatherController   *m_controller;
+    QString m_id = "101010100";
+    WeatherController *m_controller;
 };
-
 
 TEST_F(WeatherControllerTest, SetLocation)
 {
@@ -34,20 +33,19 @@ TEST_F(WeatherControllerTest, SetLocation)
 TEST_F(WeatherControllerTest, UpdateCurrentWeather)
 {
     bool updated = false;
-    QObject::connect(m_controller->getCurrentWeatherModel().data(), &CurrentWeatherModel::currentWeatherChanged, m_controller, [&]{
-        updated = true;
-    });
+    QObject::connect(m_controller->getCurrentWeatherModel().data(),
+                     &CurrentWeatherModel::currentWeatherChanged,
+                     m_controller,
+                     [&] { updated = true; });
     m_controller->updateCurrentWeather();
     EXPECT_TRUE(updated);
 }
 
-
 TEST_F(WeatherControllerTest, UpdateFutureWeather)
 {
     bool updated = false;
-    QObject::connect(m_controller->getFutureWeatherModel().data(), &FutureWeatherModel::dataChanged, m_controller, [&] {
-        updated = true;
-    });
+    QObject::connect(
+        m_controller->getFutureWeatherModel().data(), &FutureWeatherModel::dataChanged, m_controller, [&] { updated = true; });
     m_controller->updateFutureWeather();
     EXPECT_TRUE(updated);
 }
@@ -60,7 +58,7 @@ TEST_F(WeatherControllerTest, GetUpdateTime)
 
 TEST_F(WeatherControllerTest, LookForLocations)
 {
-    QList<Location> locations  = m_controller->lookForLocations(QString::fromUtf8("武汉"));
+    QList<Location> locations = m_controller->lookForLocations(QString::fromUtf8("武汉"));
     EXPECT_NE(locations.size(), 0);
 }
 

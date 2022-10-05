@@ -2,13 +2,14 @@
 
 BEGIN_USER_NAMESPACE
 
-class PluginInterfacePrivate {
-
+class PluginInterfacePrivate
+{
 public:
     PluginInterfacePrivate(PluginInterface *q)
-        : q_ptr(q),
-        m_frameProxy(nullptr)
-    {}
+        : q_ptr(q)
+        , m_frameProxy(nullptr)
+    {
+    }
     ~PluginInterfacePrivate() = default;
 
     void setFrameProxy(FrameProxyInterface *frameProxy);

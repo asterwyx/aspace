@@ -4,7 +4,8 @@
 #pragma once
 #include "hoverbutton.h"
 BEGIN_USER_NAMESPACE
-class HoverButtonPrivate {
+class HoverButtonPrivate
+{
 private:
 public:
     explicit HoverButtonPrivate(HoverButton *qPtr);
@@ -12,11 +13,10 @@ public:
 
 private:
     Q_DECLARE_PUBLIC(HoverButton)
-    HoverButton*    q_ptr;
-    QWidget         *m_backgroundWidget;
-    QColor          m_background;
-    int             m_borderRadius;
+    HoverButton *q_ptr;
+    QWidget *m_backgroundWidget;
+    QColor m_background;
+    int m_borderRadius;
 };
-
 
 END_USER_NAMESPACE

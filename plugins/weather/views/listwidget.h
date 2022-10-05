@@ -6,12 +6,10 @@
 #include "weathericon.h"
 #include "weatherdata.h"
 
-
 BEGIN_USER_NAMESPACE
 
-
-class ListWidget : public QGroupBox {
-
+class ListWidget : public QGroupBox
+{
     Q_OBJECT
 public:
     explicit ListWidget(const FutureWeather *weather, QWidget *parent = nullptr);
@@ -19,11 +17,11 @@ public:
     ~ListWidget() override;
 
 private:
-    WeatherIcon         *m_weatherIcon;
-    QLabel              *m_sunriseTime;
-    QLabel              *m_maxTemperature;
-    QLabel              *m_minTemperature;
-    QLabel              *m_sunsetTime;
+    WeatherIcon *m_weatherIcon;
+    QLabel *m_sunriseTime;
+    QLabel *m_maxTemperature;
+    QLabel *m_minTemperature;
+    QLabel *m_sunsetTime;
 };
 
 END_USER_NAMESPACE

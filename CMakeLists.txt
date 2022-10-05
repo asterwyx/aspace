@@ -66,12 +66,16 @@ if (NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "debug")
 endif()
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
-if (CMAKE_BUILD_TYPE STREQUAL "debug")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g -fsanitize=address -fno-omit-frame-pointer")
+if(CMAKE_BUILD_TYPE STREQUAL "debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g -fno-omit-frame-pointer")
+    add_compile_definitions(
+        PORTABLE
+        PERSISTENT_DAEMON
+        )
     set(BUILD_TEST ON)
-else ()
+else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
-endif ()
+endif()
 
 # find qt related package
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
@@ -79,7 +83,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Gui UiPlugin
 find_package(PkgConfig REQUIRED)
 pkg_search_module(QGSettings REQUIRED gsettings-qt)
 find_package(DtkWidget REQUIRED)
-find_package(DtkCMake REQUIRED)
 
 # create qt files
 set(TS_FILES translations/aspace_zh_CN.ts)
@@ -134,18 +137,18 @@ target_link_libraries(${CLIENT} PRIVATE
 
 install(TARGETS ${CLIENT} RUNTIME)
 set(CLIENT_BIN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${CLIENT}")
-configure_file(misc/org.deepin.aspace.desktop.in "${DBUS_SERVICE_NAME}.desktop")
-install(FILES "${PROJECT_BINARY_DIR}/org.deepin.aspace.desktop" DESTINATION ${CMAKE_INSTALL_ENTRYDIR})
-dconfig_meta_files(APPID org.deepin.aspace FILES misc/org.deepin.aspace.json)
-install(FILES misc/org.deepin.aspace.gschema.xml DESTINATION ${CMAKE_INSTALL_SCHEMADIR})
+configure_file("misc/org.deepin.aspace.desktop.in" "misc/${DBUS_SERVICE_NAME}.desktop")
+install(FILES "${PROJECT_BINARY_DIR}/misc/${DBUS_SERVICE_NAME}.desktop" DESTINATION "${CMAKE_INSTALL_ENTRYDIR}")
+dconfig_meta_files(APPID "org.deepin.aspace" FILES "misc/org.deepin.aspace.json")
+configure_file("misc/org.deepin.aspace.gschema.xml.in" "misc/${SCHEMA_ID}.gschema.xml")
+install(FILES "${PROJECT_BINARY_DIR}/misc/${SCHEMA_ID}.gschema.xml" DESTINATION "${CMAKE_INSTALL_SCHEMADIR}")
 set(DAEMON_BIN "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${DAEMON}")
-configure_file(misc/org.deepin.aspace.service.in "${DBUS_SERVICE_NAME}.service")
-install(FILES "${PROJECT_BINARY_DIR}/${DBUS_SERVICE_NAME}.service" DESTINATION ${CMAKE_INSTALL_DBUSDIR})
-configure_file(misc/aspace.service.in "${CLIENT}.service")
-install(FILES "${PROJECT_BINARY_DIR}/${CLIENT}.service" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
-configure_file(misc/update-weather.timer.in update-weather.timer)
-install(FILES "${PROJECT_BINARY_DIR}/update-weather.timer" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
-
+configure_file("misc/org.deepin.aspace.service.in" "misc/${DBUS_SERVICE_NAME}.service")
+install(FILES "${PROJECT_BINARY_DIR}/misc/${DBUS_SERVICE_NAME}.service" DESTINATION ${CMAKE_INSTALL_DBUSDIR})
+configure_file("misc/aspace.service.in" "misc/${CLIENT}.service")
+install(FILES "${PROJECT_BINARY_DIR}/misc/${CLIENT}.service" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
+configure_file("misc/update-weather.timer.in" "misc/update-weather.timer")
+install(FILES "${PROJECT_BINARY_DIR}/misc/update-weather.timer" DESTINATION ${CMAKE_INSTALL_SYSTEMDDIR})
 
 add_custom_target(uninstall COMMENT "Uninstall installed files")
 add_custom_command(
@@ -164,4 +167,5 @@ add_custom_command(
 )
 
 install(FILES ${PROJECT_BINARY_DIR}/lib${WIDGETS}.so ${PROJECT_BINARY_DIR}/lib${COMMON}.so DESTINATION lib/x86_64-linux-gnu)
-install(SCRIPT post_install.cmake)
+configure_file("misc/post_install.cmake.in" "misc/post_install.cmake")
+install(SCRIPT "${PROJECT_BINARY_DIR}/misc/post_install.cmake")

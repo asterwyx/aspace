@@ -4,7 +4,8 @@
 
 BEGIN_USER_NAMESPACE
 
-class ListWidgetDelegate : public QStyledItemDelegate {
+class ListWidgetDelegate : public QStyledItemDelegate
+{
 public:
     explicit ListWidgetDelegate(QObject *parent = nullptr);
 

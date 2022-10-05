@@ -7,15 +7,14 @@
 
 BEGIN_USER_NAMESPACE
 
-class WeatherInterface : public QDBusAbstractInterface {
+class WeatherInterface : public QDBusAbstractInterface
+{
     Q_OBJECT
 public:
-    static inline const char * staticInterfaceName()
-    {
-        return DBUS_WEATHER_INTERFACE_NAME;
-    }
+    static inline const char *staticInterfaceName() { return DBUS_WEATHER_INTERFACE_NAME; }
+
 public:
-    WeatherInterface(const QString &service, const QString &path, const QDBusConnection &connection, QObject *parent=nullptr);
+    WeatherInterface(const QString &service, const QString &path, const QDBusConnection &connection, QObject *parent = nullptr);
     ~WeatherInterface() override;
 
 signals:
@@ -43,7 +42,6 @@ public slots:
         argumentList << cityName;
         return asyncCallWithArgumentList(QLatin1String("lookForLocations"), argumentList);
     }
-
 };
 
 END_USER_NAMESPACE

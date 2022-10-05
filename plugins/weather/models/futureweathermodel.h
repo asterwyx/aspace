@@ -6,10 +6,12 @@
 #include "weatherdata.h"
 
 BEGIN_USER_NAMESPACE
-class FutureWeatherModel : public QAbstractListModel {
+class FutureWeatherModel : public QAbstractListModel
+{
     Q_OBJECT
 public slots:
     void clear();
+
 public:
     explicit FutureWeatherModel(ListView *list, QObject *parent = nullptr);
 
@@ -27,9 +29,10 @@ signals:
 
 public slots:
     void onFutureWeatherUpdated(const QList<USER_NAMESPACE::FutureWeather> &futureWeather);
+
 private:
-    QList<FutureWeather>    m_futureWeather;
-    ListView                *m_list;
+    QList<FutureWeather> m_futureWeather;
+    ListView *m_list;
 };
 
 END_USER_NAMESPACE

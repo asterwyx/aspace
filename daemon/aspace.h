@@ -21,24 +21,17 @@ class Aspace : public QObject, public QDBusContext
 public:
     explicit Aspace(QObject *parent = nullptr);
     ~Aspace() override;
-    static constexpr uint       REQUEST_TIMEOUT = 5000;        // ms
-    static bool                 parseApiCode(int apiCode);
-    inline static const char    *apiKey()
-    {
-        return "b3aeb3cb72a74857b66a1f423c15bb89";
-    }
-
+    static constexpr uint REQUEST_TIMEOUT = 5000;  // ms
+    static bool parseApiCode(int apiCode);
+    inline static const char *apiKey() { return "b3aeb3cb72a74857b66a1f423c15bb89"; }
 
 public slots:
-    USER_NAMESPACE::CurrentWeather          getCurrentWeather(const QString &cityCode, bool *ok = nullptr);
-    QList<USER_NAMESPACE::Location>         lookForLocations(const QString &cityName, bool *ok = nullptr);
-    QList<USER_NAMESPACE::FutureWeather>    getFutureWeather(const QString &cityCode, bool *ok = nullptr);
+    USER_NAMESPACE::CurrentWeather getCurrentWeather(const QString &cityCode, bool *ok = nullptr);
+    QList<USER_NAMESPACE::Location> lookForLocations(const QString &cityName, bool *ok = nullptr);
+    QList<USER_NAMESPACE::FutureWeather> getFutureWeather(const QString &cityCode, bool *ok = nullptr);
 
 private:
-    QNetworkAccessManager   m_networkManager;
+    QNetworkAccessManager m_networkManager;
 };
 
 END_USER_NAMESPACE
-
-
-

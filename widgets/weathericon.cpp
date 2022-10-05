@@ -14,8 +14,9 @@
 #include "utils.h"
 
 BEGIN_USER_NAMESPACE
-WeatherIcon::WeatherIcon(const QString& iconPath, QWidget *parent, double scaleFactor)
-    : QWidget(parent), d_ptr(new WeatherIconPrivate(this))
+WeatherIcon::WeatherIcon(const QString &iconPath, QWidget *parent, double scaleFactor)
+    : QWidget(parent)
+    , d_ptr(new WeatherIconPrivate(this))
 {
     Q_D(WeatherIcon);
     d->m_scaleFactor = scaleFactor;
@@ -44,12 +45,11 @@ void WeatherIcon::loadData()
 {
     Q_D(WeatherIcon);
     d->m_loaded = !d->m_iconPath.isEmpty();
-    if (d->m_loaded)
-    {
+    if (d->m_loaded) {
         QFile iconFile(d->m_iconPath);
         iconFile.open(QIODevice::ReadOnly);
         d->m_svgData = iconFile.readAll();
-        // Synchronize size with widget        
+        // Synchronize size with widget
         QSvgRenderer renderer;
         renderer.load(d->m_svgData);
         resize(renderer.defaultSize());
@@ -63,8 +63,7 @@ void WeatherIcon::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
     Q_D(WeatherIcon);
-    if (d->m_loaded)
-    {
+    if (d->m_loaded) {
         QSvgRenderer renderer;
         renderer.load(d->m_svgData);
         auto size = renderer.defaultSize();
@@ -80,7 +79,7 @@ void WeatherIcon::paintEvent(QPaintEvent *event)
     }
 }
 
-void WeatherIcon::setIconFromPath(const QString& iconPath)
+void WeatherIcon::setIconFromPath(const QString &iconPath)
 {
     Q_D(WeatherIcon);
     d->m_iconPath = iconPath;
@@ -127,6 +126,9 @@ QString WeatherIcon::iconPath() const
 
 WeatherIcon::~WeatherIcon() = default;
 
-WeatherIconPrivate::WeatherIconPrivate(WeatherIcon *q) : q_ptr(q) {}
+WeatherIconPrivate::WeatherIconPrivate(WeatherIcon *q)
+    : q_ptr(q)
+{
+}
 WeatherIconPrivate::~WeatherIconPrivate() = default;
 END_USER_NAMESPACE

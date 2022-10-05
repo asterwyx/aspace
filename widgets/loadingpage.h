@@ -6,13 +6,13 @@
 
 BEGIN_USER_NAMESPACE
 
-class LoadingPage : public QWidget {
+class LoadingPage : public QWidget
+{
 public:
-
     LoadingPage(QWidget *parent = nullptr);
 
 private:
     QVBoxLayout *m_layout;
-    QLabel      *m_loadingLabel;
+    QLabel *m_loadingLabel;
 };
 END_USER_NAMESPACE

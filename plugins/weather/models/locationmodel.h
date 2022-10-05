@@ -3,10 +3,10 @@
 #include <QObject>
 #include "weatherdata.h"
 
-
 BEGIN_USER_NAMESPACE
 
-class LocationModel : public QObject {
+class LocationModel : public QObject
+{
     Q_OBJECT
 public:
     explicit LocationModel(QObject *parent = nullptr);
@@ -19,9 +19,8 @@ public:
 signals:
     void locationChanged(const Location &location);
 
-
 private:
-    Location    m_location;
+    Location m_location;
 };
 
 END_USER_NAMESPACE

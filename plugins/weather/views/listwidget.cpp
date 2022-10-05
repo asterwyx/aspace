@@ -39,10 +39,6 @@ ListWidget::ListWidget(const FutureWeather *weather, QWidget *parent)
     setFixedHeight(LIST_WIDGET_HEIGHT);
 }
 
-ListWidget::~ListWidget() {
-
-}
+ListWidget::~ListWidget() {}
 
 END_USER_NAMESPACE
-
-

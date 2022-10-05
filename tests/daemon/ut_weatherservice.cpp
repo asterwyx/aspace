@@ -3,21 +3,20 @@
 #include "aspace.h"
 USE_USER_NAMESPACE
 
-class WeatherServiceTest : public testing::Test {
+class WeatherServiceTest : public testing::Test
+{
 public:
     WeatherServiceTest()
-        :m_aspace(new Aspace),
-        m_service(new WeatherService(m_aspace))
-        {}
-    ~WeatherServiceTest() override {
-        delete m_aspace;
+        : m_aspace(new Aspace)
+        , m_service(new WeatherService(m_aspace))
+    {
     }
+    ~WeatherServiceTest() override { delete m_aspace; }
 
 protected:
     Aspace *m_aspace;
     WeatherService *m_service;
 };
-
 
 TEST_F(WeatherServiceTest, TestContext)
 {
@@ -46,9 +45,7 @@ TEST_F(WeatherServiceTest, GetFutureWeather)
 TEST_F(WeatherServiceTest, CurrentWeatherUpdated)
 {
     bool updated = false;
-    QObject::connect(m_service, &WeatherService::currentWeatherUpdated, m_service, [&] {
-        updated = true;
-    });
+    QObject::connect(m_service, &WeatherService::currentWeatherUpdated, m_service, [&] { updated = true; });
     emit m_service->currentWeatherUpdated(CurrentWeather());
     EXPECT_TRUE(updated);
 }
@@ -56,9 +53,7 @@ TEST_F(WeatherServiceTest, CurrentWeatherUpdated)
 TEST_F(WeatherServiceTest, FutureWeatherUpdated)
 {
     bool updated = false;
-    QObject::connect(m_service, &WeatherService::futureWeatherUpdated, m_service, [&] {
-        updated = true;
-    });
+    QObject::connect(m_service, &WeatherService::futureWeatherUpdated, m_service, [&] { updated = true; });
     emit m_service->futureWeatherUpdated({});
     EXPECT_TRUE(updated);
 }

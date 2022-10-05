@@ -2,10 +2,11 @@
 
 BEGIN_USER_NAMESPACE
 
-LocationModel::LocationModel(QObject *parent) :
-    QObject(parent), m_location{}
-{}
-
+LocationModel::LocationModel(QObject *parent)
+    : QObject(parent)
+    , m_location{}
+{
+}
 
 void LocationModel::setLocation(const Location &location)
 {

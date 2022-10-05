@@ -16,33 +16,35 @@
 #include <QEventLoop>
 
 BEGIN_USER_NAMESPACE
-Aspace::Aspace(QObject *parent) : QObject(parent) {}
+Aspace::Aspace(QObject *parent)
+    : QObject(parent)
+{
+}
 
 Aspace::~Aspace() = default;
 
 bool Aspace::parseApiCode(int apiCode)
 {
-    switch (apiCode)
-    {
-    case 200:
-        // successful and valid data
-        qInfo() << "Successful request and get some data.";
-        return true;
-    case 204:
-        qWarning() << "Successful request but no match data.";
-        return false;
-    case 400:
-        qWarning() << "Request error, possibly lack params or wrong params.";
-        return false;
-    case 401:
-        qWarning() << "Authenticate error, possibly using wrong key or wrong signature or wrong key type.";
-        return false;
-    case 402:
-        qWarning() << "Exceed request limits.";
-    // TODO: Add more code parse
-    default:
-        qWarning() << "Unknown api code.";
-        return false;
+    switch (apiCode) {
+        case 200:
+            // successful and valid data
+            qInfo() << "Successful request and get some data.";
+            return true;
+        case 204:
+            qWarning() << "Successful request but no match data.";
+            return false;
+        case 400:
+            qWarning() << "Request error, possibly lack params or wrong params.";
+            return false;
+        case 401:
+            qWarning() << "Authenticate error, possibly using wrong key or wrong signature or wrong key type.";
+            return false;
+        case 402:
+            qWarning() << "Exceed request limits.";
+        // TODO: Add more code parse
+        default:
+            qWarning() << "Unknown api code.";
+            return false;
     }
 }
 
@@ -58,7 +60,7 @@ QList<Location> Aspace::lookForLocations(const QString &cityName, bool *ok)
     QUrl url = QUrl::fromUserInput(urlString);
     assert(url.isValid());
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json"); // grant that we get a json string
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");  // grant that we get a json string
     QNetworkReply *reply = m_networkManager.get(request);
     QEventLoop loop;
     QTimer::singleShot(REQUEST_TIMEOUT, &loop, [&] {
@@ -67,13 +69,11 @@ QList<Location> Aspace::lookForLocations(const QString &cityName, bool *ok)
     });
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec(QEventLoop::ExcludeUserInputEvents);
-    if (reply->isFinished())
-    {
+    if (reply->isFinished()) {
         // judge status code
         int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         qInfo() << "Reply status code:" << statusCode;
-        if (reply->error() == QNetworkReply::NoError)
-        {
+        if (reply->error() == QNetworkReply::NoError) {
             // successful, get raw data and log(debug), convert to json document
             QByteArray rawBody = reply->readAll();
             QString bodyStr = QString::fromLocal8Bit(rawBody);
@@ -86,11 +86,9 @@ QList<Location> Aspace::lookForLocations(const QString &cityName, bool *ok)
                 int apiCode = rootObj.value("code").toString().toInt();
                 qDebug() << "Api code:" << apiCode;
                 bool continued = parseApiCode(apiCode);
-                if (continued)
-                {
+                if (continued) {
                     QJsonArray cityArr = rootObj.value("location").toArray();
-                    foreach(QJsonValue city, cityArr)
-                    {
+                    foreach (QJsonValue city, cityArr) {
                         QJsonObject cityLocation = city.toObject();
                         Location location;
                         location.name = cityLocation.value("name").toString();
@@ -107,36 +105,26 @@ QList<Location> Aspace::lookForLocations(const QString &cityName, bool *ok)
                         location.rank = cityLocation.value("rank").toString().toInt();
                         result.append(location);
                     }
-                    queried = true; 
+                    queried = true;
                 }
-            }
-            else
-            {
+            } else {
                 qWarning() << "Parse json error:" << parseErr.error << parseErr.errorString();
             }
-        }
-        else
-        {
+        } else {
             qWarning() << "Request" << urlString << "error:" << reply->error() << reply->errorString();
         }
-    }
-    else
-    {
+    } else {
         reply->abort();
         qWarning() << "Request" << urlString << "timeout.";
     }
     reply->close();
     reply->deleteLater();
-    if (ok)
-    {
+    if (ok) {
         *ok = queried;
     }
-    if (queried)
-    {
+    if (queried) {
         return result;
-    }
-    else
-    {
+    } else {
         sendErrorReply(QDBusError::Failed, "Failed to look for locations!");
         return {};
     }
@@ -146,8 +134,7 @@ CurrentWeather Aspace::getCurrentWeather(const QString &cityCode, bool *ok)
 {
     CurrentWeather result;
     bool updated = false;
-    if (cityCode.isEmpty())
-    {
+    if (cityCode.isEmpty()) {
         sendErrorReply(QDBusError::InvalidArgs, "City code cannot be empty!");
         return {};
     }
@@ -162,19 +149,17 @@ CurrentWeather Aspace::getCurrentWeather(const QString &cityCode, bool *ok)
     QNetworkReply *reply = m_networkManager.get(request);
     // Use local event loop to wait
     QEventLoop loop;
-    QTimer::singleShot(REQUEST_TIMEOUT, &loop, [&]{
+    QTimer::singleShot(REQUEST_TIMEOUT, &loop, [&] {
         if (loop.isRunning())
             loop.quit();
-    }); // Setting wait timeout
+    });  // Setting wait timeout
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec(QEventLoop::ExcludeUserInputEvents); // Just wait for non-user input events
-    if (reply->isFinished())
-    {
+    loop.exec(QEventLoop::ExcludeUserInputEvents);  // Just wait for non-user input events
+    if (reply->isFinished()) {
         // Check normally finished or timeout
         int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         qInfo() << "Reply status code:" << statusCode;
-        if (reply->error() == QNetworkReply::NoError)
-        {
+        if (reply->error() == QNetworkReply::NoError) {
             // successful, get raw data and log(debug), convert to json document
             QByteArray rawBody = reply->readAll();
             QString bodyStr = QString::fromLocal8Bit(rawBody);
@@ -187,8 +172,7 @@ CurrentWeather Aspace::getCurrentWeather(const QString &cityCode, bool *ok)
                 int apiCode = rootObj.value("code").toString().toInt();
                 qDebug() << "Api code:" << apiCode;
                 bool continued = parseApiCode(apiCode);
-                if (continued)
-                {
+                if (continued) {
                     // extract weather info
                     QJsonObject currentWeather = rootObj.value("now").toObject();
                     result.observedTime = QDateTime::fromString(currentWeather.value("obsTime").toString(), Qt::ISODate);
@@ -204,48 +188,39 @@ CurrentWeather Aspace::getCurrentWeather(const QString &cityCode, bool *ok)
                     result.precip = currentWeather.value("precip").toString().toDouble();
                     result.pressure = currentWeather.value("pressure").toString().toDouble();
                     result.visibility = currentWeather.value("vis").toString().toDouble();
-                    result.cloud = currentWeather.value("cloud").isNull() ? 0.0 : currentWeather.value("cloud").toString().toDouble();
+                    result.cloud =
+                        currentWeather.value("cloud").isNull() ? 0.0 : currentWeather.value("cloud").toString().toDouble();
                     result.dew = currentWeather.value("dew").isNull() ? 0.0 : currentWeather.value("dew").toString().toDouble();
                     updated = true;
                 }
-            }
-            else
-            {
+            } else {
                 qWarning() << "Parse json error:" << parseErr.error << parseErr.errorString();
             }
-        }
-        else
-        {
+        } else {
             qWarning() << "Request" << urlStr << "error:" << reply->error() << reply->errorString();
         }
-    }
-    else
-    {
+    } else {
         reply->abort();
         qWarning() << "Request" << urlStr << "timeout.";
     }
     reply->close();
     reply->deleteLater();
-    if(ok)
-    {
+    if (ok) {
         *ok = updated;
     }
-    if(updated)
-    {
+    if (updated) {
         return result;
-    }
-    else
-    {
+    } else {
         sendErrorReply(QDBusError::Failed, "Location or weather update failed!");
         return {};
     }
 }
 
-QList<FutureWeather> Aspace::getFutureWeather(const QString &cityCode, bool *ok) {
+QList<FutureWeather> Aspace::getFutureWeather(const QString &cityCode, bool *ok)
+{
     QList<FutureWeather> result;
     bool updated = false;
-    if (cityCode.isEmpty())
-    {
+    if (cityCode.isEmpty()) {
         sendErrorReply(QDBusError::InvalidArgs, "City code cannot be empty!");
         return {};
     }
@@ -260,19 +235,17 @@ QList<FutureWeather> Aspace::getFutureWeather(const QString &cityCode, bool *ok)
     QNetworkReply *reply = m_networkManager.get(request);
     // Use local event loop to wait
     QEventLoop loop;
-    QTimer::singleShot(REQUEST_TIMEOUT, &loop, [&]{
+    QTimer::singleShot(REQUEST_TIMEOUT, &loop, [&] {
         if (loop.isRunning())
             loop.quit();
-    }); // Setting wait timeout
+    });  // Setting wait timeout
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec(QEventLoop::ExcludeUserInputEvents); // Just wait for non-user input events
-    if (reply->isFinished())
-    {
+    loop.exec(QEventLoop::ExcludeUserInputEvents);  // Just wait for non-user input events
+    if (reply->isFinished()) {
         // Check normally finished or timeout
         int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         qInfo() << "Reply status code:" << statusCode;
-        if (reply->error() == QNetworkReply::NoError)
-        {
+        if (reply->error() == QNetworkReply::NoError) {
             // successful, get raw data and log(debug), convert to json document
             QByteArray rawBody = reply->readAll();
             QString bodyStr = QString::fromLocal8Bit(rawBody);
@@ -285,12 +258,10 @@ QList<FutureWeather> Aspace::getFutureWeather(const QString &cityCode, bool *ok)
                 int apiCode = rootObj.value("code").toString().toInt();
                 qDebug() << "Api code:" << apiCode;
                 bool continued = parseApiCode(apiCode);
-                if (continued)
-                {
+                if (continued) {
                     // extract weather info
                     QJsonArray dailyWeathers = rootObj.value("daily").toArray();
-                    foreach(QJsonValue dailyWeather, dailyWeathers)
-                    {
+                    foreach (QJsonValue dailyWeather, dailyWeathers) {
                         QJsonObject weatherObj = dailyWeather.toObject();
                         FutureWeather futureWeather;
                         futureWeather.forecastDate = QDate::fromString(weatherObj.value("fxDate").toString(), Qt::ISODate);
@@ -323,34 +294,24 @@ QList<FutureWeather> Aspace::getFutureWeather(const QString &cityCode, bool *ok)
                     }
                     updated = true;
                 }
-            }
-            else
-            {
+            } else {
                 qWarning() << "Parse json error:" << parseErr.error << parseErr.errorString();
             }
-        }
-        else
-        {
+        } else {
             qWarning() << "Request" << urlStr << "error:" << reply->error() << reply->errorString();
         }
-    }
-    else
-    {
+    } else {
         reply->abort();
         qWarning() << "Request" << urlStr << "timeout.";
     }
     reply->close();
     reply->deleteLater();
-    if(ok)
-    {
+    if (ok) {
         *ok = updated;
     }
-    if(updated)
-    {
+    if (updated) {
         return result;
-    }
-    else
-    {
+    } else {
         sendErrorReply(QDBusError::Failed, "Location or weather update failed!");
         return {};
     }

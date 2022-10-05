@@ -4,15 +4,18 @@
 
 USE_USER_NAMESPACE
 
-class AspaceTest : public testing::Test {
+class AspaceTest : public testing::Test
+{
 public:
+    AspaceTest()
+        : m_aspace(new Aspace)
+    {
+    }
 
-    AspaceTest() : m_aspace(new Aspace) {}
-    
     ~AspaceTest() { delete m_aspace; }
 
 protected:
-    Aspace  *m_aspace;
+    Aspace *m_aspace;
 };
 
 TEST_F(AspaceTest, ApiKey)

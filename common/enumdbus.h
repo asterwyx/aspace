@@ -6,14 +6,14 @@
 #include <QDBusArgument>
 #include <type_traits>
 
-template<typename T, typename TEnum>
+template <typename T, typename TEnum>
 class QDBusEnumMarshal;
 
-template<typename T>
+template <typename T>
 class QDBusEnumMarshal<T, std::true_type>
 {
 public:
-    static QDBusArgument& marshal(QDBusArgument &argument, const T& source)
+    static QDBusArgument &marshal(QDBusArgument &argument, const T &source)
     {
         argument.beginStructure();
         argument << static_cast<int>(source);
@@ -21,7 +21,7 @@ public:
         return argument;
     }
 
-    static const QDBusArgument& unmarshal(const QDBusArgument &argument, T &source)
+    static const QDBusArgument &unmarshal(const QDBusArgument &argument, T &source)
     {
         int a;
         argument.beginStructure();
@@ -34,14 +34,14 @@ public:
     }
 };
 
-template<typename T>
-QDBusArgument& operator<<(QDBusArgument &argument, const T& source)
+template <typename T>
+QDBusArgument &operator<<(QDBusArgument &argument, const T &source)
 {
     return QDBusEnumMarshal<T, typename std::is_enum<T>::type>::marshal(argument, source);
 }
 
-template<typename T>
-const QDBusArgument& operator>>(const QDBusArgument &argument, T &source)
+template <typename T>
+const QDBusArgument &operator>>(const QDBusArgument &argument, T &source)
 {
     return QDBusEnumMarshal<T, typename std::is_enum<T>::type>::unmarshal(argument, source);
 }

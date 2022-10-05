@@ -3,9 +3,9 @@
 #include "weatherdata.h"
 #include <QDBusConnection>
 
-
 BEGIN_USER_NAMESPACE
-class CurrentWeatherModel : public QObject {
+class CurrentWeatherModel : public QObject
+{
     Q_OBJECT
 public:
     explicit CurrentWeatherModel(QObject *parent = nullptr);
@@ -14,12 +14,11 @@ public:
     void setCurrentWeather(const CurrentWeather &weather);
     CurrentWeather getCurrentWeather();
 
-
 signals:
     void currentWeatherChanged(const CurrentWeather &weather);
 
 private:
-    CurrentWeather          m_currentWeather;
+    CurrentWeather m_currentWeather;
 };
 
 END_USER_NAMESPACE

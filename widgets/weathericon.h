@@ -17,18 +17,17 @@ class WeatherIcon : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WeatherIcon(const QString& iconPath = "", QWidget *parent = nullptr, double scaleFactor = 1.0);
+    explicit WeatherIcon(const QString &iconPath = "", QWidget *parent = nullptr, double scaleFactor = 1.0);
     ~WeatherIcon();
     void setColor(QColor color = Qt::yellow);
-    void setIconFromPath(const QString& iconPath);
-    void setIconFromName(const QString& iconName);
+    void setIconFromPath(const QString &iconPath);
+    void setIconFromName(const QString &iconName);
     void setScaleFactor(double scaleFactor);
 
-    double  scaleFactor() const;
-    QColor  color() const;
-    bool    isLoaded() const;
+    double scaleFactor() const;
+    QColor color() const;
+    bool isLoaded() const;
     QString iconPath() const;
-
 
 protected:
     void paintEvent(QPaintEvent *event) override;

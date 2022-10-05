@@ -22,4 +22,3 @@ void updateFutureWeatherStub(void *weatherController)
     QList<FutureWeather> futureWeather{weather1, weather2};
     futureWeatherModel->onFutureWeatherUpdated(futureWeather);
 }
-

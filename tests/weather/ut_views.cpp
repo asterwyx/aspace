@@ -11,7 +11,6 @@ TEST(ListViewTest, ListViewConstructAndDelete)
     delete view;
 }
 
-
 TEST(ListViewTest, ScrollTo)
 {
     ListView view;

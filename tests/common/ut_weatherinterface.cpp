@@ -2,16 +2,18 @@
 #include "weatherinterface.h"
 
 USE_USER_NAMESPACE
-class WeatherInterfaceTest : public testing::Test {
-
+class WeatherInterfaceTest : public testing::Test
+{
 protected:
 public:
-    explicit WeatherInterfaceTest() : m_weatherInterface(new WeatherInterface(DBUS_SERVICE_NAME, DBUS_ASPACE_PATH, QDBusConnection::sessionBus())) {}
+    explicit WeatherInterfaceTest()
+        : m_weatherInterface(new WeatherInterface(DBUS_SERVICE_NAME, DBUS_ASPACE_PATH, QDBusConnection::sessionBus()))
+    {
+    }
 
 protected:
     WeatherInterface *m_weatherInterface;
 };
-
 
 TEST_F(WeatherInterfaceTest, LookForLocations)
 {
@@ -32,18 +34,18 @@ TEST_F(WeatherInterfaceTest, GetFutureWeather)
     EXPECT_EQ(futureWeather.size(), 3);
 }
 
-//TEST_F(WeatherInterfaceTest, CurrentWeatherUpdated)
+// TEST_F(WeatherInterfaceTest, CurrentWeatherUpdated)
 //{
-//    bool updated = false;
-//    QObject::connect(m_weatherInterface, &WeatherInterface::currentWeatherUpdated, m_weatherInterface, [&] {
-//        updated = true;
-//    });
-//    CurrentWeather currentWeather = m_weatherInterface->getCurrentWeather("101010100");
+//     bool updated = false;
+//     QObject::connect(m_weatherInterface, &WeatherInterface::currentWeatherUpdated, m_weatherInterface, [&] {
+//         updated = true;
+//     });
+//     CurrentWeather currentWeather = m_weatherInterface->getCurrentWeather("101010100");
 ////    emit m_weatherInterface->currentWeatherUpdated(CurrentWeather());
 //    EXPECT_TRUE(updated);
 //}
 //
-//TEST_F(WeatherInterfaceTest, FutureWeatherUpdated)
+// TEST_F(WeatherInterfaceTest, FutureWeatherUpdated)
 //{
 //    bool updated = false;
 //    // wait for signal

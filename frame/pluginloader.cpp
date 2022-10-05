@@ -15,7 +15,7 @@
 
 BEGIN_USER_NAMESPACE
 PluginLoader::PluginLoader(const QString &pluginDir)
-: d_ptr(new PluginLoaderPrivate(this))
+    : d_ptr(new PluginLoaderPrivate(this))
 {
     Q_D(PluginLoader);
     d->m_pluginDirs.push_back(pluginDir);
@@ -23,15 +23,19 @@ PluginLoader::PluginLoader(const QString &pluginDir)
 
 PluginLoader::~PluginLoader() = default;
 
-bool PluginLoader::loadPlugins(FrameProxyInterface *proxy) {
+bool PluginLoader::loadPlugins(FrameProxyInterface *proxy)
+{
     Q_D(PluginLoader);
     return d->loadPlugins(proxy);
 }
 
+PluginLoader::PluginLoader()
+    : d_ptr(new PluginLoaderPrivate(this))
+{
+}
 
-PluginLoader::PluginLoader() : d_ptr(new PluginLoaderPrivate(this)){ }
-
-void PluginLoader::addPluginDir(QString pluginDir) {
+void PluginLoader::addPluginDir(QString pluginDir)
+{
     Q_D(PluginLoader);
     if (!pluginDir.isEmpty())
         d->m_pluginDirs.push_back(pluginDir);
@@ -43,36 +47,31 @@ const QList<PluginInterface *> *PluginLoader::getPlugins()
     return &d->m_plugins;
 }
 
-PluginLoaderPrivate::PluginLoaderPrivate(PluginLoader *q) : q_ptr(q) {}
+PluginLoaderPrivate::PluginLoaderPrivate(PluginLoader *q)
+    : q_ptr(q)
+{
+}
 PluginLoaderPrivate::~PluginLoaderPrivate()
 {
-    foreach (PluginInterface* plugin, m_plugins) {
+    foreach (PluginInterface *plugin, m_plugins) {
         delete plugin;
     }
 }
 
-bool PluginLoaderPrivate::loadPlugins(FrameProxyInterface *proxy) {
+bool PluginLoaderPrivate::loadPlugins(FrameProxyInterface *proxy)
+{
     QString appRunPrefix = qApp->applicationDirPath();
-    foreach (QString pluginDir, m_pluginDirs)
-    {
+    foreach (QString pluginDir, m_pluginDirs) {
         QDir pluginsDir(appRunPrefix);
-        if (pluginDir.startsWith('/'))
-        {
-            // absolute path
-            pluginsDir = QDir(pluginDir); 
-        } else
-        {
-            pluginsDir.cd(pluginDir);
-        }
+        pluginsDir.cd(pluginDir);
+        qDebug() << pluginsDir.absolutePath();
         foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
-            
             QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
             QObject *plugin = pluginLoader.instance();
             PluginInterface *loadedPlugin = qobject_cast<PluginInterface *>(plugin);
             if (loadedPlugin) {
                 qDebug() << "Load plugin" << plugin->metaObject()->className() << "successfully!";
-                if (proxy)
-                {
+                if (proxy) {
                     proxy->addPlugin(loadedPlugin);
                 }
                 this->m_plugins.push_back(loadedPlugin);

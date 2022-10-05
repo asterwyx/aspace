@@ -4,7 +4,7 @@
 #include "listview.h"
 BEGIN_USER_NAMESPACE
 ListView::ListView(QWidget *parent)
-: QListView(parent)
+    : QListView(parent)
 {
     setAutoFillBackground(false);
     viewport()->setAutoFillBackground(false);

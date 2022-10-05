@@ -3,9 +3,9 @@
 #include "plugininterface.h"
 #include <QWidget>
 
-
 BEGIN_USER_NAMESPACE
-class FrameProxyInterface {
+class FrameProxyInterface
+{
 public:
     // A plugin can add multiple items, this is for scattered position of items belonging to a plugin
     virtual void addItem(PluginInterface *pluginToAdd, const QString &itemKey) = 0;
@@ -18,8 +18,7 @@ public:
     // Add a plugin
     void addPlugin(PluginInterface *plugin)
     {
-        if (plugin)
-        {
+        if (plugin) {
             plugin->setFrameProxy(this);
             pluginAdded(plugin);
         }

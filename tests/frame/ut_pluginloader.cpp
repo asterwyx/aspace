@@ -10,14 +10,16 @@
 
 USE_USER_NAMESPACE
 
-class PluginLoaderTest : public testing::Test {
+class PluginLoaderTest : public testing::Test
+{
 public:
-    PluginLoaderTest() : m_loader (new PluginLoader) {
+    PluginLoaderTest()
+        : m_loader(new PluginLoader)
+    {
     }
 
-    ~PluginLoaderTest() {
-        delete m_loader;
-    }
+    ~PluginLoaderTest() { delete m_loader; }
+
 protected:
     PluginLoader *m_loader;
 };

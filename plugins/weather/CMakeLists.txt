@@ -6,7 +6,6 @@ set(PLUGIN_NAME "aspace-weather")
 
 project(${PLUGIN_NAME})
 file(GLOB WEATHER_SRCS "*.h" "*.cpp" "assets/*.qrc" "models/*.h" "models/*.cpp" "controllers/*.h" "controllers/*.cpp" "views/*.h" "views/*.cpp")
-#find_package(Qt5 REQUIRED COMPONENTS DBus Concurrent)
 add_library(${PLUGIN_NAME} SHARED ${WEATHER_SRCS})
 target_link_libraries(${PLUGIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets

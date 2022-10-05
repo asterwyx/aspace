@@ -8,10 +8,7 @@ project(ut-${CLIENT}
     DESCRIPTION "A space for weather and rest."
     VERSION ${VERSION})
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
-
-message(STATUS ${CMAKE_MODULE_PATH})
 
 file(GLOB_RECURSE TEST_SRCS "daemon/*.cpp" "frame/*.cpp" "*.cpp" "stubs/*.cpp" "common/*.cpp" "weather/*.cpp")
 file(GLOB_RECURSE WIDGET_SRCS "../widgets/*.cpp")
@@ -33,9 +30,6 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PRIVATE "stubs")
 
-find_package(GTest REQUIRED)
-find_package(GMock REQUIRED)
-
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::DBus
@@ -44,11 +38,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Concurrent
-    GTest::gtest
-    ${GMOCK_BOTH_LIBRARIES}
     ${QGSettings_LIBRARIES}
     ${DtkWidget_LIBRARIES}
+    gtest
+    gmock
     gcov
+    pthread
     )
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${Qt5Widgets_PRIVATE_INCLUDE_DIRS}

@@ -12,14 +12,15 @@
 
 BEGIN_USER_NAMESPACE
 class PluginLoaderPrivate;
-class PluginLoader {
+class PluginLoader
+{
 public:
     PluginLoader();
     explicit PluginLoader(const QString &pluginDir);
     ~PluginLoader();
-    bool                            loadPlugins(FrameProxyInterface *proxy);
-    void                            addPluginDir(QString pluginDir);
-    const QList<PluginInterface *>  *getPlugins();
+    bool loadPlugins(FrameProxyInterface *proxy);
+    void addPluginDir(QString pluginDir);
+    const QList<PluginInterface *> *getPlugins();
 
 private:
     Q_DECLARE_PRIVATE(PluginLoader)

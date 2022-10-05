@@ -1,12 +1,11 @@
 #include "currentweathermodel.h"
 #include <QDBusInterface>
 
-
 BEGIN_USER_NAMESPACE
 CurrentWeatherModel::CurrentWeatherModel(QObject *parent)
     : QObject(parent)
-{}
-
+{
+}
 
 void CurrentWeatherModel::setCurrentWeather(const CurrentWeather &weather)
 {
@@ -16,13 +15,11 @@ void CurrentWeatherModel::setCurrentWeather(const CurrentWeather &weather)
     emit this->currentWeatherChanged(m_currentWeather);
 }
 
-
 CurrentWeather CurrentWeatherModel::getCurrentWeather()
 {
     return m_currentWeather;
 }
 
 CurrentWeatherModel::~CurrentWeatherModel() = default;
-
 
 END_USER_NAMESPACE
