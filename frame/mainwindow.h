@@ -42,8 +42,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QMap<QString, QWidget *> m_itemMap;
-    QList<PluginInterface *> m_plugins;
     QGSettings *m_windowSettings;
     DConfig *m_dConfig;
     HoverButton *m_refreshButton;

@@ -14,16 +14,16 @@ TEST(HoverButtonTest, RevertColor)
 
 TEST(HoverButtonTest, BrightenColor)
 {
-    QColor color(50, 60, 70);
+    QColor color(50, 55, 60);
     auto result = utils::brightenColor(color);
-    EXPECT_EQ(QColor(60, 70, 80), result);
+    EXPECT_EQ(QColor(60, 66, 72), result);
 }
 
 TEST(HoverButtonTest, DarkenColor)
 {
-    QColor color(100, 80, 90);
+    QColor color(100, 60, 50);
     auto result = utils::darkenColor(color);
-    EXPECT_EQ(QColor(80, 60, 70), result);
+    EXPECT_EQ(QColor(80, 48, 40), result);
 }
 
 TEST(HoverButtonTest, Background)
