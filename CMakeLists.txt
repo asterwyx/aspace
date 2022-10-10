@@ -94,6 +94,7 @@ include_directories(
     "common"
     "daemon"
     "frame"
+    "frame/pages"
     "plugins/weather"
     "widgets"
     ${QGSettings_INCLUDE_DIRS}

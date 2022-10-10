@@ -1,4 +1,5 @@
 #include "page.h"
+#include "mainwindow.h"
 
 BEGIN_USER_NAMESPACE
 
@@ -16,5 +17,10 @@ QPointer<DConfig> Page::dConfig()
 QPointer<QGSettings> Page::gSettings()
 {
     return m_window->getWindowSettings();
+}
+
+QPointer<DConfig> Page::writeDConfig()
+{
+    return m_window->writeDConfig();
 }
 END_USER_NAMESPACE

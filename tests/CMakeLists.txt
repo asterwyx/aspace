@@ -21,6 +21,10 @@ add_executable(${PROJECT_NAME}
     ${COMMON_SRCS}
     ${WEATHER_SRCS}
     ../frame/mainwindow.cpp
+    ../frame/pages/page.cpp
+    ../frame/pages/selectingpage.cpp
+    ../frame/pages/contentpage.cpp
+    ../frame/pages/loadingpage.cpp
     ../frame/pluginloader.cpp
     ../frame/assets/res.qrc
     ../daemon/aspace.cpp

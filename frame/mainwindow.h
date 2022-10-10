@@ -1,5 +1,4 @@
 #pragma once
-#include "frameproxyinterface.h"
 #include "plugininterface.h"
 
 #include <DMainWindow>
@@ -10,38 +9,37 @@
 #include <ostream>
 #include <QHBoxLayout>
 #include "hoverbutton.h"
-#include "loadingpage.h"
+
+QT_BEGIN_NAMESPACE
+class QStackedLayout;
+QT_END_NAMESPACE
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 BEGIN_USER_NAMESPACE
-class MainWindow : public DMainWindow, public FrameProxyInterface
+class SelectingPage;
+class LoadingPage;
+class ContentPage;
+class MainWindow : public DMainWindow
 {
 public:
     Q_PROPERTY(bool saveLastWindowSize READ saveLastWindowSize WRITE setSaveLastWindowSize)
 
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow() override;
 
-    void addItem(PluginInterface *pluginToAdd, const QString &itemKey) override;
-    void removeItem(const QString &itemKey) override;
-    void updateItem(const QString &itemKey) override;
-    QSize getFrameSize() override;
-    void initializeAllPlugins() override;
-    void pluginAdded(PluginInterface *plugin) override;
-    QList<PluginInterface *> plugins() override;
-
-    void loadData();
     void showContents();
     void showSplash();
+    void showSelect();
+
     QPointer<QGSettings> getWindowSettings();
     QPointer<DConfig> getDConfig();
+    QPointer<DConfig> writeDConfig();
+    QPointer<ContentPage> getContentPage();
 public slots:
     void refresh();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
-    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     QMap<QString, QWidget *> m_itemMap;
@@ -50,8 +48,10 @@ private:
     DConfig *m_dConfig;
     HoverButton *m_refreshButton;
     QWidget *m_contentFrame;
-    QVBoxLayout *m_contentLayout;
     LoadingPage *m_loadingPage;
+    SelectingPage *m_selectingPage;
+    ContentPage *m_contentPage;
+    QStackedLayout *m_stackedLayout;
 };
 
 END_USER_NAMESPACE

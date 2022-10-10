@@ -18,7 +18,7 @@ PluginLoader::PluginLoader(const QString &pluginDir)
     : d_ptr(new PluginLoaderPrivate(this))
 {
     Q_D(PluginLoader);
-    d->m_pluginDirs.push_back(pluginDir);
+    d->m_pluginDirs.append(pluginDir);
 }
 
 PluginLoader::~PluginLoader() = default;
@@ -38,7 +38,7 @@ void PluginLoader::addPluginDir(QString pluginDir)
 {
     Q_D(PluginLoader);
     if (!pluginDir.isEmpty())
-        d->m_pluginDirs.push_back(pluginDir);
+        d->m_pluginDirs.append(pluginDir);
 }
 
 const QList<PluginInterface *> *PluginLoader::getPlugins()
@@ -64,7 +64,6 @@ bool PluginLoaderPrivate::loadPlugins(FrameProxyInterface *proxy)
     foreach (QString pluginDir, m_pluginDirs) {
         QDir pluginsDir(appRunPrefix);
         pluginsDir.cd(pluginDir);
-        qDebug() << pluginsDir.absolutePath();
         foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
             QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
             QObject *plugin = pluginLoader.instance();

@@ -2,6 +2,15 @@
 #include "common_def.h"
 #include "page.h"
 
+QT_BEGIN_NAMESPACE
+class QHBoxLayout;
+class QVBoxLayout;
+class QLabel;
+class QLineEdit;
+class QPushButton;
+class QGroupBox;
+QT_END_NAMESPACE
+
 BEGIN_USER_NAMESPACE
 
 class SelectingPage : public Page
@@ -17,12 +26,13 @@ private slots:
     void onConfirmed();
 
 private:
-    QHBoxLayout *m_lineEditLayout;
+    QGroupBox *m_inputBox;
+    QVBoxLayout *m_contentLayout;
     QLabel *m_welcomeLabel;
     QLabel *m_hintLabel;
-    QLabel *m_resultLabel;  // display error message
     QLineEdit *m_cityLineEdit;
     QPushButton *m_confirmButton;
+    QLabel *m_resultLabel;  // display error message
 };
 
 END_USER_NAMESPACE

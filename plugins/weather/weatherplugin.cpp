@@ -93,10 +93,16 @@ void WeatherPlugin::initialize()
     m_futureWeatherList->setModel(m_futureWeatherModel.data());
     m_futureWeatherModel->setList(m_futureWeatherList);
     m_futureWeatherList->setItemDelegate(new ListWidgetDelegate(this));
-    QScopedPointer<DConfig> config(DConfig::create("org.deepin.aspace", DCONFIG_FILE));
+    DConfig *config = DConfig::create("org.deepin.aspace", DCONFIG_FILE, QString(), this);
     Location location;
     location.id = config->value("locationId").toString();
     location.name = config->value("locationName").toString();
+    connect(config, &DConfig::valueChanged, this, [=] {
+        Location location;
+        location.id = config->value("locationId").toString();
+        location.name = config->value("locationName").toString();
+        m_controller->setLocation(location);
+    });
     m_controller->setLocation(location);
     connect(m_futureWeatherModel.data(),
             &FutureWeatherModel::dataChanged,
