@@ -13,7 +13,8 @@ Build-Depends:
   libgsettings-qt-dev,
   qtbase5-private-dev,
   libgtest-dev,
-  libgmock-dev
+  libgmock-dev,
+  qttools5-dev
 Standards-Version: 4.1.4
 Homepage: https://github.com/asterwyx/aspace
 
