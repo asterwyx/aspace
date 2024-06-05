@@ -6,7 +6,7 @@
 #include "weathericon.h"
 #include "weatherdata.h"
 
-BEGIN_USER_NAMESPACE
+
 
 class ListWidget : public QGroupBox
 {
@@ -23,5 +23,3 @@ private:
     QLabel *m_minTemperature;
     QLabel *m_sunsetTime;
 };
-
-END_USER_NAMESPACE

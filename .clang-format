@@ -137,14 +137,6 @@ MacroBlockEnd: ''
 MaxEmptyLinesToKeep: 1
 # 命名空间的缩进: None, Inner(缩进嵌套的命名空间中的内容), All
 NamespaceIndentation: Inner
-# 使用ObjC块时缩进宽度
-ObjCBlockIndentWidth: 4
-# 在ObjC的@property后添加一个空格
-ObjCSpaceAfterProperty: false
-# 在ObjC的protocol列表前添加一个空格
-ObjCSpaceBeforeProtocolList: true
-
-
 # 在call(后对函数调用换行的penalty
 PenaltyBreakBeforeFirstCallParameter: 19
 # 在一个注释中引入换行的penalty
@@ -157,19 +149,15 @@ PenaltyBreakString: 1000
 PenaltyExcessCharacter: 1000000
 # 将函数的返回类型放到它自己的行的penalty
 PenaltyReturnTypeOnItsOwnLine: 60
-
 # 指针和引用的对齐: Left, Right, Middle
 PointerAlignment: Right
 # 允许重新排版注释
 ReflowComments: true
 # 允许排序#include
-SortIncludes: Never
-
+SortIncludes: CaseSensitive
 # 在C风格类型转换后添加空格
 SpaceAfterCStyleCast: false
-
 SpaceAfterTemplateKeyword: true
-
 # 在赋值运算符之前添加空格
 SpaceBeforeAssignmentOperators: true
 # 开圆括号之前添加一个空格: Never, ControlStatements, Always

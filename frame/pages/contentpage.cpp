@@ -1,7 +1,7 @@
 #include "contentpage.h"
 #include <QDebug>
 #include <QVBoxLayout>
-BEGIN_USER_NAMESPACE
+
 ContentPage::ContentPage(MainWindow *parent)
     : Page(parent)
     , m_layout(new QVBoxLayout(this))
@@ -69,5 +69,3 @@ void ContentPage::loadData()
         plugin->loadData();
     }
 }
-
-END_USER_NAMESPACE

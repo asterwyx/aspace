@@ -1,6 +1,6 @@
 #include "weatherinterface.h"
 
-BEGIN_USER_NAMESPACE
+
 
 WeatherInterface::WeatherInterface(const QString &service,
                                    const QString &path,
@@ -11,5 +11,3 @@ WeatherInterface::WeatherInterface(const QString &service,
 }
 
 WeatherInterface::~WeatherInterface() = default;
-
-END_USER_NAMESPACE

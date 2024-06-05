@@ -2,7 +2,7 @@
 #include "common_def.h"
 #include <QStyledItemDelegate>
 
-BEGIN_USER_NAMESPACE
+
 
 class ListWidgetDelegate : public QStyledItemDelegate
 {
@@ -17,5 +17,3 @@ public:
 
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
-
-END_USER_NAMESPACE

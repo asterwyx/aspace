@@ -2,7 +2,7 @@
 #include <QCoreApplication>
 #include <utility>
 
-BEGIN_USER_NAMESPACE
+
 
 WeatherService::WeatherService(Aspace *parent)
     : QDBusAbstractAdaptor(parent)
@@ -35,5 +35,3 @@ QList<Location> WeatherService::lookForLocations(const QString &cityName)
     m_serviceTimer->start();
     return context()->lookForLocations(cityName);
 }
-
-END_USER_NAMESPACE

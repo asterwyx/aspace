@@ -1,7 +1,7 @@
 #include "futureweathermodel.h"
 #include <utility>
 
-BEGIN_USER_NAMESPACE
+
 FutureWeatherModel::FutureWeatherModel(ListView *list, QObject *parent)
     : QAbstractListModel(parent)
     , m_list(list)
@@ -68,5 +68,3 @@ ListView *FutureWeatherModel::list()
 {
     return m_list;
 }
-
-END_USER_NAMESPACE

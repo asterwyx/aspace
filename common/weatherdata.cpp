@@ -6,7 +6,7 @@
 #include "enumdbus.h"
 #include <QDBusMetaType>
 
-BEGIN_USER_NAMESPACE
+
 void Location::registerMetaTypes()
 {
     qRegisterMetaType<Location>("Location");
@@ -254,5 +254,3 @@ const QDBusArgument &operator>>(const QDBusArgument &arg, FutureWeather &weather
     arg.endStructure();
     return arg;
 }
-
-END_USER_NAMESPACE

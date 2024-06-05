@@ -2,7 +2,7 @@
 // Created by astrea on 9/13/22.
 //
 #include "listview.h"
-BEGIN_USER_NAMESPACE
+
 ListView::ListView(QWidget *parent)
     : QListView(parent)
 {
@@ -26,5 +26,3 @@ void ListView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint 
     Q_UNUSED(index);
     Q_UNUSED(hint);
 }
-
-END_USER_NAMESPACE

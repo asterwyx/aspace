@@ -9,11 +9,7 @@
 #include <QTimer>
 #include <QDBusContext>
 #include <QNetworkAccessManager>
-
-#include "common_def.h"
 #include "weatherdata.h"
-
-BEGIN_USER_NAMESPACE
 
 class Aspace : public QObject, public QDBusContext
 {
@@ -26,12 +22,10 @@ public:
     inline static const char *apiKey() { return "b3aeb3cb72a74857b66a1f423c15bb89"; }
 
 public slots:
-    USER_NAMESPACE::CurrentWeather getCurrentWeather(const QString &cityCode, bool *ok = nullptr);
-    QList<USER_NAMESPACE::Location> lookForLocations(const QString &cityName, bool *ok = nullptr);
-    QList<USER_NAMESPACE::FutureWeather> getFutureWeather(const QString &cityCode, bool *ok = nullptr);
+    CurrentWeather getCurrentWeather(const QString &cityCode, bool *ok = nullptr);
+    QList<Location> lookForLocations(const QString &cityName, bool *ok = nullptr);
+    QList<FutureWeather> getFutureWeather(const QString &cityCode, bool *ok = nullptr);
 
 private:
     QNetworkAccessManager m_networkManager;
 };
-
-END_USER_NAMESPACE

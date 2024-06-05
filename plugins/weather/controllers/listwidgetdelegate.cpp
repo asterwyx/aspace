@@ -5,7 +5,7 @@
 #include "weatherdata.h"
 #include "views/listwidget.h"
 #include <QPainter>
-BEGIN_USER_NAMESPACE
+
 QWidget *ListWidgetDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(option)
@@ -40,5 +40,3 @@ void ListWidgetDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptio
     QRect rect = option.rect;
     editor->setGeometry(rect.x(), rect.y(), LIST_WIDGET_WIDTH, LIST_WIDGET_HEIGHT);
 }
-
-END_USER_NAMESPACE

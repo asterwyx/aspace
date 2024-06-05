@@ -10,7 +10,7 @@
 #include <QtGlobal>
 #include "common_def.h"
 
-BEGIN_USER_NAMESPACE
+
 class PluginLoaderPrivate;
 class PluginLoader
 {
@@ -26,4 +26,3 @@ private:
     Q_DECLARE_PRIVATE(PluginLoader)
     QScopedPointer<PluginLoaderPrivate> d_ptr;
 };
-END_USER_NAMESPACE

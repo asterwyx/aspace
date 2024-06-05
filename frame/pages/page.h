@@ -6,7 +6,7 @@
 #include <QGSettings>
 
 DCORE_USE_NAMESPACE
-BEGIN_USER_NAMESPACE
+
 class MainWindow;
 class Page : public QWidget
 {
@@ -20,5 +20,3 @@ public:
 protected:
     MainWindow *m_window;
 };
-
-END_USER_NAMESPACE

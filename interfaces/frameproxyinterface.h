@@ -3,7 +3,7 @@
 #include "plugininterface.h"
 #include <QWidget>
 
-BEGIN_USER_NAMESPACE
+
 class FrameProxyInterface
 {
 public:
@@ -28,4 +28,3 @@ public:
     // Get the current size of the frame proxy, for plugin layout convenience
     virtual QSize getFrameSize() = 0;
 };
-END_USER_NAMESPACE

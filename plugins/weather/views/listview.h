@@ -3,7 +3,7 @@
 #include "common_def.h"
 #include <QListView>
 
-BEGIN_USER_NAMESPACE
+
 
 class ListView : public QListView
 {
@@ -13,5 +13,3 @@ public:
 
     virtual void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible) override;
 };
-
-END_USER_NAMESPACE

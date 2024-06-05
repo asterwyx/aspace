@@ -1,7 +1,7 @@
 #include "currentweathermodel.h"
 #include <QDBusInterface>
 
-BEGIN_USER_NAMESPACE
+
 CurrentWeatherModel::CurrentWeatherModel(QObject *parent)
     : QObject(parent)
 {
@@ -21,5 +21,3 @@ CurrentWeather CurrentWeatherModel::getCurrentWeather()
 }
 
 CurrentWeatherModel::~CurrentWeatherModel() = default;
-
-END_USER_NAMESPACE

@@ -8,7 +8,7 @@
 #include <QResizeEvent>
 #include <QSize>
 
-BEGIN_USER_NAMESPACE
+
 class FrameProxyInterface;
 class PluginInterfacePrivate;
 class PluginInterface
@@ -67,10 +67,10 @@ private:
     PluginInterfacePrivate *d_ptr;
 };
 
-END_USER_NAMESPACE
+
 
 #define PLUGIN_INTERFACE_IID "org.deepin.aspace.plugin/1.0"
 
 QT_BEGIN_NAMESPACE
-Q_DECLARE_INTERFACE(USER_NAMESPACE::PluginInterface, PLUGIN_INTERFACE_IID)
+Q_DECLARE_INTERFACE(PluginInterface, PLUGIN_INTERFACE_IID)
 QT_END_NAMESPACE

@@ -3,7 +3,7 @@
 //
 #pragma once
 #include "hoverbutton.h"
-BEGIN_USER_NAMESPACE
+
 class HoverButtonPrivate
 {
 private:
@@ -18,5 +18,3 @@ private:
     QColor m_background;
     int m_borderRadius;
 };
-
-END_USER_NAMESPACE

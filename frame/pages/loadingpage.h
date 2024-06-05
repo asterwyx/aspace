@@ -4,7 +4,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-BEGIN_USER_NAMESPACE
+
 
 class LoadingPage : public QWidget
 {
@@ -15,4 +15,3 @@ private:
     QVBoxLayout *m_layout;
     QLabel *m_loadingLabel;
 };
-END_USER_NAMESPACE

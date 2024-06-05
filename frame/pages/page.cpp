@@ -1,7 +1,7 @@
 #include "page.h"
 #include "mainwindow.h"
 
-BEGIN_USER_NAMESPACE
+
 
 Page::Page(MainWindow *parent)
     : QWidget(parent)
@@ -23,4 +23,3 @@ QPointer<DConfig> Page::writeDConfig()
 {
     return m_window->writeDConfig();
 }
-END_USER_NAMESPACE

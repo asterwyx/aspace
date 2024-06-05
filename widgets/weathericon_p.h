@@ -7,7 +7,7 @@
 #include <QPixmap>
 #include <QString>
 
-BEGIN_USER_NAMESPACE
+
 class WeatherIconPrivate
 {
 public:
@@ -23,4 +23,3 @@ private:
     QByteArray m_svgData;
     bool m_loaded;  // If there is an actual svg icon loaded.
 };
-END_USER_NAMESPACE

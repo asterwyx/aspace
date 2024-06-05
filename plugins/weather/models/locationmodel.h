@@ -3,7 +3,7 @@
 #include <QObject>
 #include "weatherdata.h"
 
-BEGIN_USER_NAMESPACE
+
 
 class LocationModel : public QObject
 {
@@ -22,5 +22,3 @@ signals:
 private:
     Location m_location;
 };
-
-END_USER_NAMESPACE

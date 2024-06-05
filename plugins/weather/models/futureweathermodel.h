@@ -5,7 +5,7 @@
 #include <QPointer>
 #include "weatherdata.h"
 
-BEGIN_USER_NAMESPACE
+
 class FutureWeatherModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -28,11 +28,9 @@ signals:
     void dataChanged();
 
 public slots:
-    void onFutureWeatherUpdated(const QList<USER_NAMESPACE::FutureWeather> &futureWeather);
+    void onFutureWeatherUpdated(const QList<FutureWeather> &futureWeather);
 
 private:
     QList<FutureWeather> m_futureWeather;
     ListView *m_list;
 };
-
-END_USER_NAMESPACE

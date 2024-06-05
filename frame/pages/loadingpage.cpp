@@ -1,6 +1,6 @@
 #include "loadingpage.h"
 
-BEGIN_USER_NAMESPACE
+
 LoadingPage::LoadingPage(QWidget *parent)
     : QWidget(parent)
     , m_layout(new QVBoxLayout(this))
@@ -10,5 +10,3 @@ LoadingPage::LoadingPage(QWidget *parent)
     m_layout->addWidget(m_loadingLabel);
     setLayout(m_layout);
 }
-
-END_USER_NAMESPACE

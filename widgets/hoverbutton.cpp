@@ -7,11 +7,9 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QWidget>
-#include <dguiapplicationhelper.h>
 #include <private/qabstractbutton_p.h>
 
-BEGIN_USER_NAMESPACE
-DGUI_USE_NAMESPACE
+
 namespace utils {
 QColor revertColor(const QColor &color)
 {
@@ -74,11 +72,7 @@ void HoverButton::paintEvent(QPaintEvent *e)
     // draw background
     QColor backgroundColor;
     if (underMouse()) {
-        if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::DarkType) {
-            backgroundColor = utils::brightenColor(background());
-        } else {
-            backgroundColor = utils::darkenColor(background());
-        }
+        backgroundColor = utils::brightenColor(background());
     } else {
         backgroundColor = background();
     }
@@ -180,5 +174,3 @@ QWidget *HoverButton::backgroundWidget()
     Q_D(HoverButton);
     return d->m_backgroundWidget;
 }
-
-END_USER_NAMESPACE

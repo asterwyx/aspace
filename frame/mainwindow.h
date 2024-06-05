@@ -1,5 +1,4 @@
 #pragma once
-#include "plugininterface.h"
 
 #include <DMainWindow>
 #include <QMap>
@@ -9,14 +8,10 @@
 #include <ostream>
 #include <QHBoxLayout>
 #include "hoverbutton.h"
-
-QT_BEGIN_NAMESPACE
 class QStackedLayout;
-QT_END_NAMESPACE
-
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
-BEGIN_USER_NAMESPACE
+
 class SelectingPage;
 class LoadingPage;
 class ContentPage;
@@ -51,5 +46,3 @@ private:
     ContentPage *m_contentPage;
     QStackedLayout *m_stackedLayout;
 };
-
-END_USER_NAMESPACE

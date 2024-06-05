@@ -1,6 +1,6 @@
 #include "plugininterface.h"
 
-BEGIN_USER_NAMESPACE
+
 
 class PluginInterfacePrivate
 {
@@ -20,4 +20,3 @@ private:
     PluginInterface *q_ptr;
     FrameProxyInterface *m_frameProxy;
 };
-END_USER_NAMESPACE

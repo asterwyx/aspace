@@ -7,7 +7,7 @@
 #include <QtDBus>
 #include "enumdbus.h"
 
-BEGIN_USER_NAMESPACE
+
 
 QDomElement Utils::setXmlAttrValueRecurse(QDomElement elem, const QString &attrName, const QString &attrValue)
 {
@@ -33,5 +33,3 @@ void Utils::registerAllMetaTypes()
     CurrentWeather::registerMetaTypes();
     FutureWeather::registerMetaTypes();
 }
-
-END_USER_NAMESPACE

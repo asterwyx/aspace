@@ -10,13 +10,12 @@
 #include "utils.h"
 DCORE_USE_NAMESPACE
 
-USE_USER_NAMESPACE
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     Utils::registerAllMetaTypes();
-    Aspace asp;
+    ASpace asp;
     QDBusConnection connection = QDBusConnection::sessionBus();
     WeatherService ws(&asp);
     if (connection.registerService(DBUS_SERVICE_NAME) &&

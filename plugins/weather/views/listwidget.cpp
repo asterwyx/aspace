@@ -2,7 +2,7 @@
 // Created by astrea on 9/13/22.
 //
 #include "listwidget.h"
-BEGIN_USER_NAMESPACE
+
 ListWidget::ListWidget(const FutureWeather *weather, QWidget *parent)
     : QGroupBox(parent)
 {
@@ -40,5 +40,3 @@ ListWidget::ListWidget(const FutureWeather *weather, QWidget *parent)
 }
 
 ListWidget::~ListWidget() {}
-
-END_USER_NAMESPACE

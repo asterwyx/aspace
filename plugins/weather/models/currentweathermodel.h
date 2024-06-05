@@ -3,7 +3,7 @@
 #include "weatherdata.h"
 #include <QDBusConnection>
 
-BEGIN_USER_NAMESPACE
+
 class CurrentWeatherModel : public QObject
 {
     Q_OBJECT
@@ -20,5 +20,3 @@ signals:
 private:
     CurrentWeather m_currentWeather;
 };
-
-END_USER_NAMESPACE

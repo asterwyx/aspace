@@ -4,13 +4,9 @@
 
 #pragma once
 #include <QDomElement>
-#include "common_def.h"
-
-BEGIN_USER_NAMESPACE
 class Utils
 {
 public:
     static QDomElement setXmlAttrValueRecurse(QDomElement elem, const QString &attrName, const QString &attrValue);
     static void registerAllMetaTypes();
 };
-END_USER_NAMESPACE

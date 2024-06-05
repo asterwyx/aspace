@@ -11,7 +11,7 @@
 #include <QDateTime>
 #include "common_def.h"
 
-BEGIN_USER_NAMESPACE
+
 enum TemperatureUnit { CELSIUS, FAHRENHEIT };
 struct Location
 {
@@ -110,9 +110,9 @@ inline double fahrenheitToCelsius(double fahrenheit)
     return (5.0 / 9.0) * (fahrenheit - 32.0);
 }
 
-END_USER_NAMESPACE
 
-Q_DECLARE_METATYPE(USER_NAMESPACE::Location)
-Q_DECLARE_METATYPE(USER_NAMESPACE::CurrentWeather)
-Q_DECLARE_METATYPE(USER_NAMESPACE::FutureWeather)
-Q_DECLARE_METATYPE(USER_NAMESPACE::TemperatureUnit)
+
+Q_DECLARE_METATYPE(Location)
+Q_DECLARE_METATYPE(CurrentWeather)
+Q_DECLARE_METATYPE(FutureWeather)
+Q_DECLARE_METATYPE(TemperatureUnit)

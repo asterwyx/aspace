@@ -1,10 +1,9 @@
 #pragma once
 #include "common_def.h"
 #include <QAbstractButton>
-#include <QPushButton>
 #include <QScopedPointer>
 
-BEGIN_USER_NAMESPACE
+
 namespace utils {
 QColor revertColor(const QColor &color);
 QColor brightenColor(const QColor &color);
@@ -41,5 +40,3 @@ private:
     Q_DECLARE_PRIVATE(HoverButton)
     QScopedPointer<HoverButtonPrivate> d_ptr;
 };
-
-END_USER_NAMESPACE

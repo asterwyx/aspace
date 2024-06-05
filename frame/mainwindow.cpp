@@ -9,7 +9,7 @@
 #include "loadingpage.h"
 #include "selectingpage.h"
 #include "contentpage.h"
-BEGIN_USER_NAMESPACE
+
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
@@ -92,5 +92,3 @@ void MainWindow::showSelect()
 {
     m_stackedLayout->setCurrentWidget(m_selectingPage);
 }
-
-END_USER_NAMESPACE

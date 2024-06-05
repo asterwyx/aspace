@@ -1,6 +1,6 @@
 #include "weathercontroller.h"
 
-BEGIN_USER_NAMESPACE
+
 WeatherController::WeatherController(QObject *parent)
     : QObject(parent)
     , m_currentWeatherModel(new CurrentWeatherModel)
@@ -102,5 +102,3 @@ QDateTime WeatherController::getUpdateTime()
 }
 
 WeatherController::~WeatherController() = default;
-
-END_USER_NAMESPACE

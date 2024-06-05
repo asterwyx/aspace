@@ -13,7 +13,7 @@
 #include <QDebug>
 #include "utils.h"
 
-BEGIN_USER_NAMESPACE
+
 WeatherIcon::WeatherIcon(const QString &iconPath, QWidget *parent, double scaleFactor)
     : QWidget(parent)
     , d_ptr(new WeatherIconPrivate(this))
@@ -131,4 +131,3 @@ WeatherIconPrivate::WeatherIconPrivate(WeatherIcon *q)
 {
 }
 WeatherIconPrivate::~WeatherIconPrivate() = default;
-END_USER_NAMESPACE

@@ -1,7 +1,7 @@
 #include "plugininterface.h"
 #include "plugininterface_p.h"
 
-BEGIN_USER_NAMESPACE
+
 
 PluginInterface::PluginInterface(FrameProxyInterface *frameProxy)
     : d_ptr(new PluginInterfacePrivate(this))
@@ -35,5 +35,3 @@ FrameProxyInterface *PluginInterfacePrivate::frameProxy()
 {
     return m_frameProxy;
 }
-
-END_USER_NAMESPACE

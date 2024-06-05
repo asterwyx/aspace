@@ -15,7 +15,6 @@
 #include <QDateTime>
 #include <QEventLoop>
 
-BEGIN_USER_NAMESPACE
 Aspace::Aspace(QObject *parent)
     : QObject(parent)
 {
@@ -316,4 +315,3 @@ QList<FutureWeather> Aspace::getFutureWeather(const QString &cityCode, bool *ok)
         return {};
     }
 }
-END_USER_NAMESPACE

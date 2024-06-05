@@ -5,7 +5,7 @@
 #include "common_def.h"
 #include "weatherdata.h"
 
-BEGIN_USER_NAMESPACE
+
 
 class WeatherInterface : public QDBusAbstractInterface
 {
@@ -43,5 +43,3 @@ public slots:
         return asyncCallWithArgumentList(QLatin1String("lookForLocations"), argumentList);
     }
 };
-
-END_USER_NAMESPACE

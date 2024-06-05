@@ -6,7 +6,7 @@
 #include "weatherdata.h"
 #include "aspace.h"
 
-BEGIN_USER_NAMESPACE
+
 class WeatherService : public QDBusAbstractAdaptor
 {
     Q_OBJECT
@@ -22,12 +22,10 @@ signals:
     void futureWeatherUpdated(const QList<FutureWeather> &futureWeather);
 
 public slots:
-    USER_NAMESPACE::CurrentWeather getCurrentWeather(const QString &cityCode);
-    QList<USER_NAMESPACE::FutureWeather> getFutureWeather(const QString &cityCode);
-    QList<USER_NAMESPACE::Location> lookForLocations(const QString &cityName);
+    CurrentWeather getCurrentWeather(const QString &cityCode);
+    QList<FutureWeather> getFutureWeather(const QString &cityCode);
+    QList<Location> lookForLocations(const QString &cityName);
 
 private:
     QScopedPointer<QTimer> m_serviceTimer;
 };
-
-END_USER_NAMESPACE

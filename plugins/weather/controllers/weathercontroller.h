@@ -7,7 +7,7 @@
 #include <QScopedPointer>
 #include <QSharedPointer>
 
-BEGIN_USER_NAMESPACE
+
 
 class WeatherController : public QObject
 {
@@ -20,17 +20,17 @@ public:
 public slots:
     void updateCurrentWeather();
     void updateFutureWeather();
-    QList<USER_NAMESPACE::Location> lookForLocations(const QString &cityName);
-    void setLocation(const USER_NAMESPACE::Location &location);
+    QList<Location> lookForLocations(const QString &cityName);
+    void setLocation(const Location &location);
 
-    void setCurrentWeatherModel(USER_NAMESPACE::CurrentWeatherModel *model);
-    QSharedPointer<USER_NAMESPACE::CurrentWeatherModel> getCurrentWeatherModel();
+    void setCurrentWeatherModel(CurrentWeatherModel *model);
+    QSharedPointer<CurrentWeatherModel> getCurrentWeatherModel();
 
-    void setFutureWeatherModel(USER_NAMESPACE::FutureWeatherModel *model);
-    QSharedPointer<USER_NAMESPACE::FutureWeatherModel> getFutureWeatherModel();
+    void setFutureWeatherModel(FutureWeatherModel *model);
+    QSharedPointer<FutureWeatherModel> getFutureWeatherModel();
 
-    void setLocationModel(USER_NAMESPACE::LocationModel *model);
-    QSharedPointer<USER_NAMESPACE::LocationModel> getLocationModel();
+    void setLocationModel(LocationModel *model);
+    QSharedPointer<LocationModel> getLocationModel();
 
 private:
     QSharedPointer<CurrentWeatherModel> m_currentWeatherModel;
@@ -40,5 +40,3 @@ private:
     QScopedPointer<WeatherInterface> m_weatherDBusInterface;
     QDateTime m_updateTime;
 };
-
-END_USER_NAMESPACE

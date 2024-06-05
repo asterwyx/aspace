@@ -7,7 +7,7 @@ QT_BEGIN_NAMESPACE
 class QVBoxLayout;
 QT_END_NAMESPACE
 
-BEGIN_USER_NAMESPACE
+
 
 class ContentPage : public Page, public FrameProxyInterface
 {
@@ -29,5 +29,3 @@ private:
     QList<PluginInterface *> m_plugins;
     QVBoxLayout *m_layout;
 };
-
-END_USER_NAMESPACE

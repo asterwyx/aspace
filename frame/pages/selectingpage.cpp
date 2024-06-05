@@ -9,7 +9,7 @@
 
 #include "mainwindow.h"
 
-BEGIN_USER_NAMESPACE
+
 SelectingPage::SelectingPage(MainWindow *parent)
     : Page(parent)
     , m_inputBox(new QGroupBox(this))
@@ -68,4 +68,3 @@ void SelectingPage::onConfirmed()
         m_resultLabel->setText("请输入有效的字符串");
     }
 }
-END_USER_NAMESPACE

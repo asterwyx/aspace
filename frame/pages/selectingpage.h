@@ -11,7 +11,7 @@ class QPushButton;
 class QGroupBox;
 QT_END_NAMESPACE
 
-BEGIN_USER_NAMESPACE
+
 
 class SelectingPage : public Page
 {
@@ -34,5 +34,3 @@ private:
     QPushButton *m_confirmButton;
     QLabel *m_resultLabel;  // display error message
 };
-
-END_USER_NAMESPACE

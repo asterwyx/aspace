@@ -18,10 +18,7 @@
 #include "weatherdata.h"
 #include "weathericon.h"
 #include "controllers/listwidgetdelegate.h"
-#include <DConfig>
 
-DCORE_USE_NAMESPACE
-BEGIN_USER_NAMESPACE
 
 const QString WeatherPlugin::CURRENT_WEATHER_ITEM = "current-weather";
 const QString WeatherPlugin::FUTURE_WEATHER_ITEM = "future-weather";
@@ -93,17 +90,6 @@ void WeatherPlugin::initialize()
     m_futureWeatherList->setModel(m_futureWeatherModel.data());
     m_futureWeatherModel->setList(m_futureWeatherList);
     m_futureWeatherList->setItemDelegate(new ListWidgetDelegate(this));
-    DConfig *config = DConfig::create("org.deepin.aspace", DCONFIG_FILE, QString(), this);
-    Location location;
-    location.id = config->value("locationId").toString();
-    location.name = config->value("locationName").toString();
-    connect(config, &DConfig::valueChanged, this, [=] {
-        Location location;
-        location.id = config->value("locationId").toString();
-        location.name = config->value("locationName").toString();
-        m_controller->setLocation(location);
-    });
-    m_controller->setLocation(location);
     connect(m_futureWeatherModel.data(),
             &FutureWeatherModel::dataChanged,
             m_futureWeatherList,
@@ -164,5 +150,3 @@ void WeatherPlugin::adjustSize(QResizeEvent *event, const QMap<QString, QWidget 
     Q_UNUSED(event)
     Q_UNUSED(items)
 }
-
-END_USER_NAMESPACE

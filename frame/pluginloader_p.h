@@ -5,8 +5,8 @@
 #pragma once
 #include "pluginloader.h"
 #include <QString>
-#include <qlist.h>
-BEGIN_USER_NAMESPACE
+#include <QList>
+
 class PluginLoaderPrivate
 {
 public:
@@ -22,5 +22,3 @@ private:
     QStringList m_pluginDirs;
     QList<PluginInterface *> m_plugins;
 };
-
-END_USER_NAMESPACE

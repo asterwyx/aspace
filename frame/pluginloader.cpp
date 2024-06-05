@@ -13,7 +13,7 @@
 #include <QString>
 #include <QPluginLoader>
 
-BEGIN_USER_NAMESPACE
+
 PluginLoader::PluginLoader(const QString &pluginDir)
     : d_ptr(new PluginLoaderPrivate(this))
 {
@@ -79,4 +79,3 @@ bool PluginLoaderPrivate::loadPlugins(FrameProxyInterface *proxy)
     }
     return true;
 }
-END_USER_NAMESPACE

@@ -14,12 +14,12 @@
 #include "weathericon.h"
 #include "controllers/weathercontroller.h"
 
-BEGIN_USER_NAMESPACE
+
 class WeatherPlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_INTERFACE_IID)
-    Q_INTERFACES(USER_NAMESPACE::PluginInterface)
+    Q_INTERFACES(PluginInterface)
 public:
     Q_PROPERTY(int temperatureFontPointSize MEMBER m_temperatureFontPointSize NOTIFY temperatureFontPointSizeChanged)
     Q_PROPERTY(int temperatureFontWeight MEMBER m_temperatureFontWeight NOTIFY temperatureFontWeightChanged)
@@ -70,5 +70,3 @@ private:
     QSharedPointer<CurrentWeatherModel> m_currentWeatherModel;
     QSharedPointer<FutureWeatherModel> m_futureWeatherModel;
 };
-
-END_USER_NAMESPACE

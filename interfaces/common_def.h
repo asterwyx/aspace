@@ -9,12 +9,6 @@
 #endif
 #define DBUS_WEATHER_INTERFACE_NAME DBUS_SERVICE_NAME ".Weather"
 #define DBUS_ASPACE_PATH "/org/deepin/aspace"
-
-#define USER_NAMESPACE aspace
-#define USE_USER_NAMESPACE using namespace USER_NAMESPACE;
-#define BEGIN_USER_NAMESPACE namespace USER_NAMESPACE {
-#define END_USER_NAMESPACE }
-
 #define DCONFIG_FILE "org.deepin.aspace"
 
 #if not defined(SCHEMA_ID)

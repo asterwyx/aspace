@@ -8,7 +8,7 @@
 
 #include "common_def.h"
 
-BEGIN_USER_NAMESPACE
+
 class WeatherIconPrivate;
 /**
  * @brief SVG Weather Icon
@@ -37,4 +37,3 @@ private:
     Q_DECLARE_PRIVATE(WeatherIcon)
     QScopedPointer<WeatherIconPrivate> d_ptr;
 };
-END_USER_NAMESPACE
